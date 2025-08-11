@@ -1,16 +1,14 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html>
 
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Dashboard</title>
+    <meta charset="UTF-8">
+    <title>Browse Carers</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
-<body class="min-h-screen bg-gradient-to-br from-sky-50 via-white to-emerald-50 text-gray-800 antialiased">
-
+<body>
     <!-- Top bar -->
     <header class="border-b border-gray-200 bg-white/70 backdrop-blur">
         <div class="mx-auto max-w-6xl px-4 py-4 flex items-center justify-between">
@@ -48,34 +46,33 @@
         </div>
     </header>
 
-    <!-- Hero -->
-    <main class="mx-auto max-w-6xl px-4">
-        <section class="py-20 sm:py-24">
-            <div class="mx-auto max-w-3xl text-center">
-                <h1 class="text-4xl font-bold tracking-tight sm:text-5xl">
-                    Welcome <span class="text-emerald-600">{{ Auth::user()->first_name }}</span>!
-                </h1>
+    <!-- Main -->
+    <main class="max-w-4xl mx-auto px-4 py-6">
+        <h1 class="text-2xl font-bold mb-4">Browse Carers</h1>
 
-                {{-- Different content based on user type --}}
-                @if(auth()->user()->isJobseeker())
-                    <p class="mt-4 text-lg leading-relaxed text-gray-600">
-                        Ready to find your next care opportunity? Browse available jobs and apply today.
-                    </p>
-                @elseif(auth()->user()->isEmployer())
-                    <p class="mt-4 text-lg leading-relaxed text-gray-600">
-                        Find the perfect care professional for your needs. Browse carers or post a new job.
-                    </p>
-                @endif
-            </div>
-        </section>
+        @if($jobseekers->count() > 0)
+            <ul class="space-y-3">
+                @foreach($jobseekers as $jobseeker)
+                    <li class="bg-white border rounded-lg p-4">
+                        <div class="font-medium">
+                            {{ $jobseeker->authParent->first_name }} {{ $jobseeker->authParent->last_name }}
+                        </div>
+                        @if($jobseeker->authParent->location)
+                            <div class="text-sm text-gray-600">
+                                📍 {{ $jobseeker->authParent->location }}
+                            </div>
+                        @endif
+                    </li>
+                @endforeach
+            </ul>
+
+            <p class="mt-4 text-sm text-gray-600">
+                Showing {{ $jobseekers->count() }} care professional{{ $jobseekers->count() !== 1 ? 's' : '' }}
+            </p>
+        @else
+            <p class="text-gray-700">No carers found.</p>
+        @endif
     </main>
-
-    <!-- Footer -->
-    <footer class="border-t border-gray-200 bg-white/70 backdrop-blur">
-        <div class="mx-auto max-w-6xl px-4 py-6 text-center text-sm text-gray-500">
-            © {{ now()->year }} CareMatch. All rights reserved.
-        </div>
-    </footer>
 </body>
 
 </html>

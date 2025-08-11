@@ -3,7 +3,8 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
-
+use App\Models\Employer;
+use App\Models\Jobseeker;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -58,5 +59,19 @@ class User extends Authenticatable
     public function user()
     {
         return $this->morphTo();
+    }
+
+    public function isJobseeker() 
+    {
+        return $this->user_type === Jobseeker::class;
+    }
+    public function isEmployer() 
+    {
+        return $this->user_type === Employer::class;
+    }
+
+    public function getRole() 
+    {
+        return $this->isJobseeker() ? 'jobseeker' : 'employer';
     }
 }

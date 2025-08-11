@@ -1,5 +1,7 @@
 <?php
 
+use App\Enums\EmploymentType;
+use App\Enums\SalaryPeriod;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -12,13 +14,18 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('jobs', function (Blueprint $table) {
-            $table->id();
-            $table->string('queue')->index();
-            $table->longText('payload');
-            $table->unsignedTinyInteger('attempts');
-            $table->unsignedInteger('reserved_at')->nullable();
-            $table->unsignedInteger('available_at');
-            $table->unsignedInteger('created_at');
+            $table->uuid('id')->primary();
+            $table->foreignUuid('employer_id')->constrained('employers')->onDelete('cascade');
+            $table->string('title');
+            $table->decimal('salary', 10, 2);
+            $table->string('salary_period')->default(SalaryPeriod::Weekly->value);
+            $table->string('employment_type')->default(EmploymentType::FullTime->value);
+            $table->string('location');
+            $table->string('description')->setMaxLength(5000);
+            $table->string('requirements')->nullable();
+            $table->date('posted_date');
+            $table->boolean('active')->default(true);
+            $table->timestamps();
         });
 
         Schema::create('job_batches', function (Blueprint $table) {

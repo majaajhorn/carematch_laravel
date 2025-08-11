@@ -18,4 +18,9 @@ class Employer extends Model implements IsUserContract
     {
         return $this->morphOne(User::class, 'user');
     }
+
+    public function jobs()
+    {
+        return $this->hasMany(Job::class);
+    }
 }
