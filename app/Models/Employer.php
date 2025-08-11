@@ -16,7 +16,6 @@ class Employer extends Model implements IsUserContract
         'id',
     ];
 
-
     public function authParent()
     {
         return $this->morphOne(User::class, 'user');

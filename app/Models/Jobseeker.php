@@ -7,6 +7,8 @@ use App\Traits\IsUser;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\JobseekerQualification;
+use App\Models\JobseekerExperience;
 
 class Jobseeker extends Model implements IsUserContract
 {
@@ -22,5 +24,19 @@ class Jobseeker extends Model implements IsUserContract
     'driving_license',
     'about_yourself',
 ];
+    public function authParent()
+    {
+        return $this->morphOne(User::class, 'user');
+    }
+
+    public function qualifications()
+    {
+        return $this->hasMany(JobseekerQualification::class);
+    }
+
+    public function experiences()
+    {
+        return $this->hasMany(JobseekerExperience::class);
+    }
 
 }
