@@ -14,16 +14,8 @@ class Jobseeker extends Model implements IsUserContract
 {
     use HasFactory, HasUuids, IsUser;
 
-    protected $fillable = [
-    'id',
-    'gender',
-    'location',
-    'contact',
-    'english_level',
-    'live_in_experience',
-    'driving_license',
-    'about_yourself',
-];
+    protected $guarded = ['id'];
+    
     public function authParent()
     {
         return $this->morphOne(User::class, 'user');

@@ -12,9 +12,7 @@ class Employer extends Model implements IsUserContract
 {
     use HasFactory, HasUuids, IsUser;
 
-    protected $fillable = [
-        'id',
-    ];
+    protected $guarded = ['id'];
 
     public function authParent()
     {

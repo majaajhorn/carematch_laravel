@@ -10,10 +10,7 @@ class JobseekerExperience extends Model
 {
     use HasFactory, HasUuids;
 
-    protected $fillable = [
-        'jobseeker_id',
-        'job_title',
-    ];
+    protected $guarded = ['id'];
 
     public function jobseeker()
     {
