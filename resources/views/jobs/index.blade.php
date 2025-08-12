@@ -1,9 +1,11 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
-    <title>Browse Carers</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Jobs</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
@@ -46,33 +48,7 @@
         </div>
     </header>
 
-    <!-- Main -->
-    <main class="max-w-4xl mx-auto px-4 py-6">
-        <h1 class="text-2xl font-bold mb-4">Browse Carers</h1>
-
-        @if($jobseekers->count() > 0)
-            <ul class="space-y-3">
-                @foreach($jobseekers as $jobseeker)
-                    <li class="bg-white border rounded-lg p-4">
-                        <div class="font-medium">
-                            {{ $jobseeker->authParent->first_name }} {{ $jobseeker->authParent->last_name }}
-                        </div>
-                        @if($jobseeker->authParent->location)
-                            <div class="text-sm text-gray-600">
-                                📍 {{ $jobseeker->authParent->location }}
-                            </div>
-                        @endif
-                    </li>
-                @endforeach
-            </ul>
-
-            <p class="mt-4 text-sm text-gray-600">
-                Showing {{ $jobseekers->count() }} care professional{{ $jobseekers->count() !== 1 ? 's' : '' }}
-            </p>
-        @else
-            <p class="text-gray-700">No carers found.</p>
-        @endif
-    </main>
+    <h1>List of all jobs...</h1>
 </body>
 
 </html>

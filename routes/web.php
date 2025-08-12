@@ -2,10 +2,12 @@
 
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\SessionController;
+use App\Http\Controllers\JobController;
 use App\Models\Jobseeker;
 use Illuminate\Support\Facades\Route;
 
 Route::view('/', 'home')->name('home');
+Route::view('/about', 'about')->name('about'); 
 Route::view('/dashboard', 'dashboard')->name('dashboard')->middleware('auth');
 
 Route::get('/register', [RegisteredUserController::class, 'create'])->name('register');
@@ -15,7 +17,11 @@ Route::get('/login', [SessionController::class, 'create'])->name('login');
 Route::post('/login', [SessionController::class, 'store'])->name('login.store');
 Route::post('/logout', [SessionController::class, 'destroy'])->name('logout');
 
-Route::view('/about', 'about')->name('about'); 
+// JOBS
+Route::get('/jobs/create', [JobController::class, 'create'])->name('jobs.create')->middleware('auth');
+Route::get('/jobs', [JobController::class, 'index'])->name('jobs.index')->middleware('auth');
+Route::post('/jobs', [JobController::class, 'store'])->name('jobs.store');
+
 
 Route::get('/carers', function() {
     $jobseekers = Jobseeker::with('authParent')->get();

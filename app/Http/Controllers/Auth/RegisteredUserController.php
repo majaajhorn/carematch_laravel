@@ -21,7 +21,7 @@ class RegisteredUserController extends Controller
         $request->validate([
             'first_name' => ['required', 'string', 'max:255'],
             'last_name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email'],
             'password' => ['required', 'string', Password::min(6), 'confirmed'],
             'role' => ['required', 'in:jobseeker,employer'],
         ]);
@@ -39,7 +39,7 @@ class RegisteredUserController extends Controller
             'password' => bcrypt($request->password),
         ]);
 
-        $user->user()->associate($userType);
+        $user->user()->associate($userType); // associate postavlja vanjski ključ na users tablici (npr. user_id i, kod polimorfnih odnosa, i user_type) da “User pripada ovom profilu”.
         $user->save();
 
         return redirect('/login')->with('success', 'Registration successful! Please log in.');

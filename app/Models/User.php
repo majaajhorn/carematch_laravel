@@ -70,8 +70,9 @@ class User extends Authenticatable
         return $this->user_type === Employer::class;
     }
 
+    /* helper funkcija ako bude trebala, ali zasad ne treba
     public function getRole() 
     {
         return $this->isJobseeker() ? 'jobseeker' : 'employer';
-    }
+    }*/
 }

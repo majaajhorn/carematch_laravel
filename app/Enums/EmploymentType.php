@@ -3,8 +3,8 @@
 namespace App\Enums;
 enum EmploymentType : string
 {
-    case FullTime = 'full time';
-    case PartTime = 'part time';
+    case FullTime = 'full_time';
+    case PartTime = 'part_time';
 
 
     public function label(): string
