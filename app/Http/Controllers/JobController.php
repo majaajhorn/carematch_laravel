@@ -6,18 +6,14 @@ use App\Enums\EmploymentType;
 use App\Enums\SalaryPeriod;
 use App\Http\Requests\StoreJobRequest;
 use App\Models\Job;
-use App\Models\Employer;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Validation\Rule as ValidationRule;
 
 class JobController extends Controller
 {
     // prikaz svih poslova
     public function index()
     {
-        $jobs = Job::with('employer')->latest()->simplePaginate(3);
-
+        $jobs = Job::latest()->get();
+        
         return view('jobs.index', [
             'jobs' => $jobs
         ]);

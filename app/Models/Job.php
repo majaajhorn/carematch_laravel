@@ -17,7 +17,7 @@ class Job extends Model
         return [
             'posted_date' => 'date',
             'active' => 'boolean',
-            'salary' => 'decimal:2',
+            'salary' => 'string',
         ];
     }
     /**
