@@ -21,6 +21,7 @@ Route::post('/logout', [SessionController::class, 'destroy'])->name('logout');
 Route::get('/jobs/create', [JobController::class, 'create'])->name('jobs.create')->middleware('auth');
 Route::get('/jobs', [JobController::class, 'index'])->name('jobs.index')->middleware('auth');
 Route::post('/jobs', [JobController::class, 'store'])->name('jobs.store');
+Route::get('/jobs/{job}', [JobController::class, 'show'])->name('jobs.show')->middleware('auth');
 
 
 Route::get('/carers', function() {
