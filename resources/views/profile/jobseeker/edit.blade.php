@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>{{ $job->title }}</title>
+    <title>Edit Profile</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
@@ -48,67 +48,6 @@
             </nav>
         </div>
     </header>
-
-    <div class="max-w-4xl mx-auto p-6">
-        <div class="mb-6">
-            @if (auth()->user()->isJobseeker())
-                <a href="/jobs" class="text-emerald-600 hover:text-emerald-700">← Back to Jobs</a>
-            @elseif(auth()->user()->isEmployer())
-                <a href="/jobs/my-jobs" class="text-emerald-600 hover:text-emerald-700">← Back to My Jobs</a>
-            @endif
-
-        </div>
-
-        <div class="border border-gray-200 rounded-lg p-6">
-            <!-- Job Title and Salary -->
-            <div class="flex justify-between items-start mb-4">
-                <h1 class="text-2xl font-semibold text-gray-900">{{ $job->title }}</h1>
-                <span class="text-lg font-bold text-emerald-600">£
-                    {{ $job->salary }} {{ (string) $job->salary_period }}
-                </span>
-            </div>
-
-            <!-- Employment Type and Location -->
-            <div class="flex flex-wrap gap-4 mb-4">
-                <span
-                    class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
-                    {{ ucfirst(str_replace('_', ' ', (string) $job->employment_type)) }}
-                </span>
-                <span
-                    class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-gray-100 text-gray-700">
-                    📍 {{ $job->location }}
-                </span>
-                <span class="text-sm text-gray-500">
-                    Posted {{ $job->posted_date ? $job->posted_date->diffForHumans() : 'Recently' }}
-                </span>
-            </div>
-
-            <!-- Description -->
-            <div class="mb-4">
-                <h3 class="font-semibold text-gray-900 mb-2">Description:</h3>
-                <p class="text-gray-700 leading-relaxed">
-                    {{ $job->description ?: 'No description available.' }}
-                </p>
-            </div>
-
-            <!-- Requirements -->
-            <div class="mb-4">
-                <h3 class="font-semibold text-gray-900 mb-2">Requirements:</h3>
-                <p class="text-gray-700 leading-relaxed">
-                    {{ $job->requirements ?: 'No specific requirements listed.' }}
-                </p>
-            </div>
-
-            @if(auth()->user()->isJobseeker())
-                <!-- Apply Button -->
-                <div class="mt-6 pt-4 border-t border-gray-100">
-                    <button class="bg-emerald-600 text-white font-medium px-6 py-2 rounded-lg hover:bg-emerald-700">
-                        Apply for this Job
-                    </button>
-                </div>
-            @endif
-        </div>
-    </div>
 </body>
 
 </html>

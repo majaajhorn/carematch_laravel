@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\SessionController;
 use App\Http\Controllers\JobController;
+use App\Http\Controllers\JobseekerController;
 use App\Models\Jobseeker;
 use Illuminate\Support\Facades\Route;
 
@@ -27,6 +28,11 @@ Route::put('/jobs/{job}', [JobController::class, 'update'])->name(('jobs.update'
 Route::delete('/jobs/{job}', [JobController::class, 'destroy'])->name('jobs.destroy')->middleware('auth');
 Route::get('/jobs/{job}', [JobController::class, 'show'])->name('jobs.show')->middleware('auth');
 
+// JOBSEEKER 
+Route::get('/profile', [JobseekerController::class, 'show'])->name('jobseeker.profile.show')->middleware('auth');
+Route::get('/profile//edit', [JobseekerController::class, 'edit'])->name('jobseeker.profile.edit')->middleware('auth');
+Route::put('/profile/jobseeker', [JobseekerController::class, 'update'])->name('jobseeker.profile.update')->middleware('auth');
+Route::delete('/profile', [JobseekerController::class, 'destroy'])->name('jobseeker.profile.destroy')->middleware('auth');
 
 Route::get('/carers', function() {
     $jobseekers = Jobseeker::with('authParent')->get();

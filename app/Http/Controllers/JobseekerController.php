@@ -2,9 +2,77 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
+use App\Models\Jobseeker;
+use App\Http\Requests\StoreProfileRequest;
+use App\Enums\Gender;
+use App\Enums\EnglishLevel;
+use App\Enums\LiveInExperience;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class JobseekerController extends Controller
 {
-    //
+    // prikazi jobseekera
+    public function show()
+    {
+        $user = Auth::user();
+
+        $jobseeker = Jobseeker::where('id', $user->user_id)->with(['qualifications', 'experiences'])->first();
+
+        return view('profile.jobseeker.show', compact('user', 'jobseeker'));
+    }
+    // uredi profil
+    public function edit()
+    {
+        $user = Auth::user();
+
+        $jobseeker = Jobseeker::where('id', $user->user_id)->with(['qualifications', 'experiences'])->first();
+
+        return view('profile.jobseeker.edit', compact('user', 'jobseeker'));
+    }
+    // spremi izmjene
+    public function update(StoreProfileRequest $request)
+    {
+        $user = Auth::user();
+
+        $user->update([
+            'first_name' => $request->first_name,
+            'last_name' => $request->last_name,
+            'email' => $request->email,
+            'location' => $request->location,
+            'contact' => $request->contact,
+        ]);
+
+        $jobseeker = Jobseeker::find($user->user_id);
+
+        $jobseeker->update([
+            'gender' => $request->enum('gender', Gender::class),
+            'english_level' => $request->enum('english_level', EnglishLevel::class),
+            'live_in_experience' => $request->enum('live_in_experience', LiveInExperience::class),
+            'driving_license' => $request->boolean('driving_license'),
+            'about_yourself' => $request->about_yourself,
+        ]);
+
+        return redirect()->route('jobseeker.profile.show');
+    }
+    // obrisi profil
+    public function destroy()
+    {
+        $user = Auth::user();
+
+        $jobseeker = Jobseeker::find($user->user_id);
+
+        if ($jobseeker) {
+            $jobseeker->qualifications()->delete();
+            $jobseeker->experiences()->delete();
+
+            $jobseeker->delete();
+        }
+
+        $user->delete();
+
+        return redirect()->route('home');
+    }
+    
 }
