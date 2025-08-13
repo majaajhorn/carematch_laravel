@@ -25,6 +25,7 @@
                 {{-- Different navigation based on if the user is jobseeker or employer --}}
                 @if(auth()->user()->isJobseeker())
                     <a href="/jobs" class="text-sm font-medium text-gray-600 hover:text-gray-900">Browse Jobs</a>
+                    <a href="/jobs/saved" class="text-sm font-medium text-gray-600 hover:text-gray-900">Saved Jobs</a>
                     <a href="/my_applications" class="text-sm font-medium text-gray-600 hover:text-gray-900">My
                         Applications</a>
                 @elseif(auth()->user()->isEmployer())
@@ -61,7 +62,7 @@
                                 {{ $job->title }}
                             </a>
                         </h2>
-                        <span class="text-lg font-bold text-emerald-600">
+                        <span class="text-lg font-bold text-emerald-600">£
                             {{ $job->salary }} {{ (string) $job->salary_period }}
                         </span>
                     </div>

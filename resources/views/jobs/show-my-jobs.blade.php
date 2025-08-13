@@ -25,6 +25,7 @@
                 {{-- Different navigation based on if the user is jobseeker or employer --}}
                 @if(auth()->user()->isJobseeker())
                     <a href="/jobs" class="text-sm font-medium text-gray-600 hover:text-gray-900">Browse Jobs</a>
+                    <a href="/jobs/saved" class="text-sm font-medium text-gray-600 hover:text-gray-900">Saved Jobs</a>
                     <a href="/my_applications" class="text-sm font-medium text-gray-600 hover:text-gray-900">My
                         Applications</a>
                 @elseif(auth()->user()->isEmployer())
@@ -59,65 +60,172 @@
 
         <div class="space-y-6">
             @foreach ($jobs as $job)
+                @php
+                    $isEditing = request('edit') == $job->id;
+                @endphp
+
                 <div class="border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow">
-                    <!-- Job Title and Salary -->
-                    <div class="flex justify-between items-start mb-4">
-                        <h2 class="text-xl font-semibold text-gray-900">
-                            <a href="/jobs/{{ $job->id }}" class="hover:text-emerald-600">
-                                {{ $job->title }}
+
+                    <!-- Ako korisnik klikne da se editira-->
+
+                    @if ($isEditing)
+                        {{-- EDIT MODE --}}
+                        <form action="{{ route('jobs.update', $job->id) }}" method="POST" class="space-y-4">
+                            @csrf
+                            @method('PUT')
+
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <!-- Job Title -->
+                                <div>
+                                    <label for="title" class="block text-sm font-medium text-gray-700 mb-1">Job Title</label>
+                                    <input type="text" name="title" value="{{ old('title', $job->title) }}"
+                                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-emerald-500 focus:border-emerald-500"
+                                        required>
+                                </div>
+
+                                <!-- Location -->
+                                <div>
+                                    <label for="location" class="block text-sm font-medium text-gray-700 mb-1">Location</label>
+                                    <input type="text" name="location" value="{{ old('location', $job->location) }}"
+                                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-emerald-500 focus:border-emerald-500"
+                                        required>
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                <!-- Salary -->
+                                <div>
+                                    <label for="salary" class="block text-sm font-medium text-gray-700 mb-1">Salary</label>
+                                    <input type="text" name="salary" value="{{ old('salary', $job->salary) }}"
+                                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-emerald-500 focus:border-emerald-500"
+                                        required>
+                                </div>
+
+                                <!-- Salary Period -->
+                                <div>
+                                    <label for="salary_period" class="block text-sm font-medium text-gray-700 mb-1">Salary
+                                        Period</label>
+                                    <select name="salary_period"
+                                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-emerald-500 focus:border-emerald-500"
+                                        required>
+                                        <option value="weekly" {{ $job->salary_period == 'weekly' ? 'selected' : '' }}>Weekly
+                                        </option>
+                                        <option value="monthly" {{ $job->salary_period == 'monthly' ? 'selected' : '' }}>Monthly
+                                        </option>
+                                    </select>
+                                </div>
+
+                                <!-- Employment Type -->
+                                <div>
+                                    <label for="employment_type" class="block text-sm font-medium text-gray-700 mb-1">Employment
+                                        Type</label>
+                                    <select name="employment_type"
+                                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-emerald-500 focus:border-emerald-500"
+                                        required>
+                                        <option value="full_time" {{ $job->employment_type == 'full_time' ? 'selected' : '' }}>
+                                            Full Time</option>
+                                        <option value="part_time" {{ $job->employment_type == 'part_time' ? 'selected' : '' }}>
+                                            Part Time</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Description -->
+                            <div>
+                                <label for="description" class="block text-sm font-medium text-gray-700 mb-1">Job
+                                    Description</label>
+                                <textarea name="description" rows="3"
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-emerald-500 focus:border-emerald-500">{{ old('description', $job->description) }}</textarea>
+                            </div>
+
+                            <!-- Requirements -->
+                            <div>
+                                <label for="requirements"
+                                    class="block text-sm font-medium text-gray-700 mb-1">Requirements</label>
+                                <textarea name="requirements" rows="3"
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-emerald-500 focus:border-emerald-500">{{ old('requirements', $job->requirements) }}</textarea>
+                            </div>
+
+                            <!-- Action Buttons -->
+                            <div class="flex gap-3 pt-4">
+                                <button type="submit"
+                                    class="px-4 py-2 bg-emerald-600 text-white font-medium rounded-lg hover:bg-emerald-700">
+                                    Save Changes
+                                </button>
+                                <a href="{{ route('jobs.show-my-jobs') }}"
+                                    class="px-4 py-2 bg-gray-300 text-gray-700 font-medium rounded-lg hover:bg-gray-400">
+                                    Cancel
+                                </a>
+                            </div>
+                        </form>
+                    @else
+                        {{-- VIEW MODE --}}
+                        <!-- Job Title and Salary -->
+                        <div class="flex justify-between items-start mb-4">
+                            <h2 class="text-xl font-semibold text-gray-900">
+                                <a href="/jobs/{{ $job->id }}" class="hover:text-emerald-600">
+                                    {{ $job->title }}
+                                </a>
+                            </h2>
+                            <span class="text-lg font-bold text-emerald-600">£
+                                {{ $job->salary }} {{ (string) $job->salary_period }}
+                            </span>
+                        </div>
+
+                        <!-- Employment Type and Location -->
+                        <div class="flex flex-wrap gap-4 mb-4">
+                            <span
+                                class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
+                                {{ ucfirst(str_replace('_', ' ', (string) $job->employment_type)) }}
+                            </span>
+                            <span
+                                class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-gray-100 text-gray-700">
+                                📍 {{ $job->location }}
+                            </span>
+                            <span class="text-sm text-gray-500">
+                                Posted {{ $job->posted_date ? $job->posted_date->diffForHumans() : 'Recently' }}
+                            </span>
+                        </div>
+
+                        <!-- Description -->
+                        <div class="mb-4">
+                            <h3 class="font-semibold text-gray-900 mb-2">Description:</h3>
+                            <p class="text-gray-700 leading-relaxed">
+                                {{ $job->description ? Str::limit($job->description, 200) : 'No description available.' }}
+                            </p>
+                        </div>
+
+                        <!-- Requirements -->
+                        <div class="mb-4">
+                            <h3 class="font-semibold text-gray-900 mb-2">Requirements:</h3>
+                            <p class="text-gray-700 leading-relaxed">
+                                {{ $job->requirements ? Str::limit($job->requirements, 150) : 'No specific requirements listed.' }}
+                            </p>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="mt-4 pt-4 border-t border-gray-100 flex gap-3">
+                            <a href="/jobs/{{ $job->id }}"
+                                class="inline-flex items-center px-4 py-2 bg-emerald-600 text-white font-medium rounded-lg hover:bg-emerald-700 transition-colors">
+                                View Details
                             </a>
-                        </h2>
-                        <span class="text-lg font-bold text-emerald-600">
-                            {{ $job->salary }} {{ (string) $job->salary_period }}
-                        </span>
-                    </div>
+                            <a href="{{ route('jobs.show-my-jobs', ['edit' => $job->id]) }}"
+                                class="inline-flex items-center px-4 py-2 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors">
+                                Edit
+                            </a>
 
-                    <!-- Employment Type and Location -->
-                    <div class="flex flex-wrap gap-4 mb-4">
-                        <span
-                            class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
-                            {{ ucfirst(str_replace('_', ' ', (string) $job->employment_type)) }}
-                        </span>
-                        <span
-                            class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-gray-100 text-gray-700">
-                            📍 {{ $job->location }}
-                        </span>
-                        <span class="text-sm text-gray-500">
-                            Posted {{ $job->posted_date ? $job->posted_date->diffForHumans() : 'Recently' }}
-                        </span>
-                    </div>
-
-                    <!-- Description -->
-                    <div class="mb-4">
-                        <h3 class="font-semibold text-gray-900 mb-2">Description:</h3>
-                        <p class="text-gray-700 leading-relaxed">
-                            {{ $job->description ? Str::limit($job->description, 200) : 'No description available.' }}
-                        </p>
-                    </div>
-
-                    <!-- Requirements -->
-                    <div class="mb-4">
-                        <h3 class="font-semibold text-gray-900 mb-2">Requirements:</h3>
-                        <p class="text-gray-700 leading-relaxed">
-                            {{ $job->requirements ? Str::limit($job->requirements, 150) : 'No specific requirements listed.' }}
-                        </p>
-                    </div>
-
-                    <!-- Action Buttons -->
-                    <div class="mt-4 pt-4 border-t border-gray-100 flex gap-3">
-                        <a href="/jobs/{{ $job->id }}"
-                            class="inline-flex items-center px-4 py-2 bg-emerald-600 text-white font-medium rounded-lg hover:bg-emerald-700 transition-colors">
-                            View Details
-                        </a>
-                        <button
-                            class="inline-flex items-center px-4 py-2 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors">
-                            Edit Job
-                        </button>
-                        <button
-                            class="inline-flex items-center px-4 py-2 bg-red-600 text-white font-medium rounded-lg hover:bg-red-700 transition-colors">
-                            Delete
-                        </button>
-                    </div>
+                            <!-- Brisanje posla -->
+                            <form method="POST" action="{{ route('jobs.destroy', $job->id) }}" class="inline"
+                                onsubmit="return confirm('Are you sure you want to delete this job post?')">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit"
+                                    class="inline-flex items-center px-4 py-2 bg-red-600 text-white font-medium rounded-lg hover:bg-red-700 transition-colors">
+                                    Delete
+                                </button>
+                            </form>
+                        </div>
+                    @endif
                 </div>
             @endforeach
 

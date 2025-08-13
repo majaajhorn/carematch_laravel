@@ -56,6 +56,30 @@ class JobController extends Controller
             'posted_date' => now(),
         ]);
 
-        return redirect('/dashboard');
+        return redirect()->route('jobs.show-my-jobs');
+    }
+
+    // uređivanje poslova
+    public function update(StoreJobRequest $request, Job $job)
+    {
+        $job->update([
+            'title' => $request->title,
+            'salary' => $request->salary,
+            'salary_period' => $request->enum('salary_period', SalaryPeriod::class),
+            'employment_type' => $request->enum('employment_type', EmploymentType::class),
+            'location' => $request->location,
+            'description' => $request->description,
+            'requirements' => $request->requirements,
+        ]);
+
+        return redirect()->route('jobs.show-my-jobs');
+    }
+
+    // brisanje poslova
+    public function destroy(Job $job)
+    {
+        $job->delete();
+
+        return redirect()->route('jobs.show-my-jobs');
     }
 }
