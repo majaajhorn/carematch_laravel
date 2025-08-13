@@ -25,10 +25,23 @@ class JobController extends Controller
         return view('jobs.create');
     }
 
+    // prikaz posla
     public function show(Job $job)
-{
-    return view('jobs.show', compact('job'));
-}
+    {
+        return view('jobs.show', compact('job'));
+    }
+
+    // prikaz posla od trenutnog employera (my jobs)
+    public function showMyJobs()
+    {
+        $user = auth()->user();     // get the currently logged-in user
+
+        $employer = $user->user;    // polymorphic relationship (get related record based on user_type)
+
+        $jobs = $employer->jobs()->latest()->get(); // get all jobs from this employer
+        return view('jobs.show-my-jobs', compact('jobs'));
+    }    
+
     // spremanje poslova
     public function store(StoreJobRequest $request)
     {

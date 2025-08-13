@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Jobs</title>
+    <title>My Job Posts</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
@@ -49,7 +49,13 @@
     </header>
 
     <div class="max-w-4xl mx-auto p-6">
-        <h1 class="text-2xl font-bold mb-6">Available Jobs</h1>
+        <div class="flex justify-between items-center mb-6">
+            <h1 class="text-2xl font-bold">My Job Posts</h1>
+            <a href="/jobs/create"
+                class="bg-emerald-600 text-white px-4 py-2 rounded-lg hover:bg-emerald-700 font-medium">
+                Post New Job
+            </a>
+        </div>
 
         <div class="space-y-6">
             @foreach ($jobs as $job)
@@ -97,19 +103,31 @@
                         </p>
                     </div>
 
-                    <!-- View Details Button -->
-                    <div class="mt-4 pt-4 border-t border-gray-100">
+                    <!-- Action Buttons -->
+                    <div class="mt-4 pt-4 border-t border-gray-100 flex gap-3">
                         <a href="/jobs/{{ $job->id }}"
                             class="inline-flex items-center px-4 py-2 bg-emerald-600 text-white font-medium rounded-lg hover:bg-emerald-700 transition-colors">
-                            View Full Details →
+                            View Details
                         </a>
+                        <button
+                            class="inline-flex items-center px-4 py-2 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors">
+                            Edit Job
+                        </button>
+                        <button
+                            class="inline-flex items-center px-4 py-2 bg-red-600 text-white font-medium rounded-lg hover:bg-red-700 transition-colors">
+                            Delete
+                        </button>
                     </div>
                 </div>
             @endforeach
 
             @if($jobs->isEmpty())
                 <div class="text-center py-12">
-                    <p class="text-gray-500 text-lg">No jobs available at the moment.</p>
+                    <p class="text-gray-500 text-lg mb-4">You haven't posted any jobs yet.</p>
+                    <a href="/jobs/create"
+                        class="bg-emerald-600 text-white px-6 py-3 rounded-lg hover:bg-emerald-700 font-medium">
+                        Post Your First Job
+                    </a>
                 </div>
             @endif
         </div>

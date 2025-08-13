@@ -29,7 +29,7 @@
                         Applications</a>
                 @elseif(auth()->user()->isEmployer())
                     <a href="/carers" class="text-sm font-medium text-gray-600 hover:text-gray-900">Browse Carers</a>
-                    <a href="/my_jobs" class="text-sm font-medium text-gray-600 hover:text-gray-900">My Job Posts</a>
+                    <a href="/jobs/my-jobs" class="text-sm font-medium text-gray-600 hover:text-gray-900">My Job Posts</a>
                     <a href="/jobs/create" class="text-sm font-medium text-gray-600 hover:text-gray-900">Post a Job</a>
                 @endif
 
@@ -50,7 +50,12 @@
 
     <div class="max-w-4xl mx-auto p-6">
         <div class="mb-6">
-            <a href="/jobs" class="text-emerald-600 hover:text-emerald-700">← Back to Jobs</a>
+            @if (auth()->user()->isJobseeker())
+                <a href="/jobs" class="text-emerald-600 hover:text-emerald-700">← Back to Jobs</a>
+            @elseif(auth()->user()->isEmployer())
+                <a href="/jobs/my-jobs" class="text-emerald-600 hover:text-emerald-700">← Back to My Jobs</a>
+            @endif
+
         </div>
 
         <div class="border border-gray-200 rounded-lg p-6">
