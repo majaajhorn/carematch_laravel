@@ -4,6 +4,7 @@ use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\SessionController;
 use App\Http\Controllers\JobController;
 use App\Http\Controllers\JobseekerController;
+use App\Http\Controllers\UserAvatarController;
 use App\Models\Jobseeker;
 use Illuminate\Support\Facades\Route;
 
@@ -38,6 +39,10 @@ Route::prefix('profile')->group(function() {
     Route::patch('/', [JobseekerController::class, 'update'])->name('jobseeker.profile.update')->middleware('auth');
     Route::delete('/', [JobseekerController::class, 'destroy'])->name('jobseeker.profile.destroy')->middleware('auth');
 });
+
+// PROFILE PICTURE
+Route::post('/profile/upload-photo', [UserAvatarController::class, 'upload'])->name('profile.upload-photo');
+Route::delete('/profile/remove-photo', [UserAvatarController::class, 'remove'])->name('profile.remove-photo');
 
 Route::get('/carers', function() {
     $jobseekers = Jobseeker::with('authParent')->get();

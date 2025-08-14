@@ -75,19 +75,43 @@
                 <div class="flex items-center gap-4">
                     <!-- Profile Photo -->
                     <div class="relative">
-                        <div class="w-20 h-20 bg-gray-300 rounded-full flex items-center justify-center">
-                            <svg class="w-10 h-10 text-gray-500" fill="currentColor" viewBox="0 0 24 24">
-                                <path
-                                    d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
-                            </svg>
-                        </div>
+                        @if($user->hasPhoto())
+                            <img src="{{ $user->photo_url }}" alt="Profile Photo"
+                                class="w-20 h-20 rounded-full object-cover">
+                        @else
+                            <div class="w-20 h-20 bg-gray-300 rounded-full flex items-center justify-center">
+                                <svg class="w-10 h-10 text-gray-500" fill="currentColor" viewBox="0 0 24 24">
+                                    <path
+                                        d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
+                                </svg>
+                            </div>
+                        @endif
                     </div>
 
-                    <!-- Upload Photo Button -->
+                    <!-- Upload Photo Form -->
                     <div>
-                        <button class="bg-gray-100 hover:bg-gray-200 px-4 py-2 rounded-md text-sm text-gray-700 border">
-                            Upload New Photo
-                        </button>
+                        <form method="POST" action="{{ route('profile.upload-photo') }}" enctype="multipart/form-data"
+                            class="inline">
+                            @csrf
+                            <input type="file" name="photo" id="avatar" accept="image/*" class="hidden"
+                                onchange="this.form.submit()">
+                            <label for="avatar"
+                                class="bg-gray-100 hover:bg-gray-200 px-4 py-2 rounded-md text-sm text-gray-700 border cursor-pointer">
+                                {{ $user->hasPhoto() ? 'Change Photo' : 'Upload New Photo' }}
+                            </label>
+                        </form>
+
+                        @if($user->hasPhoto())
+                            <form method="POST" action="{{ route('profile.remove-photo') }}" class="inline ml-2">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit"
+                                    class="bg-red-100 hover:bg-red-200 px-4 py-2 rounded-md text-sm text-red-700 border">
+                                    Remove
+                                </button>
+                            </form>
+                        @endif
+
                         <p class="text-xs text-gray-500 mt-1">JPG, PNG max 2MB</p>
                     </div>
 

@@ -90,6 +90,9 @@ class JobseekerController extends Controller
             $jobseeker->delete();
         }
 
+        $userAvatarController = new UserAvatarController;
+        $userAvatarController->remove();
+
         $user->delete();
 
         return redirect()->route('home');

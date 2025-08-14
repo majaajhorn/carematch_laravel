@@ -3,6 +3,7 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Http\Controllers\UserAvatarController;
 use App\Models\Employer;
 use App\Models\Jobseeker;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
@@ -59,6 +60,15 @@ class User extends Authenticatable
     public function isEmployer() 
     {
         return $this->user_type === Employer::class;
+    }
+    public function hasPhoto()
+    {
+        return UserAvatarController::hasPhoto($this->id);
+    }
+
+    public function getPhotoUrlAttribute()
+    {
+        return UserAvatarController::getPhotoUrl($this->id);
     }
 
     /* helper funkcija ako bude trebala, ali zasad ne treba
