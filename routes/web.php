@@ -40,6 +40,8 @@ Route::prefix('profile')->group(function() {
     Route::delete('/', [JobseekerController::class, 'destroy'])->name('jobseeker.profile.destroy')->middleware('auth');
 });
 
+Route::get('/jobseeker/{id}', [JobseekerController::class, 'showPublic'])->name('jobseeker.show')->middleware('auth');
+
 // PROFILE PICTURE
 Route::post('/profile/upload-photo', [UserAvatarController::class, 'upload'])->name('profile.upload-photo');
 Route::delete('/profile/remove-photo', [UserAvatarController::class, 'remove'])->name('profile.remove-photo');

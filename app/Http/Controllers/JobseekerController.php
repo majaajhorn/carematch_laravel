@@ -97,5 +97,18 @@ class JobseekerController extends Controller
 
         return redirect()->route('home');
     }
+
+    public function showPublic($id) 
+    {
+        $jobseeker = Jobseeker::where('id', $id)->with(['qualifications', 'experiences'])->first();
+
+        if (!$jobseeker) {
+            abort(404, 'Jobseeker not found');
+        }
+
+        $user = $jobseeker->authParent;
+
+        return view('jobseeker.index', compact('user', 'jobseeker'));
+    }
     
 }
