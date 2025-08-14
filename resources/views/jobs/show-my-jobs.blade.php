@@ -30,7 +30,8 @@
                         Applications</a>
                 @elseif(auth()->user()->isEmployer())
                     <a href="/carers" class="text-sm font-medium text-gray-600 hover:text-gray-900">Browse Carers</a>
-                    <a href="/jobs/my-jobs" class="text-sm font-medium text-gray-600 hover:text-gray-900">My Job Posts</a>
+                    <a href="/jobs/my-jobs" class="text-sm font-medium text-emerald-600 hover:text-gray-900">My Job
+                        Posts</a>
                     <a href="/jobs/create" class="text-sm font-medium text-gray-600 hover:text-gray-900">Post a Job</a>
                 @endif
 

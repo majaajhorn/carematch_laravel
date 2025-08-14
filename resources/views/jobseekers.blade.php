@@ -18,7 +18,7 @@
                 <span>CareMatch</span>
             </a>
             <nav class="hidden sm:flex items-center gap-8">
-                <a href="/dashboard" class="text-sm font-medium text-gray-600 hover:text-gray-900">Home</a>
+                <a href="/dashboard" class="text-sm font-medium text-emerald-600 hover:text-gray-900">Home</a>
 
                 {{-- Different navigation based on if the user is jobseeker or employer --}}
                 @if(auth()->user()->isJobseeker())

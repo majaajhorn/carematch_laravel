@@ -19,20 +19,25 @@ Route::post('/login', [SessionController::class, 'store'])->name('login.store');
 Route::post('/logout', [SessionController::class, 'destroy'])->name('logout');
 
 // JOBS
-Route::get('/jobs/create', [JobController::class, 'create'])->name('jobs.create')->middleware('auth');
-Route::get('/jobs', [JobController::class, 'index'])->name('jobs.index')->middleware('auth');
-Route::post('/jobs', [JobController::class, 'store'])->name('jobs.store');
-Route::get('/jobs/my-jobs', [JobController::class, 'showMyJobs'])->name('jobs.show-my-jobs')->middleware('auth');
+Route::prefix('jobs')->group(function() {
+    Route::get('/create', [JobController::class, 'create'])->name('jobs.create')->middleware('auth');
+    Route::get('/', [JobController::class, 'index'])->name('jobs.index')->middleware('auth');
+    Route::post('/', [JobController::class, 'store'])->name('jobs.store');
+    Route::get('/my-jobs', [JobController::class, 'showMyJobs'])->name('jobs.show-my-jobs')->middleware('auth');
 
-Route::put('/jobs/{job}', [JobController::class, 'update'])->name(('jobs.update'))->middleware('auth');
-Route::delete('/jobs/{job}', [JobController::class, 'destroy'])->name('jobs.destroy')->middleware('auth');
-Route::get('/jobs/{job}', [JobController::class, 'show'])->name('jobs.show')->middleware('auth');
+    Route::put('/{job}', [JobController::class, 'update'])->name(('jobs.update'))->middleware('auth');
+    Route::delete('/{job}', [JobController::class, 'destroy'])->name('jobs.destroy')->middleware('auth');
+    Route::get('/{job}', [JobController::class, 'show'])->name('jobs.show')->middleware('auth');
+});
+
 
 // JOBSEEKER 
-Route::get('/profile', [JobseekerController::class, 'show'])->name('jobseeker.profile.show')->middleware('auth');
-Route::get('/profile//edit', [JobseekerController::class, 'edit'])->name('jobseeker.profile.edit')->middleware('auth');
-Route::put('/profile/jobseeker', [JobseekerController::class, 'update'])->name('jobseeker.profile.update')->middleware('auth');
-Route::delete('/profile', [JobseekerController::class, 'destroy'])->name('jobseeker.profile.destroy')->middleware('auth');
+Route::prefix('profile')->group(function() {
+    Route::get('/', [JobseekerController::class, 'show'])->name('jobseeker.profile.show')->middleware('auth');
+    Route::get('/edit', [JobseekerController::class, 'edit'])->name('jobseeker.profile.edit')->middleware('auth');
+    Route::patch('/', [JobseekerController::class, 'update'])->name('jobseeker.profile.update')->middleware('auth');
+    Route::delete('/', [JobseekerController::class, 'destroy'])->name('jobseeker.profile.destroy')->middleware('auth');
+});
 
 Route::get('/carers', function() {
     $jobseekers = Jobseeker::with('authParent')->get();

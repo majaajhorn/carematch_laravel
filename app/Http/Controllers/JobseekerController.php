@@ -54,6 +54,26 @@ class JobseekerController extends Controller
             'about_yourself' => $request->about_yourself,
         ]);
 
+        // qualifications
+        $jobseeker->qualifications()->delete(); 
+        if ($request->has('qualifications')) {
+            foreach ($request->qualifications as $qualification) {
+                $jobseeker->qualifications()->create([
+                    'qualification_name' => $qualification
+                ]);
+            }
+        }
+
+        // experiences
+        $jobseeker->experiences()->delete(); 
+        if ($request->has('experiences')) {
+            foreach ($request->experiences as $experience) {
+                $jobseeker->experiences()->create([
+                    'job_title' => $experience
+                ]);
+            }
+        }
+
         return redirect()->route('jobseeker.profile.show');
     }
     // obrisi profil

@@ -24,7 +24,7 @@
 
                 {{-- Different navigation based on if the user is jobseeker or employer --}}
                 @if(auth()->user()->isJobseeker())
-                    <a href="/jobs" class="text-sm font-medium text-gray-600 hover:text-gray-900">Browse Jobs</a>
+                    <a href="/jobs" class="text-sm font-medium text-emerald-600 hover:text-gray-900">Browse Jobs</a>
                     <a href="/jobs/saved" class="text-sm font-medium text-gray-600 hover:text-gray-900">Saved Jobs</a>
                     <a href="/my_applications" class="text-sm font-medium text-gray-600 hover:text-gray-900">My
                         Applications</a>

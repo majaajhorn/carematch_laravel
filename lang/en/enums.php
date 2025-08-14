@@ -14,7 +14,7 @@ return [
     */
 
     'experience' => [
-        'less_than_3_years' => 'Less than 3 years',
+        'one_to_three_years' => 'Less than 3 years',
         'three_to_five_years' => '3 to 5 years',
         'more_than_five_years' => 'More than 5 years',
     ],
