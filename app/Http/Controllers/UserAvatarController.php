@@ -17,22 +17,24 @@ class UserAvatarController extends Controller
 
         $user = Auth::user();
 
-        $filename = 'user_' . $user->id . '.jpg';
+        $filename = 'user_' . $user->id . '.jpg'; // naziv datoteke
 
+        // radimo provjeru da user moze imati samo jednu sliku
         if (Storage::disk('public')->exists('photos/' . $filename)) {
             Storage::disk('public')->delete('photos/' . $filename);
         }
 
-        $request->file('photo')->storeAs('photos', $filename, 'public');
+        $request->file('photo')->storeAs('photos', $filename, 'public'); // spremanje slike
 
         return redirect()->back()->with('success', 'Photo uploaded successfully!');
     }
 
     public function remove()
     {
-        $user = Auth::user();
-        $filename = 'user_' . $user->id . '.jpg';
+        $user = Auth::user(); // dohvati usera
+        $filename = 'user_' . $user->id . '.jpg'; // naziv datoteke
 
+        // ako postoji, obriši
         if (Storage::disk('public')->exists('photos/' . $filename)) {
             Storage::disk('public')->delete('photos/' . $filename);
         }
