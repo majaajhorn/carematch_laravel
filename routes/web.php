@@ -5,6 +5,7 @@ use App\Http\Controllers\Auth\SessionController;
 use App\Http\Controllers\JobController;
 use App\Http\Controllers\JobseekerController;
 use App\Http\Controllers\UserAvatarController;
+use App\Http\Controllers\SavedJobController;
 use App\Models\Jobseeker;
 use Illuminate\Support\Facades\Route;
 
@@ -19,6 +20,11 @@ Route::get('/login', [SessionController::class, 'create'])->name('login');
 Route::post('/login', [SessionController::class, 'store'])->name('login.store');
 Route::post('/logout', [SessionController::class, 'destroy'])->name('logout');
 
+// SAVED JOBS
+Route::get('/jobs/saved', [SavedJobController::class, 'index'])->name('jobs.saved')->middleware('auth');
+Route::post('/jobs/save/{jobId}', [SavedJobController::class, 'store'])->name('jobs.save')->middleware('auth');
+Route::delete('/jobs/unsave/{jobId}', [SavedJobController::class, 'destroy'])->name('jobs.unsave')->middleware('auth');
+
 // JOBS
 Route::prefix('jobs')->group(function() {
     Route::get('/create', [JobController::class, 'create'])->name('jobs.create')->middleware('auth');
@@ -30,7 +36,6 @@ Route::prefix('jobs')->group(function() {
     Route::delete('/{job}', [JobController::class, 'destroy'])->name('jobs.destroy')->middleware('auth');
     Route::get('/{job}', [JobController::class, 'show'])->name('jobs.show')->middleware('auth');
 });
-
 
 // JOBSEEKER 
 Route::prefix('profile')->group(function() {

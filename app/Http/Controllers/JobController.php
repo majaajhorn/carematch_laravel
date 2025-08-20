@@ -6,6 +6,8 @@ use App\Enums\EmploymentType;
 use App\Enums\SalaryPeriod;
 use App\Http\Requests\StoreJobRequest;
 use App\Models\Job;
+use App\Models\SavedJob;
+use Illuminate\Support\Facades\Auth;
 
 class JobController extends Controller
 {
@@ -28,7 +30,14 @@ class JobController extends Controller
     // prikaz posla
     public function show(Job $job)
     {
-        return view('jobs.show', compact('job'));
+        // ovdje ćemo napraviti provjeru ako je već sejvan posao i spremiti u varijablu
+        $isSaved = false;
+
+        if (Auth::check() && Auth::user()->isJobseeker()) {
+            $jobseekerId = Auth::user()->user->id;
+            $isSaved = SavedJob::where('job_id', $job->id)->where('jobseeker_id',$jobseekerId)->exists();
+        }
+        return view('jobs.show', compact('job', 'isSaved'));
     }
 
     // prikaz posla od trenutnog employera (my jobs)

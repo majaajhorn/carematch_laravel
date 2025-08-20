@@ -100,11 +100,33 @@
             </div>
 
             @if(auth()->user()->isJobseeker())
-                <!-- Apply Button -->
-                <div class="mt-6 pt-4 border-t border-gray-100">
-                    <button class="bg-emerald-600 text-white font-medium px-6 py-2 rounded-lg hover:bg-emerald-700">
-                        Apply for this Job
-                    </button>
+                <div class="flex flex-wrap gap-4">
+                    <div class="mt-6 pt-4 border-t border-gray-100">
+                        <button class="bg-emerald-600 text-white font-medium px-6 py-2 rounded-lg hover:bg-emerald-700">
+                            Apply
+                        </button>
+                    </div>
+
+                    <div class="mt-6 pt-4 border-t border-gray-100">
+                        @if($isSaved)
+                            <form method="POST" action="{{ route('jobs.unsave', $job->id) }}" class="inline">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit"
+                                    class="border border-red-600 text-red-600 font-medium px-6 py-2 rounded-lg hover:bg-red-50">
+                                    Remove
+                                </button>
+                            </form>
+                        @else
+                            <form method="POST" action="{{ route('jobs.save', $job->id) }}" class="inline">
+                                @csrf
+                                <button type="submit"
+                                    class="bg-blue-600 text-white font-medium px-6 py-2 rounded-lg hover:bg-blue-700">
+                                    Save Job
+                                </button>
+                            </form>
+                        @endif
+                    </div>
                 </div>
             @endif
         </div>

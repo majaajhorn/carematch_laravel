@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\JobseekerQualification;
 use App\Models\JobseekerExperience;
+use App\Models\SavedJob;
 
 class Jobseeker extends Model implements IsUserContract
 {
@@ -31,4 +32,8 @@ class Jobseeker extends Model implements IsUserContract
         return $this->hasMany(JobseekerExperience::class);
     }
 
+    public function savedJobs()
+    {
+        return $this->hasMany(SavedJob::class);
+    }
 }
