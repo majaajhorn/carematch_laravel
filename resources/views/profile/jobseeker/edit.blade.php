@@ -29,7 +29,7 @@
                     <a href="/jobs/my-jobs" class="text-sm font-medium text-gray-600 hover:text-gray-900">My Job Posts</a>
                     <a href="/jobs/create" class="text-sm font-medium text-gray-600 hover:text-gray-900">Post a Job</a>
                 @endif
-                <a href="/profile" class="text-sm font-medium text-emerald-600">My Profile</a>
+                <a href="{{ route('profile.home') }}" class="text-sm font-medium text-emerald-600">My Profile</a>
                 <a href="/about" class="text-sm font-medium text-gray-600 hover:text-gray-900">About</a>
                 <form method="POST" action="{{ route('logout') }}" class="inline">
                     @csrf

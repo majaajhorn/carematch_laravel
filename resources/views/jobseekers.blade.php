@@ -32,7 +32,8 @@
                     <a href="/jobs/create" class="text-sm font-medium text-gray-600 hover:text-gray-900">Post a Job</a>
                 @endif
 
-                <a href="/profile" class="text-sm font-medium text-gray-600 hover:text-gray-900">My Profile</a>
+                <a href="{{ route('profile.home') }}" class="text-sm font-medium text-gray-600 hover:text-gray-900">My
+                    Profile</a>
                 <a href="/about" class="text-sm font-medium text-gray-600 hover:text-gray-900">About</a>
 
                 <!-- Logout form -->

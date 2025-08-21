@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\SessionController;
+use App\Http\Controllers\EmployerController;
 use App\Http\Controllers\JobController;
 use App\Http\Controllers\JobseekerController;
 use App\Http\Controllers\UserAvatarController;
@@ -25,7 +26,7 @@ Route::get('/jobs/saved', [SavedJobController::class, 'index'])->name('jobs.save
 Route::post('/jobs/save/{jobId}', [SavedJobController::class, 'store'])->name('jobs.save')->middleware('auth');
 Route::delete('/jobs/unsave/{jobId}', [SavedJobController::class, 'destroy'])->name('jobs.unsave')->middleware('auth');
 
-// JOBS
+// JOBS ====> ovdje namjestiti kao dolje da bude lijepo i uredno
 Route::prefix('jobs')->group(function() {
     Route::get('/create', [JobController::class, 'create'])->name('jobs.create')->middleware('auth');
     Route::get('/', [JobController::class, 'index'])->name('jobs.index')->middleware('auth');
@@ -37,12 +38,29 @@ Route::prefix('jobs')->group(function() {
     Route::get('/{job}', [JobController::class, 'show'])->name('jobs.show')->middleware('auth');
 });
 
-// JOBSEEKER 
-Route::prefix('profile')->group(function() {
-    Route::get('/', [JobseekerController::class, 'show'])->name('jobseeker.profile.show')->middleware('auth');
-    Route::get('/edit', [JobseekerController::class, 'edit'])->name('jobseeker.profile.edit')->middleware('auth');
-    Route::patch('/', [JobseekerController::class, 'update'])->name('jobseeker.profile.update')->middleware('auth');
-    Route::delete('/', [JobseekerController::class, 'destroy'])->name('jobseeker.profile.destroy')->middleware('auth');
+// JOBSEEKER AND EMPLOYER PROFILE
+Route::middleware('auth')->group(function () {
+    // ovo je ruta koja vodi na /profile, i ovisno o vrsti usera vodi ga na njihov profil
+    Route::get('/profile', function () {
+        return auth()->user()->isJobseeker()
+            ? redirect()->route('jobseeker.profile.show')
+            : redirect()->route('employer.profile.show');
+    })->name('profile.home');
+
+    // JOBSEEKER
+    Route::prefix('jobseeker/profile')->name('jobseeker.profile.')->group(function () {
+        Route::get('/',    [JobseekerController::class, 'show'])->name('show');
+        Route::get('/edit',[JobseekerController::class, 'edit'])->name('edit');
+        Route::patch('/',  [JobseekerController::class, 'update'])->name('update');
+        Route::delete('/', [JobseekerController::class, 'destroy'])->name('destroy');
+    });
+
+    // EMPLOYER
+    Route::prefix('employer/profile')->name('employer.profile.')->group(function () {
+        Route::get('/',    [EmployerController::class, 'show'])->name('show');
+        Route::get('/edit',[EmployerController::class, 'edit'])->name('edit');
+        Route::patch('/',  [EmployerController::class, 'update'])->name('update');
+    });
 });
 
 Route::get('/jobseeker/{id}', [JobseekerController::class, 'showPublic'])->name('jobseeker.show')->middleware('auth');

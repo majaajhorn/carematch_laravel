@@ -18,6 +18,10 @@ class JobseekerController extends Controller
     {
         $user = Auth::user();
 
+        if (!$user->isJobseeker()) {
+            return redirect()->route('employer.profile.show');
+        }
+
         $jobseeker = Jobseeker::where('id', $user->user_id)->with(['qualifications', 'experiences'])->first();
 
         return view('profile.jobseeker.show', compact('user', 'jobseeker'));
@@ -27,6 +31,10 @@ class JobseekerController extends Controller
     {
         $user = Auth::user();
 
+        if (!$user->isJobseeker()) {
+            return redirect()->route('employer.profile.edit');
+        }
+
         $jobseeker = Jobseeker::where('id', $user->user_id)->with(['qualifications', 'experiences'])->first();
 
         return view('profile.jobseeker.edit', compact('user', 'jobseeker'));
@@ -35,6 +43,10 @@ class JobseekerController extends Controller
     public function update(StoreProfileRequest $request)
     {
         $user = Auth::user();
+
+        if (!$user->isJobseeker()) {
+            return redirect()->route('employer.profile.show');
+        }
 
         $user->update([
             'first_name' => $request->first_name,
@@ -80,6 +92,10 @@ class JobseekerController extends Controller
     public function destroy()
     {
         $user = Auth::user();
+
+        if (!$user->isJobseeker()) {
+            return redirect()->route('employer.profile.show');
+        }
 
         $jobseeker = Jobseeker::find($user->user_id);
 
