@@ -183,8 +183,9 @@
                                 class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-gray-100 text-gray-700">
                                 📍 {{ $job->location }}
                             </span>
-                            <span class="text-sm text-gray-500">
-                                Posted {{ $job->posted_date ? $job->posted_date->diffForHumans() : 'Recently' }}
+                            <span
+                                class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-gray-100 text-gray-700">
+                                Posted {{ $job->created_at->diffForHumans() }}
                             </span>
                         </div>
 

@@ -16,6 +16,11 @@ class Jobseeker extends Model implements IsUserContract
     use HasFactory, HasUuids, IsUser;
 
     protected $guarded = ['id'];
+
+    // Koristimo casts 'boolean' jer kad fetchamo model, dobit ćemo true/false umjesto 1/0
+    protected $casts = [
+        'driving_license' => 'boolean',
+    ];
     
     public function authParent()
     {

@@ -40,10 +40,18 @@ class StoreProfileRequest extends FormRequest
             'gender' => ['required', Rule::enum(Gender::class)],
             'english_level' => ['required', Rule::enum(EnglishLevel::class)],
             'live_in_experience' => ['required', Rule::enum(LiveInExperience::class)],
-            'driving_license' => ['required'],
+            'driving_license' => ['sometimes', 'boolean'], // this field is not required. we used sometimes because sometimes only validates if it's present in the request; unchecked boxes aren't sent at all, so validator skips the rule if the box is unchecked
             'about_yourself' => ['required', 'string', 'max:5000'],
         ];
     }
+
+    protected function prepareForValidation(): void
+    {
+        $this->merge([
+            'driving_license' => $this->boolean('driving_license'),
+        ]);
+    }
+
 
 
 }

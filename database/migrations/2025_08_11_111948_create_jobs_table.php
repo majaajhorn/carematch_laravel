@@ -21,8 +21,8 @@ return new class extends Migration
             $table->string('salary_period')->default(SalaryPeriod::Weekly->value);
             $table->string('employment_type')->default(EmploymentType::FullTime->value);
             $table->string('location');
-            $table->string('description')->setMaxLength(5000);
-            $table->string('requirements')->nullable();
+            $table->text('description')->setMaxLength(5000);
+            $table->text('requirements')->nullable();
             $table->date('posted_date');
             $table->boolean('active')->default(true);
             $table->timestamps();
