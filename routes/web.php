@@ -37,10 +37,10 @@ Route::prefix('jobs')->group(function() {
     Route::put('/{job}', [JobController::class, 'update'])->name(('jobs.update'))->middleware('auth');
     Route::delete('/{job}', [JobController::class, 'destroy'])->name('jobs.destroy')->middleware('auth');
     Route::get('/{job}', [JobController::class, 'show'])->name('jobs.show')->middleware('auth');
-
-    // APPLICATIONS
-    Route::get('/{job}/apply', [ApplicationController::class, 'store'])->name('jobs.apply')->middleware('auth');
 });
+
+// APPLICATIONS
+Route::get('/applications', [ApplicationController::class, 'index'])->name('applications.index')->middleware('auth');
 
 // JOBSEEKER AND EMPLOYER PROFILE
 Route::middleware('auth')->group(function () {
@@ -66,6 +66,7 @@ Route::middleware('auth')->group(function () {
         Route::patch('{employer}',  [EmployerController::class, 'update'])->name('update');
     });
 });
+
 
 Route::get('/jobseeker/{id}', [JobseekerController::class, 'showPublic'])->name('jobseeker.show')->middleware('auth');
 
