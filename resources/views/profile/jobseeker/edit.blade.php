@@ -53,7 +53,7 @@
 
         <!-- Edit Form -->
         <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
-            <form method="POST" action="{{ route('jobseeker.profile.update') }}">
+            <form method="POST" action="{{ route('jobseeker.profile.update',  $user->user_id) }}">
                 @csrf
                 @method('PATCH')
                 

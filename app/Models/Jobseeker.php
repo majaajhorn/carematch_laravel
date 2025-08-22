@@ -41,4 +41,8 @@ class Jobseeker extends Model implements IsUserContract
     {
         return $this->hasMany(SavedJob::class);
     }
+    public function applications()
+    {
+        return $this->hasMany(Application::class);
+    }
 }

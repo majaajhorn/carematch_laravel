@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ApplicationController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\SessionController;
 use App\Http\Controllers\EmployerController;
@@ -36,6 +37,9 @@ Route::prefix('jobs')->group(function() {
     Route::put('/{job}', [JobController::class, 'update'])->name(('jobs.update'))->middleware('auth');
     Route::delete('/{job}', [JobController::class, 'destroy'])->name('jobs.destroy')->middleware('auth');
     Route::get('/{job}', [JobController::class, 'show'])->name('jobs.show')->middleware('auth');
+
+    // APPLICATIONS
+    Route::get('/{job}/apply', [ApplicationController::class, 'store'])->name('jobs.apply')->middleware('auth');
 });
 
 // JOBSEEKER AND EMPLOYER PROFILE
@@ -51,7 +55,7 @@ Route::middleware('auth')->group(function () {
     Route::prefix('jobseeker/profile')->name('jobseeker.profile.')->group(function () {
         Route::get('/',    [JobseekerController::class, 'show'])->name('show');
         Route::get('/edit',[JobseekerController::class, 'edit'])->name('edit');
-        Route::patch('/',  [JobseekerController::class, 'update'])->name('update');
+        Route::patch('{jobseeker}',  [JobseekerController::class, 'update'])->name('update');
         Route::delete('/', [JobseekerController::class, 'destroy'])->name('destroy');
     });
 
@@ -59,7 +63,7 @@ Route::middleware('auth')->group(function () {
     Route::prefix('employer/profile')->name('employer.profile.')->group(function () {
         Route::get('/',    [EmployerController::class, 'show'])->name('show');
         Route::get('/edit',[EmployerController::class, 'edit'])->name('edit');
-        Route::patch('/',  [EmployerController::class, 'update'])->name('update');
+        Route::patch('{employer}',  [EmployerController::class, 'update'])->name('update');
     });
 });
 

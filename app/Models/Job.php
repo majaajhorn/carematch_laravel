@@ -43,4 +43,9 @@ class Job extends Model
     {
         return $query->where('posted_date', '>=', now()->subDays($days));
     }
+
+    public function applications()
+    {
+        return $this->hasMany(Application::class);
+    }
 }

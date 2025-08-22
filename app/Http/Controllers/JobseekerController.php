@@ -2,13 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
 use App\Models\Jobseeker;
 use App\Http\Requests\StoreProfileRequest;
 use App\Enums\Gender;
 use App\Enums\EnglishLevel;
 use App\Enums\LiveInExperience;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class JobseekerController extends Controller
@@ -40,15 +38,9 @@ class JobseekerController extends Controller
         return view('profile.jobseeker.edit', compact('user', 'jobseeker'));
     }
     // spremi izmjene
-    public function update(StoreProfileRequest $request)
+    public function update(StoreProfileRequest $request, Jobseeker $jobseeker)
     {
-        $user = Auth::user();
-
-        if (!$user->isJobseeker()) {
-            return redirect()->route('employer.profile.show');
-        }
-
-        $user->update([
+        $jobseeker->authParent()->update([
             'first_name' => $request->first_name,
             'last_name' => $request->last_name,
             'email' => $request->email,
@@ -56,7 +48,6 @@ class JobseekerController extends Controller
             'contact' => $request->contact,
         ]);
 
-        $jobseeker = Jobseeker::find($user->user_id);
 
         $jobseeker->update([
             'gender' => $request->enum('gender', Gender::class),

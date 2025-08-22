@@ -2,14 +2,10 @@
 
 namespace App\Http\Requests;
 
-use App\Enums\EmploymentType;
 use App\Enums\EnglishLevel;
 use App\Enums\Gender;
 use App\Enums\LiveInExperience;
-use App\Enums\SalaryPeriod;
-use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 
 class StoreProfileRequest extends FormRequest

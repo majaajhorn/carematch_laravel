@@ -52,8 +52,7 @@
         <h1 class="text-2xl font-bold text-gray-900 mb-8">Edit Profile</h1>
 
         <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
-            <form method="POST" action="{{ route('employer.profile.update') }}">
-
+            <form method="POST" action="{{ route('employer.profile.update', $user->user_id) }}">
                 @csrf
                 @method('PATCH')
 
