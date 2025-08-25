@@ -13,30 +13,36 @@ use Illuminate\Support\Facades\Route;
 
 Route::view('/', 'home')->name('home');
 Route::view('/about', 'about')->name('about'); 
-Route::view('/dashboard', 'dashboard')->name('dashboard')->middleware('auth');
 
+// AUTH ROUTES (login/register)
 Route::get('/register', [RegisteredUserController::class, 'create'])->name('register');
 Route::post('/register', [RegisteredUserController::class, 'store'])->name('register.store');
-
 Route::get('/login', [SessionController::class, 'create'])->name('login');
 Route::post('/login', [SessionController::class, 'store'])->name('login.store');
 Route::post('/logout', [SessionController::class, 'destroy'])->name('logout');
 
-// SAVED JOBS
-Route::get('/jobs/saved', [SavedJobController::class, 'index'])->name('jobs.saved')->middleware('auth');
-Route::post('/jobs/save/{jobId}', [SavedJobController::class, 'store'])->name('jobs.save')->middleware('auth');
-Route::delete('/jobs/unsave/{jobId}', [SavedJobController::class, 'destroy'])->name('jobs.unsave')->middleware('auth');
+Route::view('/dashboard', 'dashboard')->name('dashboard')->middleware('auth');
+// PROTECTED ROUTES
+Route::middleware('auth')->group(function () {
 
-// JOBS ====> ovdje namjestiti kao dolje da bude lijepo i uredno
-Route::prefix('jobs')->group(function() {
-    Route::get('/create', [JobController::class, 'create'])->name('jobs.create')->middleware('auth');
-    Route::get('/', [JobController::class, 'index'])->name('jobs.index')->middleware('auth');
-    Route::post('/', [JobController::class, 'store'])->name('jobs.store');
-    Route::get('/my-jobs', [JobController::class, 'showMyJobs'])->name('jobs.show-my-jobs')->middleware('auth');
+    // JOB ROUTES
+    Route::prefix('jobs')->group(function() {
+        Route::get('/', [JobController::class, 'index'])->name('jobs.index');
+        Route::get('/create', [JobController::class, 'create'])->name('jobs.create');
+        Route::post('/', [JobController::class, 'store'])->name('jobs.store');
+        Route::get('/my-jobs', [JobController::class, 'showMyJobs'])->name('jobs.show-my-jobs');
 
-    Route::put('/{job}', [JobController::class, 'update'])->name(('jobs.update'))->middleware('auth');
-    Route::delete('/{job}', [JobController::class, 'destroy'])->name('jobs.destroy')->middleware('auth');
-    Route::get('/{job}', [JobController::class, 'show'])->name('jobs.show')->middleware('auth');
+        // Saved Jobs
+        Route::get('/saved', [SavedJobController::class, 'index'])->name('jobs.saved');
+        Route::post('/save/{jobId}', [SavedJobController::class, 'store'])->name('jobs.save');
+        Route::delete('/unsave/{jobId}', [SavedJobController::class, 'destroy'])->name('jobs.unsave');
+
+        // Individual job operations
+        Route::get('/{job}', [JobController::class, 'show'])->name('jobs.show');
+        Route::put('/{job}', [JobController::class, 'update'])->name('jobs.update');
+        Route::delete('/{job}', [JobController::class, 'destroy'])->name('jobs.destroy');
+    });
+
 });
 
 // APPLICATIONS
@@ -65,20 +71,20 @@ Route::middleware('auth')->group(function () {
         Route::get('/edit',[EmployerController::class, 'edit'])->name('edit');
         Route::patch('{employer}',  [EmployerController::class, 'update'])->name('update');
     });
+
+    // PROFILE PICTURE
+    Route::post('/profile/upload-photo', [UserAvatarController::class, 'upload'])->name('profile.upload-photo');
+    Route::delete('/profile/remove-photo', [UserAvatarController::class, 'remove'])->name('profile.remove-photo');
 });
 
+Route::middleware('auth')->group(function () {
+    Route::get('/jobseeker/{id}', [JobseekerController::class, 'showPublic'])->name('jobseeker.show');
+    Route::get('/carers', function() {
+        $jobseekers = Jobseeker::with('authParent')->get();
+        return view('jobseekers', compact('jobseekers'));
+    })->name('carers');
+});
 
-Route::get('/jobseeker/{id}', [JobseekerController::class, 'showPublic'])->name('jobseeker.show')->middleware('auth');
-
-// PROFILE PICTURE
-Route::post('/profile/upload-photo', [UserAvatarController::class, 'upload'])->name('profile.upload-photo');
-Route::delete('/profile/remove-photo', [UserAvatarController::class, 'remove'])->name('profile.remove-photo');
-
-Route::get('/carers', function() {
-    $jobseekers = Jobseeker::with('authParent')->get();
-
-    return view('jobseekers', compact('jobseekers'));
-})->name('carers')->middleware('auth');
 
 /* RUTE KOJE SE TREBAJU DEFINIRATI */
 
