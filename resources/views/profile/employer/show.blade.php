@@ -1,3 +1,10 @@
+<?php
+
+/*if ($errors->any()) {
+    dd($errors);
+}*/
+?>
+
 @extends('layouts.master')
 
 @section('content')
@@ -51,6 +58,8 @@
                                 {{ $user->hasPhoto() ? 'Change Photo' : 'Upload New Photo' }}
                             </label>
                         </form>
+
+
 
                         @if($user->hasPhoto())
                             <form method="POST" action="{{ route('profile.remove-photo') }}" class="inline ml-2">

@@ -38,7 +38,7 @@ class ApplicationController extends Controller
     }
 
     // dohvati applications od employera
-    public function employerIndex()
+    /*public function employerIndex()
     {
         $user = Auth::user();
         $employer = $user->user;
@@ -50,5 +50,5 @@ class ApplicationController extends Controller
         
         return view('employer.applications', compact('applications'));
     }
-    
+    */
 }

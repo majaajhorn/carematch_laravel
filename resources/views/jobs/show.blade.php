@@ -58,9 +58,13 @@
             @if(auth()->user()->isJobseeker())
                 <div class="flex flex-wrap gap-4">
                     <div class="mt-6 pt-4 border-t border-gray-100">
-                        <button class="bg-emerald-600 text-white font-medium px-6 py-2 rounded-lg hover:bg-emerald-700">
-                            Apply
-                        </button>
+                        <form method="POST" action="{{ route('applications.store', ['job' => $job]) }}" class="inline">
+                            @csrf
+                            <button type="submit"
+                                class="bg-emerald-600 text-white font-medium px-6 py-2 rounded-lg hover:bg-emerald-700">
+                                Apply
+                            </button>
+                        </form>
                     </div>
 
                     <div class="mt-6 pt-4 border-t border-gray-100">

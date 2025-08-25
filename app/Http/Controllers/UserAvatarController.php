@@ -5,16 +5,20 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\Rules\File;
 
 class UserAvatarController extends Controller
 {
     // update the avatar for the user
     public function upload(Request $request)
     {
+        //
         $request->validate([
-            'photo' => ['required', 'image', 'mimes:jpg,jpeg,png', 'max:2048']
+            'photo' => ['required', File::image()
+            ->min(100)
+            ->max(200)]
         ]);
-
+//dd($request);
         $user = Auth::user();
 
         $filename = 'user_' . $user->id . '.jpg'; // naziv datoteke

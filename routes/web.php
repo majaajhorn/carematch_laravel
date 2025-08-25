@@ -8,7 +8,10 @@ use App\Http\Controllers\JobController;
 use App\Http\Controllers\JobseekerController;
 use App\Http\Controllers\UserAvatarController;
 use App\Http\Controllers\SavedJobController;
+use App\Http\Middleware\CheckUserByUserType;
+use App\Models\Employer;
 use App\Models\Jobseeker;
+
 use Illuminate\Support\Facades\Route;
 
 Route::view('/', 'home')->name('home');
@@ -22,32 +25,47 @@ Route::post('/login', [SessionController::class, 'store'])->name('login.store');
 Route::post('/logout', [SessionController::class, 'destroy'])->name('logout');
 
 Route::view('/dashboard', 'dashboard')->name('dashboard')->middleware('auth');
-// PROTECTED ROUTES
+
 Route::middleware('auth')->group(function () {
 
-    // JOB ROUTES
-    Route::prefix('jobs')->group(function() {
-        Route::get('/', [JobController::class, 'index'])->name('jobs.index');
-        Route::get('/create', [JobController::class, 'create'])->name('jobs.create');
-        Route::post('/', [JobController::class, 'store'])->name('jobs.store');
-        Route::get('/my-jobs', [JobController::class, 'showMyJobs'])->name('jobs.show-my-jobs');
+    Route::get('/applications', [ApplicationController::class, 'index'])->name('applications.index');
+
+    Route::middleware(CheckUserByUserType::class. ':' . Jobseeker::class)->group(function () {
+        Route::prefix('jobs')->group(function() {
+            Route::get('/', [JobController::class, 'index'])->name('jobs.index');
+            Route::get('/{job}', [JobController::class, 'show'])->name('jobs.show');
+            // Applying for job
+            Route::post('/{job}/apply', [ApplicationController::class, 'store'])->name('applications.store');
+        });
 
         // Saved Jobs
         Route::get('/saved', [SavedJobController::class, 'index'])->name('jobs.saved');
         Route::post('/save/{jobId}', [SavedJobController::class, 'store'])->name('jobs.save');
         Route::delete('/unsave/{jobId}', [SavedJobController::class, 'destroy'])->name('jobs.unsave');
 
-        // Individual job operations
-        Route::get('/{job}', [JobController::class, 'show'])->name('jobs.show');
-        Route::put('/{job}', [JobController::class, 'update'])->name('jobs.update');
-        Route::delete('/{job}', [JobController::class, 'destroy'])->name('jobs.destroy');
     });
+
+    Route::middleware(CheckUserByUserType::class. ':' . Employer::class)->group(function () {
+        Route::prefix('jobs')->group(function() {
+            //Route::get('/', [JobController::class, 'index'])->name('jobs.index');
+            Route::get('/create', [JobController::class, 'create'])->name('jobs.create');
+            Route::post('/', [JobController::class, 'store'])->name('jobs.store');
+            Route::get('/my-jobs', [JobController::class, 'showMyJobs'])->name('jobs.show-my-jobs');
+
+            Route::put('/{job}', [JobController::class, 'update'])->name('jobs.update');
+            Route::delete('/{job}', [JobController::class, 'destroy'])->name('jobs.destroy');
+        });
+    });
+
+    // trebalo bi dodati da se može poništiti aplikacija
+
+    Route::get('/employer/applications', [ApplicationController::class, 'employerIndex'])->name('applications.employer.index');
 
 });
 
-// APPLICATIONS
-Route::get('/applications', [ApplicationController::class, 'index'])->name('applications.index')->middleware('auth');
 
+
+// napraviti dodatni middleware za autorizaciju 
 // JOBSEEKER AND EMPLOYER PROFILE
 Route::middleware('auth')->group(function () {
     // ovo je ruta koja vodi na /profile, i ovisno o vrsti usera vodi ga na njihov profil
@@ -57,21 +75,23 @@ Route::middleware('auth')->group(function () {
             : redirect()->route('employer.profile.show');
     })->name('profile.home');
 
-    // JOBSEEKER
-    Route::prefix('jobseeker/profile')->name('jobseeker.profile.')->group(function () {
-        Route::get('/',    [JobseekerController::class, 'show'])->name('show');
-        Route::get('/edit',[JobseekerController::class, 'edit'])->name('edit');
-        Route::patch('{jobseeker}',  [JobseekerController::class, 'update'])->name('update');
-        Route::delete('/', [JobseekerController::class, 'destroy'])->name('destroy');
+    Route::middleware(CheckUserByUserType::class. ':' . Jobseeker::class)->group(function () {
+        Route::prefix('jobseeker/profile')->name('jobseeker.profile.')->group(function () {
+            Route::get('/',    [JobseekerController::class, 'show'])->name('show');
+            Route::get('/edit',[JobseekerController::class, 'edit'])->name('edit');
+            Route::patch('{jobseeker}',  [JobseekerController::class, 'update'])->name('update');
+            Route::delete('/', [JobseekerController::class, 'destroy'])->name('destroy');
+        });
     });
-
-    // EMPLOYER
-    Route::prefix('employer/profile')->name('employer.profile.')->group(function () {
-        Route::get('/',    [EmployerController::class, 'show'])->name('show');
-        Route::get('/edit',[EmployerController::class, 'edit'])->name('edit');
-        Route::patch('{employer}',  [EmployerController::class, 'update'])->name('update');
+    
+    Route::middleware(CheckUserByUserType::class. ':' . Employer::class)->group(function () {
+        Route::prefix('employer/profile')->name('employer.profile.')->group(function () {
+            Route::get('/',    [EmployerController::class, 'show'])->name('show');
+            Route::get('/edit',[EmployerController::class, 'edit'])->name('edit');
+            Route::patch('{employer}',  [EmployerController::class, 'update'])->name('update');
+        });
     });
-
+    
     // PROFILE PICTURE
     Route::post('/profile/upload-photo', [UserAvatarController::class, 'upload'])->name('profile.upload-photo');
     Route::delete('/profile/remove-photo', [UserAvatarController::class, 'remove'])->name('profile.remove-photo');

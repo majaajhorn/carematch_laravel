@@ -45,4 +45,8 @@ class Jobseeker extends Model implements IsUserContract
     {
         return $this->hasMany(Application::class);
     }
+    public function appliedJobs()
+    {
+        return $this->belongsToMany(Job::class, 'applications', 'jobseeker_id', 'job_id')->withTimestamps();
+    }
 }
