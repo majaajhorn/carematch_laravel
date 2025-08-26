@@ -46,7 +46,7 @@ class JobController extends Controller
     // prikaz posla od trenutnog employera (my jobs)
     public function showMyJobs()
     {
-        $user = auth()->user();     // get the currently logged-in user
+        $user = Auth::user();       // get the currently logged-in user
 
         $employer = $user->user;    // polymorphic relationship (get related record based on user_type)
 

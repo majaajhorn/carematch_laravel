@@ -11,7 +11,7 @@ use App\Http\Controllers\SavedJobController;
 use App\Http\Middleware\CheckUserByUserType;
 use App\Models\Employer;
 use App\Models\Jobseeker;
-
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 Route::view('/', 'home')->name('home');
@@ -60,8 +60,6 @@ Route::middleware('auth')->group(function () {
         });
     });
 
-    // trebalo bi dodati da se može poništiti aplikacija
-
     Route::get('/employer/applications', [ApplicationController::class, 'employerIndex'])->name('applications.employer.index');
 
 });
@@ -70,7 +68,7 @@ Route::middleware('auth')->group(function () {
 Route::middleware('auth')->group(function () {
     // ovo je ruta koja vodi na /profile, i ovisno o vrsti usera vodi ga na njihov profil
     Route::get('/profile', function () {
-        return auth()->user()->isJobseeker()
+        return Auth::user()->isJobseeker()
             ? redirect()->route('jobseeker.profile.show')
             : redirect()->route('employer.profile.show');
     })->name('profile.home');
