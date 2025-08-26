@@ -28,6 +28,18 @@ Route::view('/dashboard', 'dashboard')->name('dashboard')->middleware('auth');
 
 Route::middleware('auth')->group(function () {
 
+    Route::middleware(CheckUserByUserType::class. ':' . Employer::class)->group(function () {
+        Route::prefix('jobs')->group(function() {
+            //Route::get('/', [JobController::class, 'index'])->name('jobs.index');
+            Route::get('/create', [JobController::class, 'create'])->name('jobs.create');
+            Route::post('/', [JobController::class, 'store'])->name('jobs.store');
+            Route::get('/my-jobs', [JobController::class, 'showMyJobs'])->name('jobs.show-my-jobs');
+
+            Route::put('/{job}', [JobController::class, 'update'])->name('jobs.update');
+            Route::delete('/{job}', [JobController::class, 'destroy'])->name('jobs.destroy');
+        });
+    });
+
     Route::middleware(CheckUserByUserType::class. ':' . Jobseeker::class)->group(function () {
         Route::get('/applications', [ApplicationController::class, 'show'])->name('applications.index');
         Route::delete('/applications/job/{jobId}', [ApplicationController::class, 'destroy'])->name('applications.destroy');
@@ -46,18 +58,6 @@ Route::middleware('auth')->group(function () {
         Route::post('/save/{jobId}', [SavedJobController::class, 'store'])->name('jobs.save');
         Route::delete('/unsave/{jobId}', [SavedJobController::class, 'destroy'])->name('jobs.unsave');
 
-    });
-
-    Route::middleware(CheckUserByUserType::class. ':' . Employer::class)->group(function () {
-        Route::prefix('jobs')->group(function() {
-            //Route::get('/', [JobController::class, 'index'])->name('jobs.index');
-            Route::get('/create', [JobController::class, 'create'])->name('jobs.create');
-            Route::post('/', [JobController::class, 'store'])->name('jobs.store');
-            Route::get('/my-jobs', [JobController::class, 'showMyJobs'])->name('jobs.show-my-jobs');
-
-            Route::put('/{job}', [JobController::class, 'update'])->name('jobs.update');
-            Route::delete('/{job}', [JobController::class, 'destroy'])->name('jobs.destroy');
-        });
     });
 
     Route::get('/employer/applications', [ApplicationController::class, 'employerIndex'])->name('applications.employer.index');
