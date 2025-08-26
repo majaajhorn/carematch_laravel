@@ -6,6 +6,7 @@ use App\Models\Application;
 use App\Models\Job;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class ApplicationController extends Controller
 {
@@ -71,6 +72,21 @@ class ApplicationController extends Controller
             return redirect()->route('jobs.show', $job)->with('error', 'You have already applied for this job!');
         }
         return view('applications.index', compact('job'));
+    }
+    public function destroy(Request $request, $jobId)
+    {
+        $user = Auth::user();
+        $jobseekerId = $user->user->id;
+
+        $application = Application::where('job_id', $jobId)->where('jobseeker_id', $jobseekerId)->firstOrFail();
+
+        if (!empty($application->resume_path)) {
+            Storage::disk('public')->delete($application->resume_path);
+        }
+
+        $application->delete();
+
+        return back()->with('success', 'Successfully withdrawn from application.');
     }
     // dohvati applications od employera
     /*public function employerIndex()

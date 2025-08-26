@@ -64,6 +64,16 @@
                                     Download CV
                                 </a>
                             @endif
+
+                            <form method="POST" action="{{ route('applications.destroy', $application->job_id) }}" class="inline">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit"
+                                    onclick="return confirm('Are you sure you want to withdraw from this application?')"
+                                    class="border border-red-600 text-red-600 font-medium px-4 py-2 rounded-lg hover:bg-red-50 text-sm">
+                                    Withdraw
+                                </button>
+                            </form>
                         </div>
                     </div>
                 @endforeach
