@@ -10,7 +10,7 @@ class Application extends Model
 {
     use HasFactory, HasUuids;
 
-    protected $guided = ['id'];
+    protected $guarded = ['id'];
 
     public function job()
     {

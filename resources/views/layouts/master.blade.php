@@ -63,6 +63,12 @@
 </header>
 
 <body>
+    @if (session('success'))
+        <div class="mx-auto max-w-4xl mt-6 rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 text-emerald-800">
+            {{ session('success') }}
+        </div>
+    @endif
+
     @if ($errors->any())
         <div class="alert bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative">
             <ul>

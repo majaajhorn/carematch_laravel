@@ -16,6 +16,8 @@ return new class extends Migration
             $table->foreignUuid('job_id')->constrained('jobs')->cascadeOnDelete();
             $table->foreignUuid('jobseeker_id')->constrained('jobseekers')->cascadeOnDelete();
             $table->unique(['job_id', 'jobseeker_id']); // osiguravamo da se može prijaviti jednom na isti posao
+            $table->text('cover_letter')->nullable();
+            $table->text('additional_notes')->nullable();
             $table->timestamps();
         });
     }

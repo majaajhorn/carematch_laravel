@@ -28,13 +28,15 @@ Route::view('/dashboard', 'dashboard')->name('dashboard')->middleware('auth');
 
 Route::middleware('auth')->group(function () {
 
-    Route::get('/applications', [ApplicationController::class, 'index'])->name('applications.index');
-
     Route::middleware(CheckUserByUserType::class. ':' . Jobseeker::class)->group(function () {
+        Route::get('/applications', [ApplicationController::class, 'show'])->name('applications.index');
+
         Route::prefix('jobs')->group(function() {
             Route::get('/', [JobController::class, 'index'])->name('jobs.index');
             Route::get('/{job}', [JobController::class, 'show'])->name('jobs.show');
             // Applying for job
+            Route::get('/{job}/apply', [ApplicationController::class, 'create'])->name('applications.create');
+            // rutu post ćemo morati urediti bolje
             Route::post('/{job}/apply', [ApplicationController::class, 'store'])->name('applications.store');
         });
 
@@ -63,9 +65,6 @@ Route::middleware('auth')->group(function () {
 
 });
 
-
-
-// napraviti dodatni middleware za autorizaciju 
 // JOBSEEKER AND EMPLOYER PROFILE
 Route::middleware('auth')->group(function () {
     // ovo je ruta koja vodi na /profile, i ovisno o vrsti usera vodi ga na njihov profil
@@ -102,7 +101,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/carers', function() {
         $jobseekers = Jobseeker::with('authParent')->get();
         return view('jobseekers', compact('jobseekers'));
-    })->name('carers');
+    })->name('carers')->middleware(CheckUserByUserType::class. ':' . Employer::class);
 });
 
 

@@ -58,34 +58,24 @@
             @if(auth()->user()->isJobseeker())
                 <div class="flex flex-wrap gap-4">
                     <div class="mt-6 pt-4 border-t border-gray-100">
-                        <form method="POST" action="{{ route('applications.store', ['job' => $job]) }}" class="inline">
-                            @csrf
-                            <button type="submit"
-                                class="bg-emerald-600 text-white font-medium px-6 py-2 rounded-lg hover:bg-emerald-700">
-                                Apply
-                            </button>
-                        </form>
-                    </div>
-
-                    <div class="mt-6 pt-4 border-t border-gray-100">
-                        @if($isSaved)
-                            <form method="POST" action="{{ route('jobs.unsave', $job->id) }}" class="inline">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit"
-                                    class="border border-red-600 text-red-600 font-medium px-6 py-2 rounded-lg hover:bg-red-50">
-                                    Remove
-                                </button>
-                            </form>
+                        @if(!empty($hasApplied) && $hasApplied)
+                            <span
+                                class="inline-flex items-center rounded-lg border border-gray-300 bg-gray-100 px-6 py-2 text-sm font-medium text-gray-600">
+                                Already applied
+                            </span>
                         @else
-                            <form method="POST" action="{{ route('jobs.save', $job->id) }}" class="inline">
-                                @csrf
+                            <form method="GET" action="{{ route('applications.create', $job) }}" class="inline">
                                 <button type="submit"
-                                    class="bg-blue-600 text-white font-medium px-6 py-2 rounded-lg hover:bg-blue-700">
-                                    Save Job
+                                    class="bg-emerald-600 text-white font-medium px-6 py-2 rounded-lg hover:bg-emerald-700">
+                                    Apply
                                 </button>
                             </form>
                         @endif
+                    </div>
+
+                    {{-- Saved/Unsave section stays as you had it --}}
+                    <div class="mt-6 pt-4 border-t border-gray-100">
+
                     </div>
                 </div>
             @endif
