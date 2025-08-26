@@ -28,9 +28,10 @@ Route::view('/dashboard', 'dashboard')->name('dashboard')->middleware('auth');
 
 Route::middleware('auth')->group(function () {
 
+    Route::get('/jobs', [JobController::class, 'index'])->name('jobs.index');
+    
     Route::middleware(CheckUserByUserType::class. ':' . Employer::class)->group(function () {
         Route::prefix('jobs')->group(function() {
-            //Route::get('/', [JobController::class, 'index'])->name('jobs.index');
             Route::get('/create', [JobController::class, 'create'])->name('jobs.create');
             Route::post('/', [JobController::class, 'store'])->name('jobs.store');
             Route::get('/my-jobs', [JobController::class, 'showMyJobs'])->name('jobs.show-my-jobs');
@@ -45,8 +46,6 @@ Route::middleware('auth')->group(function () {
         Route::delete('/applications/job/{jobId}', [ApplicationController::class, 'destroy'])->name('applications.destroy');
 
         Route::prefix('jobs')->group(function() {
-            Route::get('/', [JobController::class, 'index'])->name('jobs.index');
-            Route::get('/{job}', [JobController::class, 'show'])->name('jobs.show');
             // Applying for job
             Route::get('/{job}/apply', [ApplicationController::class, 'create'])->name('applications.create');
             // rutu post ćemo morati urediti bolje
@@ -59,6 +58,8 @@ Route::middleware('auth')->group(function () {
         Route::delete('/unsave/{jobId}', [SavedJobController::class, 'destroy'])->name('jobs.unsave');
 
     });
+
+    Route::get('/jobs/{job}', [JobController::class, 'show'])->name('jobs.show')->middleware(CheckUserByUserType::class . ':' . Jobseeker::class . ',' . Employer::class);
 
     Route::get('/employer/applications', [ApplicationController::class, 'employerIndex'])->name('applications.employer.index');
 
