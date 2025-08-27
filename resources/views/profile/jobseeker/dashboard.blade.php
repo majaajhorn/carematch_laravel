@@ -10,16 +10,10 @@
                     Welcome <span class="text-emerald-600">{{ Auth::user()->first_name }}</span>!
                 </h1>
 
-                {{-- Different content based on user type --}}
-                @if(auth()->user()->isJobseeker())
-                    <p class="mt-4 text-lg leading-relaxed text-gray-600">
-                        Ready to find your next care opportunity? Browse available jobs and apply today.
-                    </p>
-                @elseif(auth()->user()->isEmployer())
-                    <p class="mt-4 text-lg leading-relaxed text-gray-600">
-                        Find the perfect care professional for your needs. Browse carers or post a new job.
-                    </p>
-                @endif
+
+                <p class="mt-4 text-lg leading-relaxed text-gray-600">
+                    Ready to find your next care opportunity? Browse available jobs and apply today.
+                </p>
             </div>
         </section>
     </main>
