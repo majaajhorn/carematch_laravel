@@ -24,11 +24,61 @@
                         <ul class="space-y-3">
                             @foreach($applications as $application)
                                 <li class="p-4 border rounded-lg bg-gray-50">
-                                    <p><strong>Job:</strong> {{ $application->job->title }}</p>
-                                    <p><strong>Applicant:</strong>
-                                        {{ $application->jobseeker?->authParent?->first_name }}
-                                        {{ $application->jobseeker?->authParent?->last_name }}
-                                    </p>
+                                    <div class="flex justify-between items-start">
+                                        <div class="flex-1">
+                                            <p><strong>Job:</strong> {{ $application->job->title }}</p>
+                                            <p><strong>Applicant:</strong>
+                                                {{ $application->jobseeker?->authParent?->first_name }}
+                                                {{ $application->jobseeker?->authParent?->last_name }}
+                                            </p>
+                                            <p><strong>Applied on:</strong> {{ $application->created_at->format('M d, Y') }}</p>
+                                        </div>
+
+                                        {{-- Status Badge --}}
+                                        <div class="ml-4">
+                                            <span
+                                                class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {{ $application->status->getBadgeClass() }}">
+                                                {{ $application->status->label() }}
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    {{-- Action Buttons - Only show if application is pending --}}
+                                    @if($application->isPending())
+                                        <div class="mt-4 flex space-x-2">
+                                            {{-- Approve Button --}}
+                                            <form action="{{ route('applications.approve', $application) }}" method="POST"
+                                                style="display: inline;">
+                                                @csrf
+                                                @method('PATCH')
+                                                <button type="submit"
+                                                    class="px-6 py-2 bg-green-600 text-white rounded-md text-sm font-medium hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500"
+                                                    onclick="return confirm('Are you sure you want to approve this application?')">
+                                                    Approve
+                                                </button>
+                                            </form>
+
+                                            {{-- Reject Button --}}
+                                            <form action="{{ route('applications.reject', $application) }}" method="POST"
+                                                style="display: inline;">
+                                                @csrf
+                                                @method('PATCH')
+                                                <button type="submit"
+                                                    class="px-6 py-2 bg-red-600 text-white rounded-md text-sm font-medium hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500"
+                                                    onclick="return confirm('Are you sure you want to reject this application?')">
+                                                    Reject
+                                                </button>
+                                            </form>
+                                        </div>
+                                    @else
+                                        {{-- Show status message for non-pending applications --}}
+                                        <div class="mt-4">
+                                            <p class="text-sm text-gray-600">
+                                                This application has been
+                                                <strong>{{ strtolower($application->status->label()) }}</strong>.
+                                            </p>
+                                        </div>
+                                    @endif
                                 </li>
                             @endforeach
                         </ul>

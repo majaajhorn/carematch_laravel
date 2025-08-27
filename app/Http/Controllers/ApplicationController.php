@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\ApplicationStatus;
 use App\Models\Application;
 use App\Models\Job;
 use Illuminate\Http\Request;
@@ -88,18 +89,28 @@ class ApplicationController extends Controller
 
         return back()->with('success', 'Successfully withdrawn from application.');
     }
-    // dohvati applications od employera
-    /*public function employerIndex()
+    
+    public function approve(Application $application)
     {
         $user = Auth::user();
-        $employer = $user->user;
 
-        $applications = Application::with(['job', 'jobseeker'])
-            ->whereHas('job', fn ($q) => $q->where('employer_id', $employer->id)) // ovo pojasniti !
-            ->latest()
-            ->get();
-        
-        return view('employer.applications', compact('applications'));
+        if ($application->job->employer_id !== $user->user_id) {
+            return back()->with('error', 'You can only approve applications for your own jobs');
+        }
+
+        $application->update(['status'=> ApplicationStatus::Approved]);
+        return back()->with('success', 'Application approved successfully.');
     }
-    */
+
+    public function reject(Application $application)
+    {
+        $user = Auth::user();
+
+        if ($application->job->employer_id !== $user->user_id) {
+            return back()->with('error', 'You can only reject applications for your own jobs');
+        }
+
+        $application->update(['status'=> ApplicationStatus::Rejected]);
+        return back()->with('success', 'Application rejected.');
+    }
 }

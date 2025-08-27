@@ -41,6 +41,9 @@ Route::middleware('auth')->group(function () {
             Route::put('/{job}', [JobController::class, 'update'])->name('jobs.update');
             Route::delete('/{job}', [JobController::class, 'destroy'])->name('jobs.destroy');
         });
+
+        Route::patch('/applications/{application}/approve', [ApplicationController::class, 'approve'])->name('applications.approve');
+        Route::patch('/applications/{application}/reject', [ApplicationController::class, 'reject'])->name('applications.reject');
     });
 
     Route::middleware(CheckUserByUserType::class. ':' . Jobseeker::class)->group(function () {
