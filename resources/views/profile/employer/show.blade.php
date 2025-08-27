@@ -77,7 +77,7 @@
 
                     <!-- Edit Button -->
                     <div class="ml-auto">
-                        <a href="{{ route('jobseeker.profile.edit') }}"
+                        <a href="{{ route('employer.profile.edit') }}"
                             class="bg-blue-600 hover:bg-blue-700 px-6 py-2 rounded-md text-sm text-white">
                             Edit Profile
                         </a>
