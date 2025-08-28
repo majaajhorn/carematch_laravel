@@ -3,11 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Enums\ApplicationStatus;
+use App\Mail\ApplicationSent;
+use App\Mail\NewApplicationNotification;
 use App\Models\Application;
 use App\Models\Job;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Log;
 
 class ApplicationController extends Controller
 {
@@ -36,7 +40,7 @@ class ApplicationController extends Controller
             $resumePath = $request->file('resume')->store('resumes', 'public');
         }
 
-        Application::updateOrCreate(
+        $application = Application::updateOrCreate(
             ['job_id' => $job->id, 'jobseeker_id' => $jobseekerId],
             [
             'cover_letter' => $request->cover_letter, 
@@ -45,7 +49,17 @@ class ApplicationController extends Controller
             ]
         );
 
-        return redirect()->route('jobs.show', $job)->with('success', 'Application sent');
+        try {
+            Mail::to($user->email)->send(new ApplicationSent($application, $job, $user));
+
+            $employer = $job->employer->authParent; 
+            
+            Mail::to($employer->email)->send(new NewApplicationNotification($application, $job, $user));
+        } catch (\Exception $e) {
+            \Log::error('Email sending failed: ' . $e->getMessage());
+        }
+
+        return redirect()->route('jobs.show', $job)->with('success', 'Application sent successfully!');
     }
 
     // dohvati applications od jobseekera

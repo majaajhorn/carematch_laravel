@@ -4,14 +4,13 @@ use App\Http\Controllers\ApplicationController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\SessionController;
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\EmailController;
 use App\Http\Controllers\EmployerController;
 use App\Http\Controllers\JobController;
 use App\Http\Controllers\JobseekerController;
 use App\Http\Controllers\UserAvatarController;
 use App\Http\Controllers\SavedJobController;
 use App\Http\Middleware\CheckUserByUserType;
-use App\Mail\MyEmail;
+use App\Mail\ApplicationSent;
 use App\Models\Employer;
 use App\Models\Jobseeker;
 use Illuminate\Support\Facades\Auth;
@@ -20,7 +19,6 @@ use Illuminate\Support\Facades\Route;
 
 Route::view('/', 'home')->name('home');
 Route::view('/about', 'about')->name('about'); 
-
 
 // AUTH ROUTES (login/register)
 Route::get('/register', [RegisteredUserController::class, 'create'])->name('register');
@@ -48,8 +46,6 @@ Route::middleware('auth')->group(function () {
         Route::patch('/applications/{application}/approve', [ApplicationController::class, 'approve'])->name('applications.approve');
         Route::patch('/applications/{application}/reject', [ApplicationController::class, 'reject'])->name('applications.reject');
     });
-
-    Route::post('/send-email', [EmailController::class, 'store'])->name('email.send');
 
     Route::middleware(CheckUserByUserType::class. ':' . Jobseeker::class)->group(function () {
         Route::get('/applications', [ApplicationController::class, 'show'])->name('applications.index');
