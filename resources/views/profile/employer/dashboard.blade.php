@@ -75,7 +75,7 @@
                                         <div class="mt-4">
                                             <p class="text-sm text-gray-600">
                                                 This application has been
-                                                <strong>{{ strtolower($application->status->label()) }}</strong>.
+                                                <strong>{{ $application->status }}</strong>.
                                             </p>
                                         </div>
                                     @endif

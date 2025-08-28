@@ -4,19 +4,23 @@ use App\Http\Controllers\ApplicationController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\SessionController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\EmailController;
 use App\Http\Controllers\EmployerController;
 use App\Http\Controllers\JobController;
 use App\Http\Controllers\JobseekerController;
 use App\Http\Controllers\UserAvatarController;
 use App\Http\Controllers\SavedJobController;
 use App\Http\Middleware\CheckUserByUserType;
+use App\Mail\MyEmail;
 use App\Models\Employer;
 use App\Models\Jobseeker;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 
 Route::view('/', 'home')->name('home');
 Route::view('/about', 'about')->name('about'); 
+
 
 // AUTH ROUTES (login/register)
 Route::get('/register', [RegisteredUserController::class, 'create'])->name('register');
@@ -24,7 +28,6 @@ Route::post('/register', [RegisteredUserController::class, 'store'])->name('regi
 Route::get('/login', [SessionController::class, 'create'])->name('login');
 Route::post('/login', [SessionController::class, 'store'])->name('login.store');
 Route::post('/logout', [SessionController::class, 'destroy'])->name('logout');
-
 
 Route::middleware('auth')->group(function () {
 
@@ -45,6 +48,8 @@ Route::middleware('auth')->group(function () {
         Route::patch('/applications/{application}/approve', [ApplicationController::class, 'approve'])->name('applications.approve');
         Route::patch('/applications/{application}/reject', [ApplicationController::class, 'reject'])->name('applications.reject');
     });
+
+    Route::post('/send-email', [EmailController::class, 'store'])->name('email.send');
 
     Route::middleware(CheckUserByUserType::class. ':' . Jobseeker::class)->group(function () {
         Route::get('/applications', [ApplicationController::class, 'show'])->name('applications.index');
