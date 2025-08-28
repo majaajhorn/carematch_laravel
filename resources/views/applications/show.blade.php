@@ -37,7 +37,10 @@
                                 <div>Applied {{ optional($application->created_at)->diffForHumans() }}</div>
                                 @if(!empty($application->status))
                                     <div class="mt-1 font-medium">
-                                        Status: <span class="text-gray-800">{{ ucfirst($application->status) }}</span>
+                                        Status: <span
+                                            class="inline-flex items-center px-2.5 py-1.5 rounded-full text-xs font-medium {{ $application->status->getBadgeClass() }}">
+                                            {{ $application->status }}
+                                        </span>
                                     </div>
                                 @endif
                             </div>

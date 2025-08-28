@@ -31,4 +31,15 @@ return [
         'advanced' => 'Advanced',
     ],
 
+    'salary_period' => [
+        'weekly' => 'Weekly',
+        'monthly' => 'Monthly'
+    ],
+
+    'status' => [
+        'pending' => 'Pending',
+        'approved' => 'Approved',
+        'rejected' => 'Rejected'
+    ],
+
 ];

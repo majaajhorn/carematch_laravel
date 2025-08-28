@@ -37,8 +37,8 @@
                                         {{-- Status Badge --}}
                                         <div class="ml-4">
                                             <span
-                                                class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {{ $application->status->getBadgeClass() }}">
-                                                {{ $application->status->label() }}
+                                                class="inline-flex items-center px-2.5 py-1.5 rounded-full text-xs font-medium {{ $application->status->getBadgeClass() }}">
+                                                {{ $application->status }}
                                             </span>
                                         </div>
                                     </div>
