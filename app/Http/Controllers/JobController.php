@@ -15,7 +15,9 @@ class JobController extends Controller
     // prikaz svih poslova
     public function index()
     {
-        $jobs = Job::latest()->get();
+        //$jobs = Job::latest()->get();
+        
+        $jobs = Job::latest()->paginate(2);
         
         return view('jobs.index', [
             'jobs' => $jobs

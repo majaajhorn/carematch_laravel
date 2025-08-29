@@ -62,6 +62,10 @@
                 </div>
             @endforeach
 
+            <div class="mt-6">
+                {{ $jobs->links() }}
+            </div>
+
             @if($jobs->isEmpty())
                 <div class="text-center py-12">
                     <p class="text-gray-500 text-lg">No jobs available at the moment.</p>
