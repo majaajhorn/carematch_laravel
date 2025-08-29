@@ -8,6 +8,7 @@ use App\Http\Requests\StoreJobRequest;
 use App\Models\Application;
 use App\Models\Job;
 use App\Models\SavedJob;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class JobController extends Controller
@@ -24,6 +25,32 @@ class JobController extends Controller
         ]);
     }
 
+    public function search(Request $request)
+    {
+        $search = $request->search;
+
+        if (empty($search)) {
+            $jobs = Job::where('id', '=', 0)->paginate(3); 
+            return view('jobs.index', compact('jobs', 'search'));
+        }
+        
+        $jobs = Job::with('employer.authParent')->where(function($query) use ($search) {
+            // Search in job fields
+            $query->where('title', 'like', "%$search%")
+                  ->orWhere('description', 'like', "%$search%")
+                  ->orWhere('location', 'like', "%$search%")
+                  ->orWhere('requirements', 'like', "%$search%");
+        })
+        
+        ->orWhereHas('employer.authParent', function($query) use ($search) {
+            $query->where('first_name', 'like', "%$search%")
+                  ->orWhere('last_name', 'like', "%$search%");
+        })
+        ->latest()
+        ->paginate(3);
+
+        return view('jobs.index', compact('jobs', 'search'));
+    }
     // stvaranje poslova
     public function create()
     {

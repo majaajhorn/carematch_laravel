@@ -32,6 +32,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('dashboard'); 
 
     Route::get('/jobs', [JobController::class, 'index'])->name('jobs.index');
+
+    Route::get('/jobs/search', [JobController::class, 'search'])->name('jobs.search');
     
     Route::middleware(CheckUserByUserType::class. ':' . Employer::class)->group(function () {
         Route::prefix('jobs')->group(function() {
