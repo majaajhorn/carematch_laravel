@@ -42,10 +42,9 @@
 
                     <!-- Contact Button -->
                     <div class="ml-auto">
-                        <button
-                            class="bg-emerald-600 hover:bg-emerald-700 px-6 py-2 rounded-md text-sm text-white font-medium">
-                            Contact Carer
-                        </button>
+                        <a href="mailto: {{ $user->email }}"
+                            class="bg-emerald-600 hover:bg-emerald-700 px-6 py-2 rounded-md text-sm text-white font-medium">Contact
+                            Carer</a>
                     </div>
                 </div>
             </div>
@@ -62,12 +61,13 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
                             <label class="block text-sm text-gray-600 mb-1">Email</label>
-                            <p class="text-gray-900">{{ $user->email }}</p>
+                            <a href="mailto: {{ $user->email }}" class="text-emerald-600">{{ $user->email }}</a>
                         </div>
                         @if($user->contact)
                             <div>
                                 <label class="block text-sm text-gray-600 mb-1">Contact</label>
-                                <p class="text-gray-900">{{ $user->contact }}</p>
+                                <!-- <p class="text-gray-900">{{ $user->contact }}</p> -->
+                                <a href="tel: {{ $user->contact }}" class="text-emerald-600"> {{ $user->contact }} </a>
                             </div>
                         @endif
                     </div>
