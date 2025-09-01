@@ -10,12 +10,7 @@
             <p class="text-gray-600">Jobs you've saved for later consideration</p>
         </div>
 
-        <!-- Success/Error Messages -->
-        @if(session('success'))
-            <div class="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg">
-                <p class="text-green-800">{{ session('success') }}</p>
-            </div>
-        @endif
+        <!-- Error Messages -->
 
         @if(session('message'))
             <div class="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
@@ -36,7 +31,7 @@
                                     </a>
                                 </h2>
 
-                                <div class="flex flex-wrap gap-4 mb-3">
+                                <div class="flex flex-wrap gap-4 mb-3 py-3">
                                     <span
                                         class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
                                         {{ ucfirst(str_replace('_', ' ', (string) $savedJob->job->employment_type)) }}
@@ -65,23 +60,35 @@
                         </p>
 
                         <!-- Action Buttons -->
-                        <div class="flex gap-3">
+                        <div class="flex items-center gap-3">
+                            <!-- View Details -->
                             <a href="{{ route('jobs.show', $savedJob->job) }}"
-                                class="bg-emerald-600 text-white font-medium px-4 py-2 rounded-lg hover:bg-emerald-700 text-sm">
+                                class="flex h-10 min-w-[120px] items-center justify-center rounded-lg px-4 text-sm font-medium text-center box-border bg-emerald-600 text-white hover:bg-emerald-700">
                                 View Details
                             </a>
 
-                            <button class="bg-gray-600 text-white font-medium px-4 py-2 rounded-lg hover:bg-gray-700 text-sm">
-                                Apply Now
-                            </button>
+                            <!-- Apply / Already applied -->
+                            @if($savedJob->job->has_applied)
+                                <span
+                                    class="flex h-10 min-w-[120px] items-center justify-center rounded-lg px-4 text-sm font-medium text-center box-border border border-gray-300 bg-gray-100 text-gray-600">
+                                    Already applied
+                                </span>
+                            @else
+                                <form method="GET" action="{{ route('applications.create', $savedJob->job) }}" class="inline">
+                                    <button type="submit"
+                                        class="flex h-10 min-w-[120px] items-center justify-center rounded-lg px-4 text-sm font-medium text-center box-border bg-gray-600 text-white hover:bg-gray-700">
+                                        Apply Now
+                                    </button>
+                                </form>
+                            @endif
 
-                            <!-- Remove from Saved Jobs - SAME PATTERN AS JOB POSTING -->
+                            <!-- Remove -->
                             <form method="POST" action="{{ route('jobs.unsave', $savedJob->job->id) }}" class="inline">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit"
                                     onclick="return confirm('Are you sure you want to remove this job from your saved jobs?')"
-                                    class="border border-red-600 text-red-600 font-medium px-4 py-2 rounded-lg hover:bg-red-50 text-sm">
+                                    class="flex h-10 min-w-[120px] items-center justify-center rounded-lg px-4 text-sm font-medium text-center box-border border border-red-600 text-red-600 hover:bg-red-50 mt-4">
                                     Remove
                                 </button>
                             </form>

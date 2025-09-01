@@ -117,5 +117,12 @@ class JobseekerController extends Controller
 
         return view('jobseeker.index', compact('user', 'jobseeker'));
     }
+
+    public function showJobseekers()
+    {
+        $jobseekers = Jobseeker::with('authParent')->paginate(2);
+
+        return view('jobseekers', compact('jobseekers'));
+    }
     
 }

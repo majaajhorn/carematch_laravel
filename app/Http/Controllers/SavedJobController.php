@@ -14,7 +14,16 @@ class SavedJobController extends Controller
         // dohvati usera
         $user = Auth::user();
         $jobseeker = $user->user;
-        $savedJobs = $jobseeker->savedJobs()->with('job')->latest()->get();
+        //$savedJobs = $jobseeker->savedJobs()->with('job')->latest()->get();
+        $savedJobs = SavedJob::query()
+        ->where('jobseeker_id', $jobseeker->id)
+        ->with(['job' => function ($q) use ($jobseeker) {
+            $q->withExists(['applications as has_applied' => function ($q) use ($jobseeker) {
+                $q->where('jobseeker_id', $jobseeker->id);
+            }]);
+        }])
+        ->latest()
+        ->get();
 
         return view('jobs.saved', compact('savedJobs'));
     }

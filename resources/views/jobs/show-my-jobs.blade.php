@@ -156,13 +156,13 @@
                         </div>
 
                         <!-- Action Buttons -->
-                        <div class="mt-4 pt-4 border-t border-gray-100 flex gap-3">
-                            <a href="/jobs/{{ $job->id }}"
-                                class="inline-flex items-center px-4 py-2 bg-emerald-600 text-white font-medium rounded-lg hover:bg-emerald-700 transition-colors">
+                        <div class="flex items-center gap-3">
+                            <a href="{{ route('jobs.show', $job->id) }}"
+                                class="flex h-10 min-w-[120px] items-center justify-center rounded-lg px-4 text-sm font-medium text-center box-border bg-emerald-600 text-white hover:bg-emerald-700">
                                 View Details
                             </a>
                             <a href="{{ route('jobs.show-my-jobs', ['edit' => $job->id]) }}"
-                                class="inline-flex items-center px-4 py-2 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors">
+                                class="flex h-10 min-w-[120px] items-center justify-center rounded-lg px-4 text-sm font-medium text-center box-border bg-gray-600 text-white hover:bg-gray-700">
                                 Edit
                             </a>
 
@@ -172,7 +172,7 @@
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit"
-                                    class="inline-flex items-center px-4 py-2 bg-red-600 text-white font-medium rounded-lg hover:bg-red-700 transition-colors">
+                                    class="flex h-10 min-w-[120px] items-center justify-center rounded-lg px-4 text-sm font-medium text-center box-border border border-red-600 text-red-600 hover:bg-red-50 mt-4">
                                     Delete
                                 </button>
                             </form>

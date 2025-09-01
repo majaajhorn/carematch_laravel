@@ -109,6 +109,8 @@
                             View Full Details →
                         </a>
                     </div>
+
+
                 </div>
             @empty
                 <div class="text-center py-12">

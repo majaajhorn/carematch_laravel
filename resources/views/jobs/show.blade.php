@@ -55,30 +55,52 @@
                 </p>
             </div>
 
-            @if(auth()->user()->isJobseeker())
-                <div class="flex flex-wrap gap-4">
+            @auth
+                @if (auth()->user()->isJobseeker())
                     <div class="mt-6 pt-4 border-t border-gray-100">
-                        @if(!empty($hasApplied) && $hasApplied)
-                            <span
-                                class="inline-flex items-center rounded-lg border border-gray-300 bg-gray-100 px-6 py-2 text-sm font-medium text-gray-600">
-                                Already applied
-                            </span>
-                        @else
-                            <form method="GET" action="{{ route('applications.create', $job) }}" class="inline">
-                                <button type="submit"
-                                    class="bg-emerald-600 text-white font-medium px-6 py-2 rounded-lg hover:bg-emerald-700">
-                                    Apply
-                                </button>
-                            </form>
-                        @endif
-                    </div>
+                        <div class="flex items-center gap-3">
 
-                    {{-- Saved/Unsave section stays as you had it --}}
-                    <div class="mt-6 pt-4 border-t border-gray-100">
+                            {{-- Apply / Already applied --}}
+                            @if(!empty($hasApplied) && $hasApplied)
+                                <span
+                                    class="inline-flex h-10 min-w-[120px] items-center justify-center rounded-lg px-4
+                                                     text-sm font-medium text-center box-border border border-gray-300 bg-gray-100 text-gray-600">
+                                    Already applied
+                                </span>
+                            @else
+                                <form method="GET" action="{{ route('applications.create', $job) }}" class="inline">
+                                    <button type="submit"
+                                        class="flex h-10 min-w-[120px] items-center justify-center rounded-lg px-4 text-sm font-medium text-center box-border bg-emerald-600 text-white hover:bg-emerald-700">
+                                        Apply
+                                    </button>
+                                </form>
+                            @endif
 
+                            {{-- Save / Unsave --}}
+                            @if($isSaved)
+                                <form method="POST" action="{{ route('jobs.unsave', $job->id) }}" class="inline">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit"
+                                        class="flex h-10 min-w-[120px] items-center justify-center rounded-lg px-4 text-sm font-medium text-center box-border border border-red-600 text-red-600 hover:bg-red-50 mt-4">
+                                        Remove
+                                    </button>
+                                </form>
+                            @else
+                                <form method="POST" action="{{ route('jobs.save', $job->id) }}" class="inline">
+                                    @csrf
+                                    <button type="submit"
+                                        class="inline-flex h-10 min-w-[120px] items-center justify-center rounded-lg px-4
+                                                   text-sm font-medium text-center box-border bg-blue-600 text-white hover:bg-blue-700">
+                                        Save Job
+                                    </button>
+                                </form>
+                            @endif
+
+                        </div>
                     </div>
-                </div>
-            @endif
+                @endif
+            @endauth
         </div>
     </div>
 @endsection

@@ -106,8 +106,11 @@ Route::middleware('auth')->group(function () {
 
 Route::middleware('auth')->group(function () {
     Route::get('/jobseeker/{id}', [JobseekerController::class, 'showPublic'])->name('jobseeker.show');
-    Route::get('/carers', function() {
+
+    Route::get('/carers', [JobseekerController::class, 'showJobseekers'])->name('carers')->middleware(CheckUserByUserType::class. ':' . Employer::class);
+
+    /*Route::get('/carers', function() {
         $jobseekers = Jobseeker::with('authParent')->get();
         return view('jobseekers', compact('jobseekers'));
-    })->name('carers')->middleware(CheckUserByUserType::class. ':' . Employer::class);
+    })->name('carers')->middleware(CheckUserByUserType::class. ':' . Employer::class);*/
 });

@@ -16,7 +16,7 @@ class UserAvatarController extends Controller
         $request->validate([
             'photo' => ['required', File::image()
             ->min(100)
-            ->max(200)]
+            ->max(5200)]
         ]);
 //dd($request);
         $user = Auth::user();

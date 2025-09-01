@@ -112,6 +112,10 @@
                 @endforeach
             </div>
 
+            <div class="mt-8">
+                {{ $jobseekers->links() }}
+            </div>
+
             <div class="mt-8 text-center">
                 <p class="text-sm text-gray-600">
                     Showing {{ $jobseekers->count() }} care professional{{ $jobseekers->count() !== 1 ? 's' : '' }}

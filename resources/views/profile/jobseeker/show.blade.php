@@ -3,13 +3,6 @@
 @section('content')
     <!-- Main Content -->
     <main class="mx-auto max-w-3xl px-4 py-8">
-        <!-- Success Message -->
-        @if(session('success'))
-            <div class="mb-6 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-lg">
-                {{ session('success') }}
-            </div>
-        @endif
-
         <!-- Error Message -->
         @if(session('error'))
             <div class="mb-6 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg">

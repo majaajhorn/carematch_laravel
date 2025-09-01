@@ -22,7 +22,7 @@
                                         {{ $application->job->title }}
                                     </a>
                                 </h2>
-                                <div class="mt-1 flex flex-wrap gap-2 text-sm text-gray-600">
+                                <div class="mt-1 flex flex-wrap gap-2 text-sm text-gray-600 py-3">
                                     <span class="inline-flex items-center rounded-full bg-gray-100 px-3 py-1">📍
                                         {{ $application->job->location }}</span>
                                     <span class="inline-flex items-center rounded-full bg-gray-100 px-3 py-1">💰
@@ -33,7 +33,7 @@
                                 </div>
                             </div>
 
-                            <div class="text-right text-sm text-gray-600">
+                            <div class="text-right text-sm text-gray-600 py-4 ">
                                 <div>Applied {{ optional($application->created_at)->diffForHumans() }}</div>
                                 @if(!empty($application->status))
                                     <div class="mt-1 font-medium">
@@ -55,15 +55,15 @@
                             </div>
                         @endif
 
-                        <div class="mt-4 flex flex-wrap gap-3">
+                        <div class="mt-4 flex items-center gap-3">
                             <a href="{{ route('jobs.show', $application->job) }}"
-                                class="inline-flex items-center rounded-lg bg-emerald-600 px-4 py-2 text-sm font-semibold text-white hover:bg-emerald-700">
+                                class="flex h-10 min-w-[120px] items-center justify-center rounded-lg px-4 text-sm font-medium text-center box-border bg-emerald-600 text-white hover:bg-emerald-700">
                                 View Job
                             </a>
 
                             @if($application->resume_path)
                                 <a href="{{ Storage::disk('public')->url($application->resume_path) }}" target="_blank"
-                                    class="inline-flex items-center rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50">
+                                    class="flex h-10 min-w-[120px] items-center justify-center rounded-lg px-4 text-sm font-medium text-center box-border border border-gray-300 bg-gray-100 text-gray-600">
                                     Download CV
                                 </a>
                             @endif
@@ -73,7 +73,7 @@
                                 @method('DELETE')
                                 <button type="submit"
                                     onclick="return confirm('Are you sure you want to withdraw from this application?')"
-                                    class="border border-red-600 text-red-600 font-medium px-4 py-2 rounded-lg hover:bg-red-50 text-sm">
+                                    class="flex h-10 min-w-[120px] items-center justify-center rounded-lg px-4 text-sm font-medium text-center box-border border border-red-600 text-red-600 hover:bg-red-50 mt-4">
                                     Withdraw
                                 </button>
                             </form>
