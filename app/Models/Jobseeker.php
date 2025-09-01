@@ -49,4 +49,16 @@ class Jobseeker extends Model implements IsUserContract
     {
         return $this->belongsToMany(Job::class, 'applications', 'jobseeker_id', 'job_id')->withTimestamps();
     }
+    public function reviews()
+    {
+        return $this->hasMany(Review::class);
+    }
+    public function getAverageRating()
+    {
+        return $this->reviews()->avg('rating_star') ?? 0;
+    }
+    public function getTotalReviews()
+    {
+        return $this->reviews()->count();
+    }
 }

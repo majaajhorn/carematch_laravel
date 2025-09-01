@@ -23,4 +23,8 @@ class Employer extends Model implements IsUserContract
     {
         return $this->hasMany(Job::class);
     }
+    public function reviewsWritten()
+    {
+        return $this->hasMany(Review::class);
+    }
 }

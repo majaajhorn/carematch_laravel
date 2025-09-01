@@ -107,7 +107,7 @@ class JobseekerController extends Controller
 
     public function showPublic($id) 
     {
-        $jobseeker = Jobseeker::where('id', $id)->with(['qualifications', 'experiences'])->first();
+        $jobseeker = Jobseeker::where('id', $id)->with(['qualifications', 'experiences', 'reviews.employer.authParent'])->first();
 
         if (!$jobseeker) {
             abort(404, 'Jobseeker not found');

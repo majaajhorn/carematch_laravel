@@ -40,6 +40,29 @@
                         @endif
                     </div>
 
+                    {{-- Rating Summary --}}
+                    @if($jobseeker->getTotalReviews() > 0)
+                        <div class="flex items-center mt-2 gap-2">
+                            {{-- Stars --}}
+                            <div class="flex items-center">
+                                @for($i = 1; $i <= 5; $i++)
+                                    @if($i <= round($jobseeker->getAverageRating()))
+                                        <span class="text-yellow-400">⭐</span>
+                                    @else
+                                        <span class="text-gray-300">⭐</span>
+                                    @endif
+                                @endfor
+                            </div>
+                            {{-- Rating number and count --}}
+                            <span class="text-sm text-gray-600">
+                                {{ number_format($jobseeker->getAverageRating(), 1) }}
+                                ({{ $jobseeker->getTotalReviews() }} {{ Str::plural('review', $jobseeker->getTotalReviews()) }})
+                            </span>
+                        </div>
+                    @else
+                        <p class="text-sm text-gray-500 mt-2">No reviews yet</p>
+                    @endif
+
                     <!-- Contact Button -->
                     <div class="ml-auto">
                         <a href="mailto: {{ $user->email }}"
@@ -47,6 +70,38 @@
                             Carer</a>
                     </div>
                 </div>
+            </div>
+
+            {{-- Review Buttons --}}
+            <div class="flex gap-3">
+                {{-- View Reviews Button --}}
+                <a href="{{ route('reviews.show', $jobseeker) }}"
+                    class="px-4 py-2 border border-gray-300 rounded-md text-sm text-gray-700 bg-white hover:bg-gray-50 text-center">
+                    📝 Reviews
+                    @if($jobseeker->getTotalReviews() > 0)
+                        ({{ $jobseeker->getTotalReviews() }})
+                    @endif
+                </a>
+
+                {{-- Write Review Button (only for employers who haven't reviewed) --}}
+                @if(Auth::check() && Auth::user()->isEmployer())
+                    @php
+                        $hasReviewed = App\Models\Review::where('jobseeker_id', $jobseeker->id)
+                            ->where('employer_id', Auth::user()->user_id)
+                            ->exists();
+                    @endphp
+
+                    @if(!$hasReviewed)
+                        <a href="{{ route('reviews.create', $jobseeker) }}"
+                            class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-md text-sm text-center">
+                            ⭐ Rate
+                        </a>
+                    @else
+                        <span class="px-4 py-2 bg-gray-100 text-gray-500 rounded-md text-sm text-center">
+                            ✓ Reviewed
+                        </span>
+                    @endif
+                @endif
             </div>
 
             <!-- Profile Information Section -->

@@ -7,6 +7,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EmployerController;
 use App\Http\Controllers\JobController;
 use App\Http\Controllers\JobseekerController;
+use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\UserAvatarController;
 use App\Http\Controllers\SavedJobController;
 use App\Http\Middleware\CheckUserByUserType;
@@ -40,6 +41,11 @@ Route::middleware('auth')->group(function () {
             Route::get('/create', [JobController::class, 'create'])->name('jobs.create');
             Route::post('/', [JobController::class, 'store'])->name('jobs.store');
             Route::get('/my-jobs', [JobController::class, 'showMyJobs'])->name('jobs.show-my-jobs');
+
+            Route::get('/jobseeker/{jobseeker}/review', [ReviewController::class, 'create'])->name('reviews.create');
+            Route::post('/jobseeker/{jobseeker}/review', [ReviewController::class, 'store'])->name('reviews.store');
+
+            Route::get('/jobseeker/{jobseeker}/reviews', [ReviewController::class, 'show'])->name('reviews.show');
 
             Route::put('/{job}', [JobController::class, 'update'])->name('jobs.update');
             Route::delete('/{job}', [JobController::class, 'destroy'])->name('jobs.destroy');
