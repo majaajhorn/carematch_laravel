@@ -42,14 +42,14 @@ Route::middleware('auth')->group(function () {
             Route::post('/', [JobController::class, 'store'])->name('jobs.store');
             Route::get('/my-jobs', [JobController::class, 'showMyJobs'])->name('jobs.show-my-jobs');
 
-            Route::get('/jobseeker/{jobseeker}/review', [ReviewController::class, 'create'])->name('reviews.create');
-            Route::post('/jobseeker/{jobseeker}/review', [ReviewController::class, 'store'])->name('reviews.store');
-
-            Route::get('/jobseeker/{jobseeker}/reviews', [ReviewController::class, 'show'])->name('reviews.show');
-
             Route::put('/{job}', [JobController::class, 'update'])->name('jobs.update');
             Route::delete('/{job}', [JobController::class, 'destroy'])->name('jobs.destroy');
         });
+
+        
+        Route::get('/jobseeker/{jobseeker}/review', [ReviewController::class, 'create'])->name('reviews.create');
+        Route::post('/jobseeker/{jobseeker}/review', [ReviewController::class, 'store'])->name('reviews.store');
+        Route::get('/jobseeker/{jobseeker}/reviews', [ReviewController::class, 'show'])->name('reviews.show');
 
         Route::patch('/applications/{application}/approve', [ApplicationController::class, 'approve'])->name('applications.approve');
         Route::patch('/applications/{application}/reject', [ApplicationController::class, 'reject'])->name('applications.reject');

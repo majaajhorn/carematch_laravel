@@ -45,7 +45,7 @@ class ReviewController extends Controller
             'review_description' => $request->review_description,
         ]);
 
-        return redirect()->back()->with('success', 'Review submitted successfully!');
+        return redirect()->route('jobseeker.show', $jobseeker)->with('success', 'Review submitted successfully!');
     }
     public function show(Jobseeker $jobseeker)
     {

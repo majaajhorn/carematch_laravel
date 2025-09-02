@@ -37,15 +37,13 @@
                         </div>
 
                         {{-- Jobseeker Details --}}
-                        <div class="text-sm text-gray-500">
-                            <span>English Level: </span>
-                            <span class="text-gray-900">
-                                {{ $jobseeker->english_level ? ucfirst($jobseeker->english_level) : 'Not specified' }}
-                            </span>
-                            <span> | Experience: </span>
-                            <span class="text-gray-900">
-                                {{ $jobseeker->live_in_experience ? ucfirst(str_replace('_', ' ', $jobseeker->live_in_experience)) : 'Not specified' }}
-                            </span>
+                        <div class="flex-1">
+                            <h2 class="text-xl font-semibold text-gray-900">{{ $jobseeker->authParent->first_name }}
+                                {{ $jobseeker->authParent->last_name }}
+                            </h2>
+                            @if($jobseeker->authParent->location)
+                                <p class="text-gray-600">📍 {{ $jobseeker->authParent->location }}</p>
+                            @endif
                         </div>
                     </div>
 
@@ -78,10 +76,6 @@
 
                 {{-- Action Buttons --}}
                 <div class="mt-4 pt-4 border-t border-gray-200 flex justify-between items-center">
-                    <a href="{{ route('jobseeker.show', $jobseeker->id) }}"
-                        class="text-emerald-600 hover:text-emerald-900 text-sm font-medium">
-                        ← Back to Profile
-                    </a>
 
                     {{-- Only show "Write Review" button if user is an employer and hasn't reviewed yet --}}
                     @if(Auth::check() && Auth::user()->isEmployer())

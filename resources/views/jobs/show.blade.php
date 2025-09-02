@@ -58,13 +58,11 @@
             @auth
                 @if (auth()->user()->isJobseeker())
                     <div class="mt-6 pt-4 border-t border-gray-100">
-                        <div class="flex items-center gap-3">
-
+                        <div class="mt-4 flex items-center gap-3">
                             {{-- Apply / Already applied --}}
                             @if(!empty($hasApplied) && $hasApplied)
                                 <span
-                                    class="inline-flex h-10 min-w-[120px] items-center justify-center rounded-lg px-4
-                                                     text-sm font-medium text-center box-border border border-gray-300 bg-gray-100 text-gray-600">
+                                    class="flex h-10 min-w-[120px] items-center justify-center rounded-lg px-4 text-sm font-medium text-center box-border border border-gray-300 bg-gray-100 text-gray-600">
                                     Already applied
                                 </span>
                             @else
@@ -90,8 +88,7 @@
                                 <form method="POST" action="{{ route('jobs.save', $job->id) }}" class="inline">
                                     @csrf
                                     <button type="submit"
-                                        class="inline-flex h-10 min-w-[120px] items-center justify-center rounded-lg px-4
-                                                   text-sm font-medium text-center box-border bg-blue-600 text-white hover:bg-blue-700">
+                                        class="flex h-10 min-w-[120px] items-center justify-center rounded-lg px-4 text-sm font-medium text-center box-border border border-emerald-600 text-emerald-600 hover:bg-emerald-50 mt-4">
                                         Save Job
                                     </button>
                                 </form>
