@@ -43,6 +43,8 @@ Route::middleware('auth')->group(function () {
             Route::get('/my-jobs', [JobController::class, 'showMyJobs'])->name('jobs.show-my-jobs');
 
             Route::put('/{job}', [JobController::class, 'update'])->name('jobs.update');
+            Route::post('/{job}/deactivate', [JobController::class, 'deactivate'])->name('jobs.deactivate');
+            Route::post('/{job}/activate', [JobController::class, 'activate'])->name('jobs.activate');
             Route::delete('/{job}', [JobController::class, 'destroy'])->name('jobs.destroy');
         });
 

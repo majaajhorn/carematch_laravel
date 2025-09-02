@@ -114,7 +114,7 @@
                         <!-- Job Title and Salary -->
                         <div class="flex justify-between items-start mb-4">
                             <h2 class="text-xl font-semibold text-gray-900">
-                                <a href="/jobs/{{ $job->id }}" class="hover:text-emerald-600">
+                                <a href="{{ route('jobs.show', $job) }}" class="hover:text-emerald-600">
                                     {{ $job->title }}
                                 </a>
                             </h2>
@@ -126,7 +126,7 @@
                         <!-- Employment Type and Location -->
                         <div class="flex flex-wrap gap-4 mb-4">
                             <span
-                                class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
+                                class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-emerald-100 text-emerald-800">
                                 {{ ucfirst(str_replace('_', ' ', (string) $job->employment_type)) }}
                             </span>
                             <span
@@ -176,10 +176,34 @@
                                     Delete
                                 </button>
                             </form>
+
+                            {{-- Activate / Deactivate --}}
+                            @if ($job->active) {{-- job IS active -> show Deactivate --}}
+                                <form method="POST" action="{{ route('jobs.deactivate', $job->id) }}" class="inline"
+                                    onsubmit="return confirm('Are you sure you want to deactivate this job post?')">
+                                    @csrf
+                                    <button type="submit"
+                                        class="flex h-10 min-w-[120px] items-center justify-center rounded-lg px-4 text-sm font-medium text-center box-border border border-salmon-400 text-white bg-amber-500 hover:bg-amber-700 mt-4">
+                                        Deactivate
+                                    </button>
+                                </form>
+                            @else
+                                <form method="POST" action="{{ route('jobs.activate', $job->id) }}" class="inline"
+                                    onsubmit="return confirm('Are you sure you want to activate this job post?')">
+                                    @csrf
+                                    <button type="submit"
+                                        class="flex h-10 min-w-[120px] items-center justify-center rounded-lg px-4 text-sm font-medium text-center box-border border border-emerald-600 text-emerald-600 hover:bg-emerald-50 mt-4">
+                                        Activate
+                                    </button>
+                                </form>
+                            @endif
+
+
                         </div>
                     @endif
                 </div>
             @endforeach
+            {{ $jobs->links() }}
 
             @if($jobs->isEmpty())
                 <div class="text-center py-12">

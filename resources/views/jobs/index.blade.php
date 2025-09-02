@@ -53,7 +53,7 @@
                     <!-- Job Title and Salary -->
                     <div class="flex justify-between items-start mb-4">
                         <h2 class="text-xl font-semibold text-gray-900">
-                            <a href="/jobs/{{ $job->id }}" class="hover:text-emerald-600">
+                            <a href="{{ route('jobs.show', $job) }}" class="hover:text-emerald-600">
                                 {{ $job->title }}
                             </a>
                         </h2>
@@ -104,7 +104,7 @@
 
                     <!-- View Details Button -->
                     <div class="mt-4 pt-4 border-t border-gray-100">
-                        <a href="/jobs/{{ $job->id }}"
+                        <a href="{{ route('jobs.show', $job) }}"
                             class="inline-flex items-center px-4 py-2 bg-emerald-600 text-white font-medium rounded-lg hover:bg-emerald-700 transition-colors">
                             View Full Details →
                         </a>

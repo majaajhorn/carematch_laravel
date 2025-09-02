@@ -18,7 +18,7 @@ class JobController extends Controller
     {
         //$jobs = Job::latest()->get();
         
-        $jobs = Job::latest()->paginate(2);
+        $jobs = Job::latest()->active()->paginate(2);
         
         return view('jobs.index', [
             'jobs' => $jobs
@@ -79,7 +79,7 @@ class JobController extends Controller
 
         $employer = $user->user;    // polymorphic relationship (get related record based on user_type)
 
-        $jobs = $employer->jobs()->latest()->get(); // get all jobs from this employer
+        $jobs = $employer->jobs()->latest()->paginate(2); // get all jobs from this employer
         return view('jobs.show-my-jobs', compact('jobs'));
     }    
 
@@ -122,5 +122,21 @@ class JobController extends Controller
         $job->delete();
 
         return redirect()->route('jobs.show-my-jobs');
+    }
+
+    // deactiviranje poslova
+    public function deactivate(Job $job)
+    {
+        $job->update(['active' => false]);
+
+        return back()->with('success', 'Job deactivated.');
+    }
+
+    // aktiviranje posla
+    public function activate(Job $job)
+    {
+        $job->update(['active' => true]);
+
+        return back()->with('success', 'Job activated.');
     }
 }

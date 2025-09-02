@@ -63,7 +63,7 @@
                             @if(!empty($hasApplied) && $hasApplied)
                                 <span
                                     class="flex h-10 min-w-[120px] items-center justify-center rounded-lg px-4 text-sm font-medium text-center box-border border border-gray-300 bg-gray-100 text-gray-600">
-                                    Already applied
+                                    mt-4
                                 </span>
                             @elseif ($job->applications()->where('status', \App\Enums\ApplicationStatus::Approved)->exists())
                                 <span
@@ -73,7 +73,7 @@
                             @else
                                 <form method="GET" action="{{ route('applications.create', $job) }}" class="inline">
                                     <button type="submit"
-                                        class="flex h-10 min-w-[120px] items-center justify-center rounded-lg px-4 text-sm font-medium text-center box-border bg-emerald-600 text-white hover:bg-emerald-700">
+                                        class="flex h-10 min-w-[120px] items-center justify-center rounded-lg px-4 text-sm font-medium text-center box-border bg-emerald-600 text-white hover:bg-emerald-700 mt-4">
                                         Apply
                                     </button>
                                 </form>

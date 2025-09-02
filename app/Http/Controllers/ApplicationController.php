@@ -56,7 +56,7 @@ class ApplicationController extends Controller
             
             Mail::to($employer->email)->send(new NewApplicationNotification($application, $job, $user));
         } catch (\Exception $e) {
-            \Log::error('Email sending failed: ' . $e->getMessage());
+            Log::error('Email sending failed: ' . $e->getMessage());
         }
 
         return redirect()->route('jobs.show', $job)->with('success', 'Application sent successfully!');
