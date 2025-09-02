@@ -83,9 +83,16 @@ class ApplicationController extends Controller
 
         $alreadyApplied = Application::where('job_id', $job->id)->where('jobseeker_id', $jobseekerId)->exists();
 
+        $jobTaken = Application::where('job_id', $job->id)->where('status', ApplicationStatus::Approved)->exists();
+
         if ($alreadyApplied) {
             return redirect()->route('jobs.show', $job)->with('error', 'You have already applied for this job!');
         }
+        // ako je taj posao već odobren za nekog drugog jobseekera, ne može se više aplicirati
+        if ($jobTaken) {
+            return redirect()->route('jobs.show', $job)->with('error', 'This job position has already been fillded.');
+        }
+
         return view('applications.index', compact('job'));
     }
     public function destroy(Request $request, $jobId)

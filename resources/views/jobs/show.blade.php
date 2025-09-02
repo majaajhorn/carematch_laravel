@@ -65,6 +65,11 @@
                                     class="flex h-10 min-w-[120px] items-center justify-center rounded-lg px-4 text-sm font-medium text-center box-border border border-gray-300 bg-gray-100 text-gray-600">
                                     Already applied
                                 </span>
+                            @elseif ($job->applications()->where('status', \App\Enums\ApplicationStatus::Approved)->exists())
+                                <span
+                                    class="flex h-10 min-w-[120px] items-center justify-center rounded-lg px-4 text-sm font-medium text-center box-border border border-gray-300 bg-gray-100 text-gray-600">
+                                    Position filled
+                                </span>
                             @else
                                 <form method="GET" action="{{ route('applications.create', $job) }}" class="inline">
                                     <button type="submit"

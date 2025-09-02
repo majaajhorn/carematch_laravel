@@ -22,83 +22,112 @@
         @if($savedJobs->count() > 0)
             <div class="space-y-6">
                 @foreach($savedJobs as $savedJob)
-                    <div class="border border-gray-200 rounded-lg p-6 hover:shadow-lg transition-shadow">
-                        <div class="flex justify-between items-start mb-4">
-                            <div class="flex-1">
-                                <h2 class="text-xl font-semibold text-gray-900 mb-2">
-                                    <a href="{{ route('jobs.show', $savedJob->job) }}" class="hover:text-emerald-600">
-                                        {{ $savedJob->job->title }}
-                                    </a>
-                                </h2>
+                    @php
+                        $filled = $savedJob->job->applications()
+                            ->where('status', \App\Enums\ApplicationStatus::Approved)
+                            ->exists();
+                    @endphp
 
-                                <div class="flex flex-wrap gap-4 mb-3 py-3">
-                                    <span
-                                        class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
-                                        {{ ucfirst(str_replace('_', ' ', (string) $savedJob->job->employment_type)) }}
-                                    </span>
-                                    <span
-                                        class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-gray-100 text-gray-700">
-                                        📍 {{ $savedJob->job->location }}
-                                    </span>
-                                    <span class="text-sm text-gray-500">
-                                        Posted
-                                        {{ $savedJob->job->posted_date ? $savedJob->job->posted_date->diffForHumans() : 'Recently' }}
+                    <div class="relative border border-gray-200 rounded-lg p-6 hover:shadow-lg transition-shadow overflow-hidden">
+                        {{-- overlay + ribbon when filled --}}
+                        @if($filled)
+                            <div class="absolute inset-0 bg-white/60 pointer-events-none z-10"></div>
+                            <div class="absolute top-3 right-3 z-20">
+                                <span
+                                    class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-gray-800 text-white">
+                                    Position filled
+                                </span>
+                            </div>
+                        @endif
+
+                        {{-- Card content (blurred when filled) --}}
+                        <div class="{{ $filled ? 'blur-sm select-none' : '' }}">
+                            <div class="flex justify-between items-start mb-4">
+                                <div class="flex-1">
+                                    <h2 class="text-xl font-semibold text-gray-900 mb-2">
+                                        <a href="{{ route('jobs.show', $savedJob->job) }}" class="hover:text-emerald-600">
+                                            {{ $savedJob->job->title }}
+                                        </a>
+                                    </h2>
+
+                                    <div class="flex flex-wrap gap-4 mb-3 py-3">
+                                        <span
+                                            class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
+                                            {{ ucfirst(str_replace('_', ' ', (string) $savedJob->job->employment_type)) }}
+                                        </span>
+                                        <span
+                                            class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-gray-100 text-gray-700">
+                                            📍 {{ $savedJob->job->location }}
+                                        </span>
+                                        <span class="text-sm text-gray-500">
+                                            Posted
+                                            {{ $savedJob->job->posted_date ? $savedJob->job->posted_date->diffForHumans() : 'Recently' }}
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <div class="ml-4 text-right">
+                                    <span class="text-lg font-bold text-emerald-600">
+                                        £{{ $savedJob->job->salary }} {{ (string) $savedJob->job->salary_period }}
                                     </span>
                                 </div>
                             </div>
 
-                            <div class="ml-4 text-right">
-                                <span class="text-lg font-bold text-emerald-600">
-                                    £{{ $savedJob->job->salary }} {{ (string) $savedJob->job->salary_period }}
-                                </span>
-                            </div>
-                        </div>
+                            <p class="text-gray-700 mb-4 line-clamp-2">
+                                {{ Str::limit($savedJob->job->description ?: 'No description available.', 150) }}
+                            </p>
 
-                        <!-- Job Description Preview -->
-                        <p class="text-gray-700 mb-4 line-clamp-2">
-                            {{ Str::limit($savedJob->job->description ?: 'No description available.', 150) }}
-                        </p>
+                            <div class="mt-4 flex items-center gap-3">
+                                {{-- View Details (disabled style if filled) --}}
+                                @if($filled)
+                                    <span
+                                        class="flex h-10 min-w-[120px] items-center justify-center rounded-lg px-4 text-sm font-medium text-center box-border bg-gray-200 text-gray-500 cursor-not-allowed">
+                                        View Details
+                                    </span>
+                                @else
+                                    <a href="{{ route('jobs.show', $savedJob->job) }}"
+                                        class="flex h-10 min-w-[120px] items-center justify-center rounded-lg px-4 text-sm font-medium text-center box-border bg-emerald-600 text-white hover:bg-emerald-700">
+                                        View Details
+                                    </a>
+                                @endif
 
-                        <!-- Action Buttons -->
-                        <div class="flex items-center gap-3">
-                            <!-- View Details -->
-                            <a href="{{ route('jobs.show', $savedJob->job) }}"
-                                class="flex h-10 min-w-[120px] items-center justify-center rounded-lg px-4 text-sm font-medium text-center box-border bg-emerald-600 text-white hover:bg-emerald-700">
-                                View Details
-                            </a>
+                                {{-- Apply / Already applied / Position filled --}}
+                                @if($savedJob->job->has_applied)
+                                    <span
+                                        class="flex h-10 min-w-[120px] items-center justify-center rounded-lg px-4 text-sm font-medium text-center box-border border border-gray-300 bg-gray-100 text-gray-600">
+                                        Already applied
+                                    </span>
+                                @elseif($filled)
+                                    <span
+                                        class="flex h-10 min-w-[120px] items-center justify-center rounded-lg px-4 text-sm font-medium text-center box-border border border-gray-300 bg-gray-100 text-gray-600">
+                                        Position filled
+                                    </span>
+                                @else
+                                    <form method="GET" action="{{ route('applications.create', $savedJob->job) }}" class="inline">
+                                        <button type="submit"
+                                            class="flex h-10 min-w-[120px] items-center justify-center rounded-lg px-4 text-sm font-medium text-center box-border bg-emerald-600 text-white hover:bg-emerald-700">
+                                            Apply Now
+                                        </button>
+                                    </form>
+                                @endif
 
-                            <!-- Apply / Already applied -->
-                            @if($savedJob->job->has_applied)
-                                <span
-                                    class="flex h-10 min-w-[120px] items-center justify-center rounded-lg px-4 text-sm font-medium text-center box-border border border-gray-300 bg-gray-100 text-gray-600">
-                                    Already applied
-                                </span>
-                            @else
-                                <form method="GET" action="{{ route('applications.create', $savedJob->job) }}" class="inline">
+                                {{-- Remove (always active) --}}
+                                <form method="POST" action="{{ route('jobs.unsave', $savedJob->job->id) }}" class="inline">
+                                    @csrf
+                                    @method('DELETE')
                                     <button type="submit"
-                                        class="flex h-10 min-w-[120px] items-center justify-center rounded-lg px-4 text-sm font-medium text-center box-border bg-gray-600 text-white hover:bg-gray-700">
-                                        Apply Now
+                                        onclick="return confirm('Are you sure you want to remove this job from your saved jobs?')"
+                                        class="flex h-10 min-w-[120px] items-center justify-center rounded-lg px-4 text-sm font-medium text-center box-border border border-red-600 text-red-600 hover:bg-red-50 mt-4">
+                                        Remove
                                     </button>
                                 </form>
-                            @endif
+                            </div>
 
-                            <!-- Remove -->
-                            <form method="POST" action="{{ route('jobs.unsave', $savedJob->job->id) }}" class="inline">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit"
-                                    onclick="return confirm('Are you sure you want to remove this job from your saved jobs?')"
-                                    class="flex h-10 min-w-[120px] items-center justify-center rounded-lg px-4 text-sm font-medium text-center box-border border border-red-600 text-red-600 hover:bg-red-50 mt-4">
-                                    Remove
-                                </button>
-                            </form>
-                        </div>
-
-                        <!-- Saved Date -->
-                        <div class="mt-4 pt-4 border-t border-gray-100">
-                            <span class="text-xs text-gray-500">
-                                Saved {{ $savedJob->created_at->diffForHumans() }}
-                            </span>
+                            <div class="mt-4 pt-4 border-t border-gray-100">
+                                <span class="text-xs text-gray-500">
+                                    Saved {{ $savedJob->created_at->diffForHumans() }}
+                                </span>
+                            </div>
                         </div>
                     </div>
                 @endforeach
