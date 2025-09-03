@@ -53,6 +53,7 @@ Route::middleware('auth')->group(function () {
         Route::post('/jobseeker/{jobseeker}/review', [ReviewController::class, 'store'])->name('reviews.store');
         Route::get('/jobseeker/{jobseeker}/reviews', [ReviewController::class, 'show'])->name('reviews.show');
 
+        Route::get('/employer/applications', [ApplicationController::class, 'employerIndex'])->name('applications.employer.index');
         Route::patch('/applications/{application}/approve', [ApplicationController::class, 'approve'])->name('applications.approve');
         Route::patch('/applications/{application}/reject', [ApplicationController::class, 'reject'])->name('applications.reject');
     });

@@ -134,4 +134,18 @@ class ApplicationController extends Controller
         $application->update(['status'=> ApplicationStatus::Rejected]);
         return back()->with('success', 'Application rejected.');
     }
+    public function employerIndex()
+    {
+        $user = Auth::user();
+        $employerId = $user->user_id;
+
+        $applications = Application::with('job', 'jobseeker')
+            ->whereHas('job', function ($query) use ($employerId) {
+                $query->where('employer_id', $employerId);
+            })
+            ->latest()
+            ->get();
+
+        return view('applications.employer.index', compact('applications'));
+    }
 }

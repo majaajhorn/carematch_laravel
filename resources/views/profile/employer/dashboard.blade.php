@@ -16,7 +16,14 @@
 
                 {{-- List of applications --}}
                 <div class="mt-10 text-left">
-                    <h2 class="text-2xl font-semibold mb-4">Applications for your jobs</h2>
+                    <div class="flex justify-between items-center mb-4">
+                        <h2 class="text-2xl font-semibold mb-4">Applications for your jobs</h2>
+
+                        <a href="{{ route('applications.employer.index') }}"
+                            class="rounded-xl bg-emerald-600 px-4 py-2 text-sm font-semibold text-white shadow hover:bg-emerald-700">View
+                            All</a>
+                    </div>
+
 
                     @if($applications->isEmpty())
                         <p class="text-gray-600">No applications yet.</p>
