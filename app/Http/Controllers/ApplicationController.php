@@ -134,18 +134,40 @@ class ApplicationController extends Controller
         $application->update(['status'=> ApplicationStatus::Rejected]);
         return back()->with('success', 'Application rejected.');
     }
-    public function employerIndex()
+    public function employerIndex(Request $request)
     {
         $user = Auth::user();
         $employerId = $user->user_id;
+        
+        
+        $status = $request->query('status', 'all');
+        
+        $order = $request->query('order', 'desc');
 
-        $applications = Application::with('job', 'jobseeker')
-            ->whereHas('job', function ($query) use ($employerId) {
+        $applications = Application::with('job', 'jobseeker.authParent')
+            ->whereHas('job', function($query) use ($employerId) {
                 $query->where('employer_id', $employerId);
-            })
-            ->latest()
-            ->paginate(2);
+            });
 
-        return view('applications.employer.index', compact('applications'));
+        
+        if (in_array($status, ['pending', 'approved', 'rejected'], true)) {
+            
+            $statusMap = [
+                'pending'  => ApplicationStatus::Pending,
+                'approved' => ApplicationStatus::Approved,
+                'rejected' => ApplicationStatus::Rejected,
+            ];
+            
+            $applications->where('status', $statusMap[$status]);
+        }
+
+        
+        $applications->orderBy('created_at', $order === 'asc' ? 'asc' : 'desc');
+
+        $applications = $applications->paginate(10)->withQueryString();
+
+        
+        return view('applications.employer.index', compact('applications', 'status', 'order'));
     }
 }
+

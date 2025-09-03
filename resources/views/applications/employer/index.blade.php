@@ -4,6 +4,54 @@
     <div class="max-w-6xl mx-auto p-6">
         <h1 class="text-3xl font-bold mb-6">All Applications</h1>
 
+        @php
+            // fallbacks in case the view is reached through employerIndex delegating to filter
+            $st = $status ?? request('status', 'all');
+            $ord = $order ?? request('order', 'desc');
+        @endphp
+
+        {{-- Filter + Sort --}}
+        <div class="flex items-center justify-between bg-gray-50 border border-gray-200 rounded-xl p-4 mb-6">
+            <div class="flex items-center gap-2">
+                <span class="text-sm font-semibold text-gray-800">Filter by status:</span>
+
+                <a href="{{ route('applications.employer.index', ['status' => 'all', 'order' => $ord]) }}"
+                    class="px-3 py-1.5 rounded-lg text-sm font-medium border
+                              {{ $st === 'all' ? 'bg-emerald-500 text-white border-emerald-500' : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-100' }}">
+                    All
+                </a>
+
+                <a href="{{ route('applications.employer.index', ['status' => 'pending', 'order' => $ord]) }}"
+                    class="px-3 py-1.5 rounded-lg text-sm font-medium border
+                              {{ $st === 'pending' ? 'bg-emerald-500 text-white border-emerald-500' : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-100' }}">
+                    Pending
+                </a>
+
+                <a href="{{ route('applications.employer.index', ['status' => 'approved', 'order' => $ord]) }}"
+                    class="px-3 py-1.5 rounded-lg text-sm font-medium border
+                              {{ $st === 'approved' ? 'bg-emerald-500 text-white border-emerald-500' : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-100' }}">
+                    Approved
+                </a>
+
+                <a href="{{ route('applications.employer.index', ['status' => 'rejected', 'order' => $ord]) }}"
+                    class="px-3 py-1.5 rounded-lg text-sm font-medium border
+                              {{ $st === 'rejected' ? 'bg-emerald-500 text-white border-emerald-500' : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-100' }}">
+                    Rejected
+                </a>
+            </div>
+
+            <form method="GET" action="{{ route('applications.employer.index') }}" class="flex items-center gap-2">
+                <input type="hidden" name="status" value="{{ $st }}">
+                <span class="text-sm font-semibold text-gray-800">Sort by:</span>
+                <select name="order" class="border border-gray-300 rounded-lg px-2 py-1.5 text-sm"
+                    onchange="this.form.submit()">
+                    <option value="desc" @selected($ord === 'desc')>Newest First</option>
+                    <option value="asc" @selected($ord === 'asc')>Oldest First</option>
+                </select>
+            </form>
+        </div>
+
+        {{-- Table --}}
         <div class="overflow-hidden rounded-xl border border-gray-200 bg-white">
             <table class="min-w-full divide-y divide-gray-200">
                 <thead class="bg-gray-50">
@@ -43,7 +91,7 @@
                                 {{ $application->created_at->format('j M Y') }}
                             </td>
 
-                            {{-- Status - Make badge same height as buttons --}}
+                            {{-- Status --}}
                             <td class="px-6 py-0 align-middle">
                                 <div class="h-10 flex items-center">
                                     <span
@@ -54,14 +102,13 @@
                             </td>
 
                             {{-- Actions --}}
-                            <td class="px-6 py-0 w-56 whitespace-nowrap align-middle">
+                            <td class="px-6 py-0 w-[260px] whitespace-nowrap align-middle">
                                 <div class="h-10 flex items-center gap-2">
-                                    {{-- Define button classes once for consistency --}}
                                     @php
-                                        $btn = 'inline-flex h-8 min-w-[80px] items-center justify-center rounded-md px-3 text-xs font-medium text-center box-border leading-none appearance-none select-none';
+                                        $btn = 'inline-flex h-8 min-w-[84px] items-center justify-center rounded-md px-3 text-xs font-medium text-center leading-none';
                                     @endphp
 
-                                    {{-- View Button --}}
+                                    {{-- View --}}
                                     <form method="GET" action="{{ route('jobseeker.show', $application->jobseeker_id) }}"
                                         class="inline m-0">
                                         <button type="submit" class="{{ $btn }} bg-emerald-600 text-white hover:bg-emerald-700">
@@ -69,45 +116,45 @@
                                         </button>
                                     </form>
 
-                                    {{-- Conditional Action Buttons based on status --}}
                                     @if($application->isPending())
-                                        {{-- Show both Approve and Reject for pending applications --}}
-                                        <form action="{{ route('applications.approve', $application) }}" method="POST"
+                                        {{-- Approve --}}
+                                        <form method="POST" action="{{ route('applications.approve', $application) }}"
                                             class="inline m-0">
                                             @csrf @method('PATCH')
-                                            <button type="submit" class="{{ $btn }} bg-amber-400 text-white hover:bg-amber-600"
-                                                onclick="return confirm('Are you sure you want to approve this application?')">
+                                            <button type="submit" class="{{ $btn }} bg-amber-500 text-white hover:bg-amber-600"
+                                                onclick="return confirm('Approve this application?')">
                                                 Approve
                                             </button>
                                         </form>
 
-                                        <form action="{{ route('applications.reject', $application) }}" method="POST"
+                                        {{-- Reject --}}
+                                        <form method="POST" action="{{ route('applications.reject', $application) }}"
                                             class="inline m-0">
                                             @csrf @method('PATCH')
                                             <button type="submit" class="{{ $btn }} bg-red-600 text-white hover:bg-red-700"
-                                                onclick="return confirm('Are you sure you want to reject this application?')">
+                                                onclick="return confirm('Reject this application?')">
                                                 Reject
                                             </button>
                                         </form>
 
                                     @elseif($application->status === \App\Enums\ApplicationStatus::Approved)
-                                        {{-- Show only Reject for approved applications --}}
-                                        <form action="{{ route('applications.reject', $application) }}" method="POST"
+                                        {{-- Only Reject --}}
+                                        <form method="POST" action="{{ route('applications.reject', $application) }}"
                                             class="inline m-0">
                                             @csrf @method('PATCH')
                                             <button type="submit" class="{{ $btn }} bg-red-600 text-white hover:bg-red-700"
-                                                onclick="return confirm('Are you sure you want to reject this application?')">
+                                                onclick="return confirm('Reject this application?')">
                                                 Reject
                                             </button>
                                         </form>
 
                                     @elseif($application->status === \App\Enums\ApplicationStatus::Rejected)
-                                        {{-- Show only Approve for rejected applications --}}
-                                        <form action="{{ route('applications.approve', $application) }}" method="POST"
+                                        {{-- Only Approve --}}
+                                        <form method="POST" action="{{ route('applications.approve', $application) }}"
                                             class="inline m-0">
                                             @csrf @method('PATCH')
-                                            <button type="submit" class="{{ $btn }} bg-green-600 text-white hover:bg-green-700"
-                                                onclick="return confirm('Are you sure you want to approve this application?')">
+                                            <button type="submit" class="{{ $btn }} bg-amber-500 text-white hover:bg-amber-600"
+                                                onclick="return confirm('Approve this application?')">
                                                 Approve
                                             </button>
                                         </form>
@@ -117,13 +164,12 @@
                         </tr>
                     @empty
                         <tr>
-                            <td class="px-6 py-8 text-center text-gray-500" colspan="5">No applications yet.</td>
+                            <td class="px-6 py-8 text-center text-gray-500" colspan="5">No applications found.</td>
                         </tr>
                     @endforelse
                 </tbody>
             </table>
         </div>
-
 
         <div class="mt-6">
             {{ $applications->links() }}
