@@ -144,7 +144,7 @@ class ApplicationController extends Controller
                 $query->where('employer_id', $employerId);
             })
             ->latest()
-            ->get();
+            ->paginate(2);
 
         return view('applications.employer.index', compact('applications'));
     }

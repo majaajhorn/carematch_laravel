@@ -124,6 +124,11 @@
             </table>
         </div>
 
+
+        <div class="mt-6">
+            {{ $applications->links() }}
+        </div>
+
         <div class="mt-8">
             <a href="{{ route('dashboard') }}"
                 class="inline-flex items-center px-4 py-2 rounded-lg text-sm font-medium bg-emerald-600 text-white hover:bg-emerald-700">
