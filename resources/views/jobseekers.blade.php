@@ -5,6 +5,9 @@
     <!-- Main -->
     <main class="max-w-5xl mx-auto px-4 py-8">
         <div class="mb-8">
+            <a href="{{ url()->previous() }}" class="text-emerald-600 hover:text-emerald-800 mb-6 inline-block">
+                ← Back
+            </a>
             <h1 class="text-3xl font-bold text-gray-900">Browse Carers</h1>
             <p class="text-gray-600 mt-2">Find experienced care professionals for your needs</p>
         </div>
