@@ -73,7 +73,7 @@ class ApplicationController extends Controller
         $applications = Application::with('job')
             ->where('jobseeker_id', $jobseeker->id)
             ->latest()
-            ->get();
+            ->paginate(1);
 
         return view('applications.show', compact('applications'));
     }
@@ -181,7 +181,7 @@ class ApplicationController extends Controller
         
         $applications->orderBy('created_at', $order === 'asc' ? 'asc' : 'desc');
 
-        $applications = $applications->paginate(10)->withQueryString();
+        $applications = $applications->paginate(5)->withQueryString();
 
         
         return view('applications.employer.index', compact('applications', 'status', 'order'));
@@ -208,7 +208,7 @@ class ApplicationController extends Controller
             return back()->with('error', 'You can only view applications for your own jobs');
         }
 
-        $applications = Application::with(['jobseeker.authParent', 'jobseeker.experiences'])->where('job_id', $job->id)->latest()->paginate(2)->withQueryString();
+        $applications = Application::with(['jobseeker.authParent', 'jobseeker.experiences'])->where('job_id', $job->id)->latest()->paginate(5)->withQueryString();
 
         return view('applications.employer.by_job', compact('job', 'applications'));
     }

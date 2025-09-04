@@ -80,6 +80,10 @@
                         </div>
                     </div>
                 @endforeach
+
+                <div>
+                    {{ $applications->links() }}
+                </div>
             </div>
         @endif
     </div>

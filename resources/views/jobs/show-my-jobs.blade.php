@@ -5,7 +5,8 @@
     <div class="max-w-4xl mx-auto p-6">
         <div class="flex justify-between items-center mb-6">
             <h1 class="text-2xl font-bold">My Job Posts</h1>
-            <a href="/jobs/create" class="bg-emerald-600 text-white px-4 py-2 rounded-lg hover:bg-emerald-700 font-medium">
+            <a href="{{ route('jobs.create') }}"
+                class="bg-emerald-600 text-white px-4 py-2 rounded-lg hover:bg-emerald-700 font-medium">
                 Post New Job
             </a>
         </div>

@@ -1,7 +1,11 @@
 @extends('layouts.master')
 
 @section('content')
+
     <div class="max-w-6xl mx-auto p-6">
+        <a href="{{ url()->previous() }}" class="text-emerald-600 hover:text-emerald-800 mb-6 inline-block">
+            ← Back
+        </a>
         <h1 class="text-3xl font-bold mb-6">All Applications</h1>
 
         @php
@@ -17,25 +21,25 @@
 
                 <a href="{{ route('applications.employer.index', ['status' => 'all', 'order' => $ord]) }}"
                     class="px-3 py-1.5 rounded-lg text-sm font-medium border
-                                  {{ $st === 'all' ? 'bg-emerald-500 text-white border-emerald-500' : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-100' }}">
+                                                      {{ $st === 'all' ? 'bg-emerald-500 text-white border-emerald-500' : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-100' }}">
                     All
                 </a>
 
                 <a href="{{ route('applications.employer.index', ['status' => 'pending', 'order' => $ord]) }}"
                     class="px-3 py-1.5 rounded-lg text-sm font-medium border
-                                  {{ $st === 'pending' ? 'bg-emerald-500 text-white border-emerald-500' : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-100' }}">
+                                                      {{ $st === 'pending' ? 'bg-emerald-500 text-white border-emerald-500' : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-100' }}">
                     Pending
                 </a>
 
                 <a href="{{ route('applications.employer.index', ['status' => 'approved', 'order' => $ord]) }}"
                     class="px-3 py-1.5 rounded-lg text-sm font-medium border
-                                  {{ $st === 'approved' ? 'bg-emerald-500 text-white border-emerald-500' : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-100' }}">
+                                                      {{ $st === 'approved' ? 'bg-emerald-500 text-white border-emerald-500' : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-100' }}">
                     Approved
                 </a>
 
                 <a href="{{ route('applications.employer.index', ['status' => 'rejected', 'order' => $ord]) }}"
                     class="px-3 py-1.5 rounded-lg text-sm font-medium border
-                                  {{ $st === 'rejected' ? 'bg-emerald-500 text-white border-emerald-500' : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-100' }}">
+                                                      {{ $st === 'rejected' ? 'bg-emerald-500 text-white border-emerald-500' : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-100' }}">
                     Rejected
                 </a>
             </div>
@@ -173,11 +177,6 @@
             {{ $applications->links() }}
         </div>
 
-        <div class="mt-8">
-            <a href="{{ route('dashboard') }}"
-                class="inline-flex items-center px-4 py-2 rounded-lg text-sm font-medium bg-emerald-600 text-white hover:bg-emerald-700">
-                Back to Dashboard
-            </a>
-        </div>
+
     </div>
 @endsection
