@@ -19,7 +19,7 @@ class DashboardController extends Controller
         //dd($user);
         $applications = Application::whereHas('job', function(Builder $query) use ($user){
             $query->where('employer_id', '=', $user->user_id );
-        })->with(['job', 'jobseeker.authParent'])->orderBy('created_at', 'desc')->paginate(1);
+        })->with(['job', 'jobseeker.authParent'])->orderBy('created_at', 'desc')->paginate(2);
 
         return view('profile.employer.dashboard', compact('applications'));
     }
