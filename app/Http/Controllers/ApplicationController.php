@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Enums\ApplicationStatus;
+use App\Mail\ApplicationApproved;
+use App\Mail\ApplicationRejected;
 use App\Mail\ApplicationSent;
 use App\Mail\NewApplicationNotification;
 use App\Models\Application;
@@ -119,7 +121,15 @@ class ApplicationController extends Controller
             return back()->with('error', 'You can only approve applications for your own jobs');
         }
 
+
         $application->update(['status'=> ApplicationStatus::Approved]);
+
+        try {
+            Mail::to($application->jobseeker->authParent->email)->send(new ApplicationApproved($application, $application->job, $application->jobseeker->authParent));
+        } catch (\Exception $e) {
+            Log::error('Email sending failed: ' . $e->getMessage());
+        }
+
         return back()->with('success', 'Application approved successfully.');
     }
 
@@ -132,6 +142,13 @@ class ApplicationController extends Controller
         }
 
         $application->update(['status'=> ApplicationStatus::Rejected]);
+
+        try {
+            Mail::to($application->jobseeker->authParent->email)->send(new ApplicationRejected($application, $application->job, $application->jobseeker->authParent));
+        } catch (\Exception $e) {
+            Log::error('Email sending failed: ' . $e->getMessage());
+        }
+
         return back()->with('success', 'Application rejected.');
     }
     public function employerIndex(Request $request)
