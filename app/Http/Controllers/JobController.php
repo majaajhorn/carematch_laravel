@@ -79,7 +79,7 @@ class JobController extends Controller
 
         $employer = $user->user;    // polymorphic relationship (get related record based on user_type)
 
-        $jobs = $employer->jobs()->latest()->paginate(2); // get all jobs from this employer
+        $jobs = $employer->jobs()->withCount('applications')->latest()->paginate(2); // get all jobs from this employer
         return view('jobs.show-my-jobs', compact('jobs'));
     }    
 

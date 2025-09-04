@@ -4,9 +4,8 @@
 
     <div class="mx-auto max-w-5xl p-6">
 
-        <a href="{{ route('applications.employer.index', request()->only('status', 'order')) }}"
-            class="text-md font-medium bg-white text-emerald-700">
-            ← Back to All Applications
+        <a href="{{ url()->previous() }}" class="text-md font-medium bg-white text-emerald-700">
+            ← Back
         </a>
 
         <h1 class="mb-6 text-2xl font-semibold text-gray-900 mt-5">Application</h1>

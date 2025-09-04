@@ -46,6 +46,7 @@ Route::middleware('auth')->group(function () {
             Route::post('/{job}/deactivate', [JobController::class, 'deactivate'])->name('jobs.deactivate');
             Route::post('/{job}/activate', [JobController::class, 'activate'])->name('jobs.activate');
             Route::delete('/{job}', [JobController::class, 'destroy'])->name('jobs.destroy');
+            Route::get('/{job}/applications', [ApplicationController::class, 'employerByJob'])->name('applications.employer.by-job'); // OVO SMO DODALI SADA 
         });
 
         

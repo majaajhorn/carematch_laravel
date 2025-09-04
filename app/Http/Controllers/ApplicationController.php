@@ -199,5 +199,18 @@ class ApplicationController extends Controller
 
         return view('applications.employer.show', compact('application'));
     }
+    public function employerByJob(Job $job)
+    {
+        $user = Auth::user();
+        $employerId = $user->user_id;
+
+        if ($job->employer_id !== $employerId) {
+            return back()->with('error', 'You can only view applications for your own jobs');
+        }
+
+        $applications = Application::with(['jobseeker.authParent', 'jobseeker.experiences'])->where('job_id', $job->id)->latest()->paginate(2)->withQueryString();
+
+        return view('applications.employer.by_job', compact('job', 'applications'));
+    }
 }
 

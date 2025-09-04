@@ -72,22 +72,21 @@
                             </form>
                         @endif
 
-                        <p class="text-xs text-gray-500 mt-1">JPG, PNG max 2MB</p>
+
                     </div>
 
                     <!-- Edit Button -->
                     <div class="ml-auto">
                         <a href="{{ route('employer.profile.edit') }}"
-                            class="bg-blue-600 hover:bg-blue-700 px-6 py-2 rounded-md text-sm text-white">
+                            class="bg-emerald-600 hover:bg-emerald-700 px-6 py-2 rounded-md text-sm text-white">
                             Edit Profile
                         </a>
                     </div>
                 </div>
 
-                <!-- Change Email/Password Links -->
-                <div class="flex gap-6 mt-4">
-                    <a href="#" class="text-sm text-blue-600 hover:text-blue-800">Change Email</a>
-                    <a href="#" class="text-sm text-blue-600 hover:text-blue-800">Change Password</a>
+                <!-- Change Password  -->
+                <div class="flex  mt-4">
+                    <a href="#" class="text-sm text-emerald-600 hover:text-emerald-800">Change Password</a>
                 </div>
             </div>
 

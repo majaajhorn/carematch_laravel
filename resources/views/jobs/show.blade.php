@@ -5,9 +5,9 @@
     <div class="max-w-4xl mx-auto p-6">
         <div class="mb-6">
             @if (auth()->user()->isJobseeker())
-                <a href="/jobs" class="text-emerald-600 hover:text-emerald-700">← Back to Jobs</a>
+                <a href="{{  url()->previous() }}" class="text-emerald-600 hover:text-emerald-700">← Back</a>
             @elseif(auth()->user()->isEmployer())
-                <a href="/jobs/my-jobs" class="text-emerald-600 hover:text-emerald-700">← Back to My Jobs</a>
+                <a href="{{ url()->previous() }}" class="text-emerald-600 hover:text-emerald-700">← Back</a>
             @endif
 
         </div>
@@ -23,7 +23,8 @@
 
             <!-- Employment Type and Location -->
             <div class="flex flex-wrap gap-4 mb-4">
-                <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
+                <span
+                    class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-emerald-100 text-emerald-800">
                     {{ ucfirst(str_replace('_', ' ', (string) $job->employment_type)) }}
                 </span>
                 <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-gray-100 text-gray-700">

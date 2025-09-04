@@ -162,7 +162,7 @@
                                 View Details
                             </a>
                             <a href="{{ route('jobs.show-my-jobs', ['edit' => $job->id]) }}"
-                                class="flex h-10 min-w-[120px] items-center justify-center rounded-lg px-4 text-sm font-medium text-center box-border bg-gray-600 text-white hover:bg-gray-700">
+                                class="flex h-10 min-w-[120px] items-center justify-center rounded-lg px-4 text-sm font-medium text-center box-border bg-emerald-300 text-gray-900 hover:bg-emerald-700">
                                 Edit
                             </a>
 
@@ -172,7 +172,7 @@
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit"
-                                    class="flex h-10 min-w-[120px] items-center justify-center rounded-lg px-4 text-sm font-medium text-center box-border border border-red-600 text-red-600 hover:bg-red-50 mt-4">
+                                    class="flex h-10 min-w-[120px] items-center justify-center rounded-lg px-4 text-sm font-medium text-center box-border border bg-red-400 text-white hover:bg-red-600 mt-4">
                                     Delete
                                 </button>
                             </form>
@@ -183,7 +183,7 @@
                                     onsubmit="return confirm('Are you sure you want to deactivate this job post?')">
                                     @csrf
                                     <button type="submit"
-                                        class="flex h-10 min-w-[120px] items-center justify-center rounded-lg px-4 text-sm font-medium text-center box-border border border-salmon-400 text-white bg-amber-500 hover:bg-amber-700 mt-4">
+                                        class="flex h-10 min-w-[120px] items-center justify-center rounded-lg px-4 text-sm font-medium text-center box-border  text-white bg-emerald-900 hover:bg-gray-700 mt-4">
                                         Deactivate
                                     </button>
                                 </form>
@@ -192,13 +192,20 @@
                                     onsubmit="return confirm('Are you sure you want to activate this job post?')">
                                     @csrf
                                     <button type="submit"
-                                        class="flex h-10 min-w-[120px] items-center justify-center rounded-lg px-4 text-sm font-medium text-center box-border border border-emerald-600 text-emerald-600 hover:bg-emerald-50 mt-4">
+                                        class="flex h-10 min-w-[120px] items-center justify-center rounded-lg px-4 text-sm font-medium text-center box-border border border-emerald-700 text-emerald-600 hover:bg-emerald-50 mt-4">
                                         Activate
                                     </button>
                                 </form>
                             @endif
 
-
+                            <!-- View Applications -->
+                            @php
+                                $appsCount = $job->applications_count ?? $job->applications()->count();
+                            @endphp
+                            <a href="{{ route('applications.employer.by-job', $job) }}"
+                                class="flex h-10 min-w-[160px] items-center justify-center rounded-lg px-4 text-sm font-medium text-center box-border bg-amber-300 text-gray-800 hover:bg-amber-700">
+                                View Applications ({{ $appsCount }})
+                            </a>
                         </div>
                     @endif
                 </div>
