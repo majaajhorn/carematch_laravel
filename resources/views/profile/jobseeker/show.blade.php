@@ -55,22 +55,64 @@
                                 </button>
                             </form>
                         @endif
-
-                        <p class="text-xs text-gray-500 mt-1">JPG, PNG max 2MB</p>
                     </div>
 
                     <!-- Edit Button -->
-                    <div class="ml-auto">
+                    <div class="ml-auto mt-7">
                         <a href="{{ route('jobseeker.profile.edit') }}"
                             class="bg-emerald-600 hover:bg-emerald-700 px-6 py-2 rounded-md text-sm text-white">
                             Edit Profile
                         </a>
+
+                        @php
+                            $avg = (float) $jobseeker->getAverageRating();     // e.g. 4.5
+                            $count = (int) $jobseeker->getTotalReviews();
+                            $percent = max(0, min(100, ($avg / 5) * 100));   
+                        @endphp
+
+                        @if ($count > 0)
+                            <div class="flex items-center mt-4 gap-2">
+                                <div class="relative inline-block align-middle"
+                                    aria-label="Rating {{ number_format($avg, 1) }} out of 5" style="line-height:0;">
+                                    {{-- Base: 5 gray stars --}}
+                                    <div class="flex text-gray-300">
+                                        @for ($i = 0; $i < 5; $i++)
+                                            <svg class="w-5 h-5 block shrink-0" viewBox="0 0 20 20" fill="currentColor"
+                                                aria-hidden="true">
+                                                <path
+                                                    d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.802 2.036a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118L10 13.347l-2.985 2.126c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L3.38 8.72c-.783-.57-.38-1.81.588-1.81H7.43a1 1 0 00.95-.69l1.07-3.292z" />
+                                            </svg>
+                                        @endfor
+                                    </div>
+
+                                    {{-- Overlay: 5 yellow stars, clipped to exact percentage --}}
+                                    <div class="absolute inset-0 pointer-events-none"
+                                        style="clip-path: inset(0 {{ 100 - $percent }}% 0 0);">
+                                        <div class="flex text-yellow-400">
+                                            @for ($i = 0; $i < 5; $i++)
+                                                <svg class="w-5 h-5 block shrink-0" viewBox="0 0 20 20" fill="currentColor"
+                                                    aria-hidden="true">
+                                                    <path
+                                                        d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.802 2.036a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118L10 13.347l-2.985 2.126c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L3.38 8.72c-.783-.57-.38-1.81.588-1.81H7.43a1 1 0 00.95-.69l1.07-3.292z" />
+                                                </svg>
+                                            @endfor
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <span class="text-sm text-gray-600">
+                                    {{ number_format($avg, 1) }}
+                                    ({{ $count }} {{ \Illuminate\Support\Str::plural('review', $count) }})
+                                </span>
+                            </div>
+                        @else
+                            <p class="text-sm text-gray-500 mt-4">No reviews yet</p>
+                        @endif
                     </div>
                 </div>
 
-                <!-- Change Email/Password Links -->
+                <!-- Change Password  -->
                 <div class="flex gap-6 mt-4">
-                    <a href="#" class="text-sm text-emerald-600 hover:text-emerald-800">Change Email</a>
                     <a href="#" class="text-sm text-emerald-600 hover:text-emerald-800">Change Password</a>
                 </div>
             </div>

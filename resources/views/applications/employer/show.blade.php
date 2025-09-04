@@ -38,7 +38,7 @@
                         @endif
 
                         @if($application->job?->employment_type)
-                            <span class="inline-flex items-center rounded-full bg-blue-100 px-3 py-1 text-blue-800">
+                            <span class="inline-flex items-center rounded-full bg-emerald-100 px-3 py-1 text-emerald-800">
                                 {{ ucfirst(str_replace('_', ' ', (string) $application->job->employment_type)) }}
                             </span>
                         @endif

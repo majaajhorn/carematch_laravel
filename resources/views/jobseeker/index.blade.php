@@ -40,23 +40,47 @@
                         @endif
                     </div>
 
+
                     {{-- Rating Summary --}}
-                    @if($jobseeker->getTotalReviews() > 0)
+                    @php
+                        $avg = (float) $jobseeker->getAverageRating();
+                        $count = (int) $jobseeker->getTotalReviews();
+                        $percent = max(0, min(100, ($avg / 5) * 100));   
+                    @endphp
+
+                    @if ($count > 0)
                         <div class="flex items-center mt-2 gap-2">
-                            {{-- Stars --}}
-                            <div class="flex items-center">
-                                @for($i = 1; $i <= 5; $i++)
-                                    @if($i <= round($jobseeker->getAverageRating()))
-                                        <span class="text-yellow-400">⭐</span>
-                                    @else
-                                        <span class="text-gray-300">⭐</span>
-                                    @endif
-                                @endfor
+                            <div class="relative inline-block align-middle"
+                                aria-label="Rating {{ number_format($avg, 1) }} out of 5" style="line-height:0;">
+                                {{-- Base: 5 gray stars --}}
+                                <div class="flex text-gray-300">
+                                    @for ($i = 0; $i < 5; $i++)
+                                        <svg class="w-5 h-5 block shrink-0" viewBox="0 0 20 20" fill="currentColor"
+                                            aria-hidden="true">
+                                            <path
+                                                d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.802 2.036a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118L10 13.347l-2.985 2.126c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L3.38 8.72c-.783-.57-.38-1.81.588-1.81H7.43a1 1 0 00.95-.69l1.07-3.292z" />
+                                        </svg>
+                                    @endfor
+                                </div>
+
+                                {{-- Overlay: 5 yellow stars, clipped to exact percentage --}}
+                                <div class="absolute inset-0 pointer-events-none"
+                                    style="clip-path: inset(0 {{ 100 - $percent }}% 0 0);">
+                                    <div class="flex text-yellow-400">
+                                        @for ($i = 0; $i < 5; $i++)
+                                            <svg class="w-5 h-5 block shrink-0" viewBox="0 0 20 20" fill="currentColor"
+                                                aria-hidden="true">
+                                                <path
+                                                    d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.802 2.036a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118L10 13.347l-2.985 2.126c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L3.38 8.72c-.783-.57-.38-1.81.588-1.81H7.43a1 1 0 00.95-.69l1.07-3.292z" />
+                                            </svg>
+                                        @endfor
+                                    </div>
+                                </div>
                             </div>
-                            {{-- Rating number and count --}}
+
                             <span class="text-sm text-gray-600">
-                                {{ number_format($jobseeker->getAverageRating(), 1) }}
-                                ({{ $jobseeker->getTotalReviews() }} {{ Str::plural('review', $jobseeker->getTotalReviews()) }})
+                                {{ number_format($avg, 1) }}
+                                ({{ $count }} {{ \Illuminate\Support\Str::plural('review', $count) }})
                             </span>
                         </div>
                     @else

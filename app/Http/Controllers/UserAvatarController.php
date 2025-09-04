@@ -15,13 +15,14 @@ class UserAvatarController extends Controller
         //
         $request->validate([
             'photo' => ['required', File::image()
-            ->min(100)
-            ->max(5200)]
+            ->min(10)
+            ->max(5 * 1024)]
         ]);
 //dd($request);
         $user = Auth::user();
 
-        $filename = 'user_' . $user->id . '.jpg'; // naziv datoteke
+        $extension = $request->file('photo')->extension();
+        $filename = "user_{$user->id}.{$extension}"; // naziv datoteke
 
         // radimo provjeru da user moze imati samo jednu sliku
         if (Storage::disk('public')->exists('photos/' . $filename)) {

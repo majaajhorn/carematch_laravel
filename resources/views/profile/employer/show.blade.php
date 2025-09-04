@@ -1,29 +1,8 @@
-<?php
-
-/*if ($errors->any()) {
-    dd($errors);
-}*/
-?>
-
 @extends('layouts.master')
 
 @section('content')
 
     <main class="mx-auto max-w-3xl px-4 py-8">
-        <!-- Success Message -->
-        @if(session('success'))
-            <div class="mb-6 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-lg">
-                {{ session('success') }}
-            </div>
-        @endif
-
-        <!-- Error Message -->
-        @if(session('error'))
-            <div class="mb-6 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg">
-                {{ session('error') }}
-            </div>
-        @endif
-
         <!-- Page Title -->
         <h1 class="text-2xl font-bold text-gray-900 mb-8">My Profile</h1>
 
@@ -59,8 +38,6 @@
                             </label>
                         </form>
 
-
-
                         @if($user->hasPhoto())
                             <form method="POST" action="{{ route('profile.remove-photo') }}" class="inline ml-2">
                                 @csrf
@@ -71,8 +48,6 @@
                                 </button>
                             </form>
                         @endif
-
-
                     </div>
 
                     <!-- Edit Button -->
