@@ -55,6 +55,7 @@ Route::middleware('auth')->group(function () {
 
         Route::get('/employer/applications', [ApplicationController::class, 'employerIndex'])->name('applications.employer.index');
         
+        Route::get('/employer/applications/{application}', [ApplicationController::class, 'employerShow'])->name('applications.employer.show');
         Route::patch('/applications/{application}/approve', [ApplicationController::class, 'approve'])->name('applications.approve');
         Route::patch('/applications/{application}/reject', [ApplicationController::class, 'reject'])->name('applications.reject');
     });

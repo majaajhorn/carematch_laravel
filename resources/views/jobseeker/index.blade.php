@@ -5,7 +5,7 @@
     <!-- Main Content -->
     <main class="mx-auto max-w-3xl px-4 py-8">
         <!-- Back Link -->
-        <a href="/carers" class="text-blue-600 hover:text-blue-800 mb-6 inline-block">
+        <a href="{{ route('carers') }}" class="text-emerald-600 hover:text-emerald-800 mb-6 inline-block">
             ← Back to Browse Carers
         </a>
 

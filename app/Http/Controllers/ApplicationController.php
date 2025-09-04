@@ -186,5 +186,18 @@ class ApplicationController extends Controller
         
         return view('applications.employer.index', compact('applications', 'status', 'order'));
     }
+    public function employerShow(Application $application)
+    {
+        $user = Auth::user();
+        $employerId = $user->user_id;
+
+        if ($application->job->employer_id !== $employerId) {
+            return back()->with('error', 'You can only view applications for your own jobs');
+        }
+
+        $application->load('job', 'jobseeker.authParent');
+
+        return view('applications.employer.show', compact('application'));
+    }
 }
 

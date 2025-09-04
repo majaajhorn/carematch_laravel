@@ -17,25 +17,25 @@
 
                 <a href="{{ route('applications.employer.index', ['status' => 'all', 'order' => $ord]) }}"
                     class="px-3 py-1.5 rounded-lg text-sm font-medium border
-                              {{ $st === 'all' ? 'bg-emerald-500 text-white border-emerald-500' : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-100' }}">
+                                  {{ $st === 'all' ? 'bg-emerald-500 text-white border-emerald-500' : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-100' }}">
                     All
                 </a>
 
                 <a href="{{ route('applications.employer.index', ['status' => 'pending', 'order' => $ord]) }}"
                     class="px-3 py-1.5 rounded-lg text-sm font-medium border
-                              {{ $st === 'pending' ? 'bg-emerald-500 text-white border-emerald-500' : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-100' }}">
+                                  {{ $st === 'pending' ? 'bg-emerald-500 text-white border-emerald-500' : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-100' }}">
                     Pending
                 </a>
 
                 <a href="{{ route('applications.employer.index', ['status' => 'approved', 'order' => $ord]) }}"
                     class="px-3 py-1.5 rounded-lg text-sm font-medium border
-                              {{ $st === 'approved' ? 'bg-emerald-500 text-white border-emerald-500' : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-100' }}">
+                                  {{ $st === 'approved' ? 'bg-emerald-500 text-white border-emerald-500' : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-100' }}">
                     Approved
                 </a>
 
                 <a href="{{ route('applications.employer.index', ['status' => 'rejected', 'order' => $ord]) }}"
                     class="px-3 py-1.5 rounded-lg text-sm font-medium border
-                              {{ $st === 'rejected' ? 'bg-emerald-500 text-white border-emerald-500' : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-100' }}">
+                                  {{ $st === 'rejected' ? 'bg-emerald-500 text-white border-emerald-500' : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-100' }}">
                     Rejected
                 </a>
             </div>
@@ -109,12 +109,10 @@
                                     @endphp
 
                                     {{-- View --}}
-                                    <form method="GET" action="{{ route('jobseeker.show', $application->jobseeker_id) }}"
-                                        class="inline m-0">
-                                        <button type="submit" class="{{ $btn }} bg-emerald-600 text-white hover:bg-emerald-700">
-                                            View
-                                        </button>
-                                    </form>
+                                    <a href="{{ route('applications.employer.show', $application) }}"
+                                        class="{{ $btn }} bg-emerald-600 text-white hover:bg-emerald-700 inline-flex items-center justify-center">
+                                        View
+                                    </a>
 
                                     @if($application->isPending())
                                         {{-- Approve --}}
