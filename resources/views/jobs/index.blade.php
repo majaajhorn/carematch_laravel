@@ -8,7 +8,7 @@
             <!-- Search Input -->
             <input type="text" name="search" value="{{ $search ?? '' }}"
                 class="flex-1 px-4 py-2.5 text-sm text-gray-900 bg-white border border-gray-300 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
-                placeholder="Search jobs, locations, employers..." />
+                placeholder="Search jobs, locations..." />
 
             <!-- Search Button -->
             <button type="submit"

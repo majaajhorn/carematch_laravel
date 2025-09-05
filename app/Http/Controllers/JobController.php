@@ -37,9 +37,8 @@ class JobController extends Controller
         $jobs = Job::with('employer.authParent')->where(function($query) use ($search) {
             // Search in job fields
             $query->where('title', 'like', "%$search%")
-                  ->orWhere('description', 'like', "%$search%")
                   ->orWhere('location', 'like', "%$search%")
-                  ->orWhere('requirements', 'like', "%$search%");
+                  ->orWhere('salary', 'like', "%$search%");
         })
         
         ->orWhereHas('employer.authParent', function($query) use ($search) {
