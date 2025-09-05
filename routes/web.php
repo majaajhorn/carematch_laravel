@@ -7,6 +7,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EmployerController;
 use App\Http\Controllers\JobController;
 use App\Http\Controllers\JobseekerController;
+use App\Http\Controllers\PasswordResetController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\UserAvatarController;
 use App\Http\Controllers\SavedJobController;
@@ -14,9 +15,12 @@ use App\Http\Middleware\CheckUserByUserType;
 use App\Mail\ApplicationSent;
 use App\Models\Employer;
 use App\Models\Jobseeker;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Http\Request;
+
 
 Route::view('/', 'home')->name('home');
 Route::view('/about', 'about')->name('about'); 
@@ -27,6 +31,17 @@ Route::post('/register', [RegisteredUserController::class, 'store'])->name('regi
 Route::get('/login', [SessionController::class, 'create'])->name('login');
 Route::post('/login', [SessionController::class, 'store'])->name('login.store');
 Route::post('/logout', [SessionController::class, 'destroy'])->name('logout');
+
+// FORGOT PASSWORD NADODALA SAM OVO
+Route::middleware('guest')->group(function () {
+    Route::get('/forgot-password', [PasswordResetController::class, 'showForgotPasswordForm'])->name('password.request');
+
+    Route::post('/forgot-password', [PasswordResetController::class, 'sendResetLinkEmail'])->name('password.email');
+
+    Route::get('/reset-password/{token}', [PasswordResetController::class, 'showResetPasswordForm'])->name('password.reset');
+
+    Route::post('/reset-password', [PasswordResetController::class, 'resetPassword'])->name('password.update');
+});
 
 Route::middleware('auth')->group(function () {
 
@@ -46,7 +61,7 @@ Route::middleware('auth')->group(function () {
             Route::post('/{job}/deactivate', [JobController::class, 'deactivate'])->name('jobs.deactivate');
             Route::post('/{job}/activate', [JobController::class, 'activate'])->name('jobs.activate');
             Route::delete('/{job}', [JobController::class, 'destroy'])->name('jobs.destroy');
-            Route::get('/{job}/applications', [ApplicationController::class, 'employerByJob'])->name('applications.employer.by-job'); // OVO SMO DODALI SADA 
+            Route::get('/{job}/applications', [ApplicationController::class, 'employerByJob'])->name('applications.employer.by-job'); 
         });
 
         

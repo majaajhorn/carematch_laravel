@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Contracts\Auth\CanResetPassword;
 
 class User extends Authenticatable
 {
@@ -69,6 +70,10 @@ class User extends Authenticatable
     public function getPhotoUrlAttribute()
     {
         return UserAvatarController::getPhotoUrl($this->id);
+    }
+    public function getEmailForPasswordReset()
+    {
+        return $this->email;
     }
 
     /* helper funkcija ako bude trebala, ali zasad ne treba
