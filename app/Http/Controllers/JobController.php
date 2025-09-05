@@ -14,42 +14,61 @@ use Illuminate\Support\Facades\Auth;
 class JobController extends Controller
 {
     // prikaz svih poslova
-    public function index()
+    public function index(Request $request)
     {
-        //$jobs = Job::latest()->get();
+        /*//$jobs = Job::latest()->get();
         
         $jobs = Job::latest()->active()->paginate(3);
         
         return view('jobs.index', [
             'jobs' => $jobs
-        ]);
+        ]);*/
+        $location = $request->get('location');
+        $minSalary = $request->get('min_salary');
+        $maxSalary = $request->get('max_salary');
+        $search = $request->get('search');
+
+        $jobs = Job::with('employer.authParent')
+            ->when($location, function ($query, $location) {
+                return $query->where('location', 'like', $location.'%');
+            })
+            ->when($minSalary, function ($query, $minSalary) {
+                return $query->where('salary', '>=', $minSalary);
+            })
+            ->when($maxSalary, function ($query, $maxSalary) {
+                return $query->where('salary', '<=', $maxSalary);
+            })
+            ->when($search, function ($query, $search) {
+                return $query->where('title', 'like', '%'.$search.'%');
+            })
+            ->latest()
+            ->active()
+            ->paginate(3)
+            ->withQueryString();
+
+        return view('jobs.index', compact('jobs', 'location', 'minSalary', 'maxSalary', 'search'));
     }
 
+    /*public function search(Request $request)
+    {
+        $location = $request->input('search');
+        $salary = $request->input('salary');
+
+        $jobs = Job::where('location', 'like', $location.'%')
+            ->when($salary, function ($query, $salary) {
+                return $query->where('salary', '>=', $salary);
+            })
+            ->get();
+
+       dd($jobs);
+       
+      
+    }*/
     public function search(Request $request)
     {
-        $search = $request->search;
-
-        if (empty($search)) {
-            $jobs = Job::where('id', '=', 0)->paginate(3); 
-            return view('jobs.index', compact('jobs', 'search'));
-        }
-        
-        $jobs = Job::with('employer.authParent')->where(function($query) use ($search) {
-            // Search in job fields
-            $query->where('title', 'like', "%$search%")
-                  ->orWhere('location', 'like', "%$search%")
-                  ->orWhere('salary', 'like', "%$search%");
-        })
-        
-        ->orWhereHas('employer.authParent', function($query) use ($search) {
-            $query->where('first_name', 'like', "%$search%")
-                  ->orWhere('last_name', 'like', "%$search%");
-        })
-        ->latest()
-        ->paginate(3);
-
-        return view('jobs.index', compact('jobs', 'search'));
+        return redirect()->route('jobs.index', ['search' => $request->search]);
     }
+
     // stvaranje poslova
     public function create()
     {

@@ -2,67 +2,155 @@
 
 @section('content')
 
-    <!-- Simple Search Form -->
-    <form method="GET" action="{{ route('jobs.search') }}" class="max-w-2xl mx-auto mt-8">
+    <!-- Search Form -->
+    <form method="GET" action="{{ route('jobs.index') }}" class="max-w-2xl mx-auto mt-8">
         <div class="flex">
-            <!-- Search Input -->
             <input type="text" name="search" value="{{ $search ?? '' }}"
-                class="flex-1 px-4 py-2.5 text-sm text-gray-900 bg-white border border-gray-300 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
-                placeholder="Search jobs, locations..." />
+                class="flex-1 px-4 py-2.5 text-sm text-gray-900 bg-white border border-gray-300 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                placeholder="Search jobs..." />
 
-            <!-- Search Button -->
+            <!-- Preserve filters when searching -->
+            <input type="hidden" name="location" value="{{ $location ?? '' }}">
+            <input type="hidden" name="min_salary" value="{{ $minSalary ?? '' }}">
+            <input type="hidden" name="max_salary" value="{{ $maxSalary ?? '' }}">
+
             <button type="submit"
-                class="px-6 py-2.5 text-white bg-emerald-600 border border-emerald-600 rounded-r-lg hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-500">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                </svg>
+                class="px-6 py-2.5 text-white bg-emerald-600 border border-emerald-600 rounded-r-lg hover:bg-emerald-700">
+                Search
             </button>
         </div>
-
-        <!-- Clear Search Button (show only when searching) -->
-        @if(isset($search) && $search)
-            <div class="mt-2 text-center">
-                <a href="{{ route('jobs.index') }}" class="text-sm text-gray-600 hover:text-gray-800">
-                    Clear search and show all jobs
-                </a>
-            </div>
-        @endif
     </form>
 
-    <!-- Results Section -->
-    <div class="max-w-4xl mx-auto p-6">
-        <!-- Results Header -->
-        <div class="flex justify-between items-center mb-6">
-            <h1 class="text-2xl font-bold">
-                @if(isset($search) && $search)
-                    Search Results for "{{ $search }}"
-                @else
-                    Available Jobs
-                @endif
-            </h1>
-            <div class="text-sm text-gray-600">
-                {{ $jobs->total() }} jobs found
+    <!-- Main Content -->
+    <div class="max-w-6xl mx-auto p-6">
+
+        <!-- Filters Section -->
+        <div class="bg-gray-50 border border-gray-200 rounded-xl p-6 mb-6">
+            <div class="flex items-center justify-between mb-4">
+                <h2 class="text-lg font-semibold text-gray-800">Filter Jobs</h2>
+
+                <!-- Advanced Filter Button -->
+                <button id="openFilters"
+                    class="inline-flex items-center px-3 py-1.5 bg-emerald-600 text-white text-xs font-medium rounded-lg hover:bg-emerald-700">
+                    <svg class="w-4 h-4 mr-1.5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M18 7H17M17 7H16M17 7V6M17 7V8M12.5 5H6C5.5286 5 5.29289 5 5.14645 5.14645C5 5.29289 5 5.5286 5 6V7.96482C5 8.2268 5 8.35779 5.05916 8.46834C5.11833 8.57888 5.22732 8.65154 5.4453 8.79687L8.4688 10.8125C9.34073 11.3938 9.7767 11.6845 10.0133 12.1267C10.25 12.5688 10.25 13.0928 10.25 14.1407V19L13.75 17.25V14.1407C13.75 13.0928 13.75 12.5688 13.9867 12.1267C14.1205 11.8765 14.3182 11.6748 14.6226 11.4415M20 7C20 8.65685 18.6569 10 17 10C15.3431 10 14 8.65685 14 7C14 5.34315 15.3431 4 17 4C18.6569 4 20 5.34315 20 7Z"
+                            stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"></path>
+                    </svg>
+                    Filters
+                </button>
             </div>
+
+            <!-- Quick Location Filters -->
+            <div class="flex flex-wrap gap-2">
+                <!-- All Locations -->
+                <a href="{{ route('jobs.index', array_filter(['search' => $search, 'min_salary' => $minSalary, 'max_salary' => $maxSalary])) }}"
+                    class="px-4 py-2 rounded-lg text-sm font-medium border transition-colors
+                                   {{ !$location ? 'bg-emerald-500 text-white border-emerald-500' : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-100' }}">
+                    All Locations
+                </a>
+            </div>
+
+            <!-- Show active filters -->
+            @if($location || $minSalary || $maxSalary)
+                <div class="mt-4 pt-4 border-t border-gray-200">
+                    <div class="flex items-center gap-2 text-sm text-gray-600">
+                        <span>Active filters:</span>
+                        @if($location)
+                            <span class="bg-emerald-100 text-emerald-800 px-2 py-1 rounded">Location: {{ $location }}</span>
+                        @endif
+                        @if($minSalary)
+                            <span class="bg-emerald-100 text-emerald-800 px-2 py-1 rounded">Min: £{{ $minSalary }}</span>
+                        @endif
+                        @if($maxSalary)
+                            <span class="bg-emerald-100 text-emerald-800 px-2 py-1 rounded">Max: £{{ $maxSalary }}</span>
+                        @endif
+                        <a href="{{ route('jobs.index', ['search' => $search]) }}"
+                            class="text-red-600 hover:text-red-800 ml-2">Clear all</a>
+                    </div>
+                </div>
+            @endif
+        </div>
+
+        <!-- Filter Modal -->
+        <div id="filterModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden">
+            <div class="flex items-center justify-center min-h-screen p-4">
+                <div class="bg-white rounded-xl shadow-xl max-w-md w-full">
+                    <!-- Modal Header -->
+                    <div class="flex items-center justify-between p-6 border-b">
+                        <h3 class="text-lg font-semibold text-gray-900">Filter Jobs</h3>
+                        <button id="closeFilters" class="text-gray-400 hover:text-gray-600">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M6 18L18 6M6 6l12 12"></path>
+                            </svg>
+                        </button>
+                    </div>
+
+                    <!-- Modal Content -->
+                    <form method="GET" action="{{ route('jobs.index') }}" class="p-6 space-y-4">
+                        <!-- Preserve search -->
+                        <input type="hidden" name="search" value="{{ $search ?? '' }}">
+
+                        <!-- Location -->
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-800 mb-2">Location</label>
+                            <input type="text" name="location" value="{{ $location ?? '' }}"
+                                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                                placeholder="Enter location...">
+                        </div>
+
+                        <!-- Salary Range -->
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-800 mb-2">Salary Range</label>
+                            <div class="flex items-center space-x-2">
+                                <input type="number" name="min_salary" value="{{ $minSalary ?? '' }}"
+                                    class="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                                    placeholder="Min">
+                                <span class="text-gray-500">to</span>
+                                <input type="number" name="max_salary" value="{{ $maxSalary ?? '' }}"
+                                    class="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                                    placeholder="Max">
+                            </div>
+                        </div>
+
+                        <!-- Buttons -->
+                        <div class="flex justify-between pt-4">
+                            <button type="button" onclick="resetFilters()"
+                                class="px-4 py-2 text-gray-600 bg-gray-100 rounded-lg hover:bg-gray-200">
+                                Reset
+                            </button>
+                            <button type="submit"
+                                class="px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700">
+                                Apply Filters
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Results -->
+        <div class="flex justify-between items-center mb-6">
+            <h1 class="text-2xl font-bold">Available Jobs</h1>
+            <div class="text-sm text-gray-600">{{ $jobs->total() }} jobs found</div>
         </div>
 
         <!-- Job Listings -->
         <div class="space-y-6">
             @forelse ($jobs as $job)
                 <div class="border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow">
-                    <!-- Job Title and Salary -->
                     <div class="flex justify-between items-start mb-4">
                         <h2 class="text-xl font-semibold text-gray-900">
                             <a href="{{ route('jobs.show', $job) }}" class="hover:text-emerald-600">
                                 {{ $job->title }}
                             </a>
                         </h2>
-                        <span class="text-lg font-bold text-emerald-600">£
-                            {{ $job->salary }} {{ (string) $job->salary_period }}
+                        <span class="text-lg font-bold text-emerald-600">
+                            £{{ $job->salary }} {{ $job->salary_period }}
                         </span>
                     </div>
 
-                    <!-- Employment Type and Location -->
                     <div class="flex flex-wrap gap-4 mb-4">
                         <span
                             class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
@@ -76,89 +164,50 @@
                             class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-gray-100 text-gray-700">
                             Posted {{ $job->created_at->diffForHumans() }}
                         </span>
-                        @if($job->employer && $job->employer->authParent)
-                            <span
-                                class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-emerald-100 text-emerald-800">
-                                👤 {{ $job->employer->authParent->first_name }} {{ $job->employer->authParent->last_name }}
-                            </span>
-                        @endif
                     </div>
 
-                    <!-- Description -->
-                    <div class="mb-4">
-                        <h3 class="font-semibold text-gray-900 mb-2">Description:</h3>
-                        <p class="text-gray-700 leading-relaxed">
-                            {{ $job->description ? Str::limit($job->description, 200) : 'No description available.' }}
-                        </p>
-                    </div>
+                    <p class="text-gray-700 mb-4">
+                        {{ Str::limit($job->description, 200) }}
+                    </p>
 
-                    <!-- Requirements -->
-                    @if($job->requirements)
-                        <div class="mb-4">
-                            <h3 class="font-semibold text-gray-900 mb-2">Requirements:</h3>
-                            <p class="text-gray-700 leading-relaxed">
-                                {{ Str::limit($job->requirements, 150) }}
-                            </p>
-                        </div>
-                    @endif
-
-                    <!-- View Details Button -->
-                    <div class="mt-4 pt-4 border-t border-gray-100">
-                        <a href="{{ route('jobs.show', $job) }}"
-                            class="inline-flex items-center px-4 py-2 bg-emerald-600 text-white font-medium rounded-lg hover:bg-emerald-700 transition-colors">
-                            View Full Details →
-                        </a>
-                    </div>
-
-
+                    <a href="{{ route('jobs.show', $job) }}"
+                        class="inline-flex items-center px-4 py-2 bg-emerald-600 text-white font-medium rounded-lg hover:bg-emerald-700">
+                        View Details →
+                    </a>
                 </div>
             @empty
                 <div class="text-center py-12">
-                    @if(isset($search) && $search)
-                        <p class="text-gray-500 text-lg">No jobs found for "{{ $search }}"</p>
-                        <p class="text-gray-400 mt-2">Try searching with different keywords</p>
-                        <a href="{{ route('jobs.index') }}" class="mt-4 inline-block text-emerald-600 hover:text-emerald-700">
-                            View all jobs
-                        </a>
-                    @else
-                        <p class="text-gray-500 text-lg">No jobs available at the moment.</p>
-                    @endif
+                    <p class="text-gray-500 text-lg">No jobs found matching your criteria.</p>
+                    <a href="{{ route('jobs.index') }}" class="mt-4 inline-block text-emerald-600 hover:text-emerald-700">
+                        View all jobs
+                    </a>
                 </div>
             @endforelse
         </div>
 
         <!-- Pagination -->
         <div class="mt-8">
-            {{ $jobs->links() }}
+            {{ $jobs->appends(request()->query())->links() }}
         </div>
     </div>
 
     <script>
-        // Simple dropdown toggle functionality
-        document.addEventListener('DOMContentLoaded', function () {
-            const dropdownButton = document.getElementById('dropdown-button');
-            const dropdown = document.getElementById('dropdown');
+        // Modal functionality
+        const modal = document.getElementById('filterModal');
+        const openBtn = document.getElementById('openFilters');
+        const closeBtn = document.getElementById('closeFilters');
 
-            dropdownButton.addEventListener('click', function (e) {
-                e.preventDefault();
-                dropdown.classList.toggle('hidden');
-            });
-
-            // Close dropdown when clicking outside
-            document.addEventListener('click', function (e) {
-                if (!dropdownButton.contains(e.target) && !dropdown.contains(e.target)) {
-                    dropdown.classList.add('hidden');
-                }
-            });
-
-            // Handle dropdown item selection
-            const dropdownItems = dropdown.querySelectorAll('button');
-            dropdownItems.forEach(item => {
-                item.addEventListener('click', function () {
-                    dropdownButton.innerHTML = this.textContent + ' <svg class="w-2.5 h-2.5 ms-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4" /></svg>';
-                    dropdown.classList.add('hidden');
-                });
-            });
+        openBtn.addEventListener('click', () => modal.classList.remove('hidden'));
+        closeBtn.addEventListener('click', () => modal.classList.add('hidden'));
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) modal.classList.add('hidden');
         });
+
+        function resetFilters() {
+            document.querySelector('input[name="location"]').value = '';
+            document.querySelector('input[name="min_salary"]').value = '';
+            document.querySelector('input[name="max_salary"]').value = '';
+        }
     </script>
+
 @endsection
