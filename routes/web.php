@@ -11,6 +11,7 @@ use App\Http\Controllers\PasswordResetController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\UserAvatarController;
 use App\Http\Controllers\SavedJobController;
+use App\Http\Controllers\CarersController;
 use App\Http\Middleware\CheckUserByUserType;
 use App\Mail\ApplicationSent;
 use App\Models\Employer;
@@ -134,7 +135,7 @@ Route::middleware('auth')->group(function () {
 Route::middleware('auth')->group(function () {
     Route::get('/jobseeker/{id}', [JobseekerController::class, 'showPublic'])->name('jobseeker.show');
 
-    Route::get('/carers', [JobseekerController::class, 'showJobseekers'])->name('carers')->middleware(CheckUserByUserType::class. ':' . Employer::class);
+    Route::get('/carers', [CarersController::class, 'index'])->name('carers')->middleware(CheckUserByUserType::class. ':' . Employer::class);
 
     /*Route::get('/carers', function() {
         $jobseekers = Jobseeker::with('authParent')->get();
