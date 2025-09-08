@@ -2,75 +2,76 @@
 
 @section('content')
 
-    <!-- Search Form -->
-    <form method="GET" action="{{ route('jobs.index') }}" class="max-w-2xl mx-auto mt-8">
-        <div class="flex">
-            <input type="text" name="search" value="{{ $search ?? '' }}"
-                class="flex-1 px-4 py-2.5 text-sm text-gray-900 bg-white border border-gray-300 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                placeholder="Search jobs..." />
+    <!-- Search Form with Filter Button on Same Line -->
+    <div class="max-w-4xl mx-auto mt-8">
+        <div class="flex gap-3">
+            <!-- Search Form -->
+            <form method="GET" action="{{ route('jobs.index') }}" class="flex-1">
+                <div class="flex">
+                    <input type="text" name="search" value="{{ $search ?? '' }}"
+                        class="flex-1 px-4 py-2.5  text-gray-900 bg-white border border-gray-300 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                        placeholder="Search jobs..." />
 
-            <!-- Preserve filters when searching -->
-            <input type="hidden" name="location" value="{{ $location ?? '' }}">
-            <input type="hidden" name="min_salary" value="{{ $minSalary ?? '' }}">
-            <input type="hidden" name="max_salary" value="{{ $maxSalary ?? '' }}">
+                    <!-- Preserve filters when searching -->
+                    <input type="hidden" name="location" value="{{ $location ?? '' }}">
+                    <input type="hidden" name="min_salary" value="{{ $minSalary ?? '' }}">
+                    <input type="hidden" name="max_salary" value="{{ $maxSalary ?? '' }}">
 
-            <button type="submit"
-                class="px-6 py-2.5 text-white bg-emerald-600 border border-emerald-600 rounded-r-lg hover:bg-emerald-700">
-                Search
+                    <button type="submit"
+                        class="px-6 py-2.5 text-white font-medium text-base bg-emerald-600 border border-emerald-600 rounded-r-lg hover:bg-emerald-700">
+                        Search
+                    </button>
+                </div>
+            </form>
+
+            <!-- Filter Button - Same Line -->
+            <button id="openFilters" type="button"
+                class="inline-flex items-center px-6 py-2.5 mb-4 bg-emerald-600 text-white text-base font-medium rounded-lg hover:bg-emerald-700 whitespace-nowrap">
+                <svg class="w-4 h-4 mr-2" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M18 7H17M17 7H16M17 7V6M17 7V8M12.5 5H6C5.5286 5 5.29289 5 5.14645 5.14645C5 5.29289 5 5.5286 5 6V7.96482C5 8.2268 5 8.35779 5.05916 8.46834C5.11833 8.57888 5.22732 8.65154 5.4453 8.79687L8.4688 10.8125C9.34073 11.3938 9.7767 11.6845 10.0133 12.1267C10.25 12.5688 10.25 13.0928 10.25 14.1407V19L13.75 17.25V14.1407C13.75 13.0928 13.75 12.5688 13.9867 12.1267C14.1205 11.8765 14.3182 11.6748 14.6226 11.4415M20 7C20 8.65685 18.6569 10 17 10C15.3431 10 14 8.65685 14 7C14 5.34315 15.3431 4 17 4C18.6569 4 20 5.34315 20 7Z"
+                        stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"></path>
+                </svg>
+                Filters
             </button>
         </div>
-    </form>
+
+        <!-- Clear Search Button (show only when searching) -->
+        @if($search)
+            <div class="mt-3 text-center">
+                <a href="{{ route('jobs.index', array_filter(['location' => $location, 'min_salary' => $minSalary, 'max_salary' => $maxSalary])) }}"
+                    class="text-sm text-gray-600 hover:text-gray-800 inline-flex items-center">
+                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                    Clear search "{{ $search }}" and keep filters
+                </a>
+            </div>
+        @endif
+    </div>
 
     <!-- Main Content -->
     <div class="max-w-6xl mx-auto p-6">
 
-        <!-- Filters Section -->
-        <div class="bg-gray-50 border border-gray-200 rounded-xl p-6 mb-6">
-            <div class="flex items-center justify-between mb-4">
-                <h2 class="text-lg font-semibold text-gray-800">Filter Jobs</h2>
-
-                <!-- Advanced Filter Button -->
-                <button id="openFilters"
-                    class="inline-flex items-center px-3 py-1.5 bg-emerald-600 text-white text-xs font-medium rounded-lg hover:bg-emerald-700">
-                    <svg class="w-4 h-4 mr-1.5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path
-                            d="M18 7H17M17 7H16M17 7V6M17 7V8M12.5 5H6C5.5286 5 5.29289 5 5.14645 5.14645C5 5.29289 5 5.5286 5 6V7.96482C5 8.2268 5 8.35779 5.05916 8.46834C5.11833 8.57888 5.22732 8.65154 5.4453 8.79687L8.4688 10.8125C9.34073 11.3938 9.7767 11.6845 10.0133 12.1267C10.25 12.5688 10.25 13.0928 10.25 14.1407V19L13.75 17.25V14.1407C13.75 13.0928 13.75 12.5688 13.9867 12.1267C14.1205 11.8765 14.3182 11.6748 14.6226 11.4415M20 7C20 8.65685 18.6569 10 17 10C15.3431 10 14 8.65685 14 7C14 5.34315 15.3431 4 17 4C18.6569 4 20 5.34315 20 7Z"
-                            stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"></path>
-                    </svg>
-                    Filters
-                </button>
-            </div>
-
-            <!-- Quick Location Filters -->
-            <div class="flex flex-wrap gap-2">
-                <!-- All Locations -->
-                <a href="{{ route('jobs.index', array_filter(['search' => $search, 'min_salary' => $minSalary, 'max_salary' => $maxSalary])) }}"
-                    class="px-4 py-2 rounded-lg text-sm font-medium border transition-colors
-                                   {{ !$location ? 'bg-emerald-500 text-white border-emerald-500' : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-100' }}">
-                    All Locations
-                </a>
-            </div>
-
-            <!-- Show active filters -->
-            @if($location || $minSalary || $maxSalary)
-                <div class="mt-4 pt-4 border-t border-gray-200">
-                    <div class="flex items-center gap-2 text-sm text-gray-600">
-                        <span>Active filters:</span>
-                        @if($location)
-                            <span class="bg-emerald-100 text-emerald-800 px-2 py-1 rounded">Location: {{ $location }}</span>
-                        @endif
-                        @if($minSalary)
-                            <span class="bg-emerald-100 text-emerald-800 px-2 py-1 rounded">Min: £{{ $minSalary }}</span>
-                        @endif
-                        @if($maxSalary)
-                            <span class="bg-emerald-100 text-emerald-800 px-2 py-1 rounded">Max: £{{ $maxSalary }}</span>
-                        @endif
-                        <a href="{{ route('jobs.index', ['search' => $search]) }}"
-                            class="text-red-600 hover:text-red-800 ml-2">Clear all</a>
-                    </div>
+        <!-- Show active filters (if any) -->
+        @if($location || $minSalary || $maxSalary)
+            <div class="bg-gray-50 border border-gray-200 rounded-xl p-4 mb-6">
+                <div class="flex items-center gap-2 text-sm text-gray-600">
+                    <span class="font-medium">Active filters:</span>
+                    @if($location)
+                        <span class="bg-emerald-100 text-emerald-800 px-2 py-1 rounded">Location: {{ $location }}</span>
+                    @endif
+                    @if($minSalary)
+                        <span class="bg-emerald-100 text-emerald-800 px-2 py-1 rounded">Min: £{{ $minSalary }}</span>
+                    @endif
+                    @if($maxSalary)
+                        <span class="bg-emerald-100 text-emerald-800 px-2 py-1 rounded">Max: £{{ $maxSalary }}</span>
+                    @endif
+                    <a href="{{ route('jobs.index', ['search' => $search]) }}"
+                        class="text-red-600 hover:text-red-800 ml-2 font-medium">Clear all filters</a>
                 </div>
-            @endif
-        </div>
+            </div>
+        @endif
 
         <!-- Filter Modal -->
         <div id="filterModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden">
@@ -103,13 +104,13 @@
                         <!-- Salary Range -->
                         <div>
                             <label class="block text-sm font-semibold text-gray-800 mb-2">Salary Range</label>
-                            <div class="flex items-center space-x-2">
+                            <div class="flex items-center space-x-2 w-full">
                                 <input type="number" name="min_salary" value="{{ $minSalary ?? '' }}"
-                                    class="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                                    class="flex-1 min-w-0 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
                                     placeholder="Min">
-                                <span class="text-gray-500">to</span>
+                                <span class="text-gray-500 flex-shrink-0">to</span>
                                 <input type="number" name="max_salary" value="{{ $maxSalary ?? '' }}"
-                                    class="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                                    class="flex-1 min-w-0 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
                                     placeholder="Max">
                             </div>
                         </div>
