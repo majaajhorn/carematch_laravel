@@ -27,7 +27,7 @@
                                         {{ $application->job->location }}</span>
                                     <span class="inline-flex items-center rounded-full bg-gray-100 px-3 py-1">💰
                                         £{{ $application->job->salary }} {{ (string) $application->job->salary_period }}</span>
-                                    <span class="inline-flex items-center rounded-full bg-blue-100 px-3 py-1 text-blue-800">
+                                    <span class="inline-flex items-center rounded-full bg-emerald-100 px-3 py-1 text-emerald-800">
                                         {{ ucfirst(str_replace('_', ' ', (string) $application->job->employment_type)) }}
                                     </span>
                                 </div>
@@ -73,7 +73,7 @@
                                 @method('DELETE')
                                 <button type="submit"
                                     onclick="return confirm('Are you sure you want to withdraw from this application?')"
-                                    class="flex h-10 min-w-[120px] items-center justify-center rounded-lg px-4 text-sm font-medium text-center box-border border border-red-600 text-red-600 hover:bg-red-50 mt-4">
+                                    class="flex h-10 min-w-[120px] items-center justify-center rounded-lg px-4 text-sm font-medium text-center box-border border border-red-600 text-red-600 hover:bg-red-50">
                                     Withdraw
                                 </button>
                             </form>

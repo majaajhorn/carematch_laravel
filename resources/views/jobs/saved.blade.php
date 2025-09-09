@@ -14,8 +14,8 @@
         <!-- Error Messages -->
 
         @if(session('message'))
-            <div class="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-                <p class="text-blue-800">{{ session('message') }}</p>
+            <div class="mb-6 p-4 bg-emerald-50 border border-emerald-200 rounded-lg">
+                <p class="text-emerald-800">{{ session('message') }}</p>
             </div>
         @endif
 
@@ -118,7 +118,7 @@
                                     @method('DELETE')
                                     <button type="submit"
                                         onclick="return confirm('Are you sure you want to remove this job from your saved jobs?')"
-                                        class="flex h-10 min-w-[120px] items-center justify-center rounded-lg px-4 text-sm font-medium text-center box-border border border-red-600 text-red-600 hover:bg-red-50 mt-4">
+                                        class="flex h-10 min-w-[120px] items-center justify-center rounded-lg px-4 text-sm font-medium text-center box-border border border-red-600 text-red-600 hover:bg-red-50">
                                         Remove
                                     </button>
                                 </form>

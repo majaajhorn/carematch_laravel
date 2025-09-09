@@ -74,7 +74,7 @@
                             @else
                                 <form method="GET" action="{{ route('applications.create', $job) }}" class="inline">
                                     <button type="submit"
-                                        class="flex h-10 min-w-[120px] items-center justify-center rounded-lg px-4 text-sm font-medium text-center box-border bg-emerald-600 text-white hover:bg-emerald-700 mt-4">
+                                        class="flex h-10 min-w-[120px] items-center justify-center rounded-lg px-4 text-sm font-medium text-center box-border bg-emerald-600 text-white hover:bg-emerald-700 ">
                                         Apply
                                     </button>
                                 </form>
@@ -86,7 +86,7 @@
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit"
-                                        class="flex h-10 min-w-[120px] items-center justify-center rounded-lg px-4 text-sm font-medium text-center box-border border border-red-600 text-red-600 hover:bg-red-50 mt-4">
+                                        class="flex h-10 min-w-[120px] items-center justify-center rounded-lg px-4 text-sm font-medium text-center box-border border border-red-600 text-red-600  hover:bg-red-50">
                                         Remove
                                     </button>
                                 </form>
@@ -94,7 +94,7 @@
                                 <form method="POST" action="{{ route('jobs.save', $job->id) }}" class="inline">
                                     @csrf
                                     <button type="submit"
-                                        class="flex h-10 min-w-[120px] items-center justify-center rounded-lg px-4 text-sm font-medium text-center box-border border border-emerald-600 text-emerald-600 hover:bg-emerald-50 mt-4">
+                                        class="flex h-10 min-w-[120px] items-center justify-center rounded-lg px-4 text-sm font-medium text-center box-border border border-emerald-600 text-emerald-600 hover:bg-emerald-50">
                                         Save Job
                                     </button>
                                 </form>
