@@ -12,6 +12,7 @@ use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\UserAvatarController;
 use App\Http\Controllers\SavedJobController;
 use App\Http\Controllers\CarersController;
+use App\Http\Controllers\UserController;
 use App\Http\Middleware\CheckUserByUserType;
 use App\Mail\ApplicationSent;
 use App\Models\Employer;
@@ -21,6 +22,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
+
 
 
 Route::view('/', 'home')->name('home');
@@ -130,6 +132,10 @@ Route::middleware('auth')->group(function () {
     // PROFILE PICTURE
     Route::post('/profile/upload-photo', [UserAvatarController::class, 'upload'])->name('profile.upload-photo');
     Route::delete('/profile/remove-photo', [UserAvatarController::class, 'remove'])->name('profile.remove-photo');
+
+    Route::post('/reset-password', [PasswordResetController::class, 'resetPassword'])->name('password.reset.update');
+    Route::get('/profile/password', [UserController::class, 'editPassword'])->name('password.edit');
+    Route::patch('/profile/password', [UserController::class, 'updatePassword'])->name('password.profile.update');
 });
 
 Route::middleware('auth')->group(function () {

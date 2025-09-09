@@ -295,7 +295,7 @@
                             </button>
                         @endif
 
-                        <a href="#"
+                        <a href="{{ route('password.edit') }}"
                         class="px-4 py-2 text-sm font-medium text-gray-700 border-gray-300 border rounded-md hover:bg-gray-200">
                         Change Password
                         </a>

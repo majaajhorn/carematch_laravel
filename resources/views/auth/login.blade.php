@@ -40,7 +40,7 @@
                     </div>
                 @endif
 
-                <form method="POST" action="{{ route('login') }}"
+                <form method="POST" action="{{ route('login.store') }}"
                     class="mt-6 space-y-4 rounded-2xl bg-white p-6 shadow">
                     @csrf
 

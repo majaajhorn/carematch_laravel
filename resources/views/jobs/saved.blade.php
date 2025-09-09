@@ -53,7 +53,7 @@
 
                                     <div class="flex flex-wrap gap-4 mb-3 py-3">
                                         <span
-                                            class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
+                                            class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-emerald-100 text-emerald-800">
                                             {{ ucfirst(str_replace('_', ' ', (string) $savedJob->job->employment_type)) }}
                                         </span>
                                         <span
@@ -82,12 +82,12 @@
                                 {{-- View Details (disabled style if filled) --}}
                                 @if($filled)
                                     <span
-                                        class="flex h-10 min-w-[120px] items-center justify-center rounded-lg px-4 text-sm font-medium text-center box-border bg-gray-200 text-gray-500 cursor-not-allowed">
+                                        class="flex h-10 min-w-[120px] items-center justify-center rounded-lg px-4 text-sm font-medium text-center box-border bg-gray-100 text-gray-500 cursor-not-allowed">
                                         View Details
                                     </span>
                                 @else
                                     <a href="{{ route('jobs.show', $savedJob->job) }}"
-                                        class="flex h-10 min-w-[120px] items-center justify-center rounded-lg px-4 text-sm font-medium text-center box-border bg-emerald-600 text-white hover:bg-emerald-700">
+                                        class="flex h-10 min-w-[120px] items-center justify-center rounded-lg px-4 text-sm font-medium text-center box-border bg-gray-100 text-gray-500 hover:bg-gray-700">
                                         View Details
                                     </a>
                                 @endif
