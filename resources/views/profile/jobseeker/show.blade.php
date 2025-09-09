@@ -15,57 +15,47 @@
 
         <!-- Profile Card -->
         <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+
             <!-- Profile Photo Section -->
             <div class="p-6 border-b border-gray-200">
-                <div class="flex items-center gap-4">
-                    <!-- Profile Photo -->
-                    <div class="relative">
+                <div class="flex items-center gap-6">
+                    <!-- Profile Photo + Change button -->
+                    <div class="flex flex-col items-center">
                         @if($user->hasPhoto())
-                            <img src="{{ $user->photo_url }}" alt="Profile Photo" class="w-20 h-20 rounded-full object-cover">
+                            <img src="{{ $user->photo_url }}" alt="Profile Photo" class="w-24 h-24 rounded-full object-cover">
                         @else
-                            <div class="w-20 h-20 bg-gray-300 rounded-full flex items-center justify-center">
+                            <div class="w-24 h-24 bg-gray-300 rounded-full flex items-center justify-center">
                                 <svg class="w-10 h-10 text-gray-500" fill="currentColor" viewBox="0 0 24 24">
                                     <path
-                                        d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
+                                        d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4
+                                                                                                                         1.79-4 4 1.79 4 4 4zm0 2c-2.67
+                                                                                                                         0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
                                 </svg>
                             </div>
                         @endif
-                    </div>
 
-                    <!-- Upload Photo Form -->
-                    <div>
+                        <!-- Upload Photo Form -->
                         <form method="POST" action="{{ route('profile.upload-photo') }}" enctype="multipart/form-data"
-                            class="inline">
+                            class="mt-3">
                             @csrf
                             <input type="file" name="photo" id="avatar" accept="image/*" class="hidden"
                                 onchange="this.form.submit()">
                             <label for="avatar"
-                                class="bg-gray-100 hover:bg-gray-200 px-4 py-2 rounded-md text-sm text-gray-700 border cursor-pointer">
+                                class="inline-block px-4 py-2 text-sm font-medium text-emerald-700 border border-emerald-600 rounded-md cursor-pointer hover:border-emerald-700 hover:text-emerald-800 focus:outline-none focus:ring-2 focus:ring-emerald-500/30">
                                 {{ $user->hasPhoto() ? 'Change Photo' : 'Upload New Photo' }}
                             </label>
                         </form>
-
-                        @if($user->hasPhoto())
-                            <form method="POST" action="{{ route('profile.remove-photo') }}" class="inline ml-2">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit"
-                                    class="bg-red-100 hover:bg-red-200 px-4 py-2 rounded-md text-sm text-red-700 border">
-                                    Remove
-                                </button>
-                            </form>
-                        @endif
                     </div>
 
-                    <!-- Edit Button -->
-                    <div class="ml-auto mt-7">
+                    <!-- Right Side: Edit button + ratings -->
+                    <div class="ml-auto">
                         <a href="{{ route('jobseeker.profile.edit') }}"
-                            class="bg-emerald-600 hover:bg-emerald-700 px-6 py-2 rounded-md text-sm text-white">
+                            class="inline-block px-6 py-2 text-sm font-medium text-white bg-emerald-600 rounded-md hover:bg-emerald-700">
                             Edit Profile
                         </a>
 
                         @php
-                            $avg = (float) $jobseeker->getAverageRating();     // e.g. 4.5
+                            $avg = (float) $jobseeker->getAverageRating();
                             $count = (int) $jobseeker->getTotalReviews();
                             $percent = max(0, min(100, ($avg / 5) * 100));   
                         @endphp
@@ -109,11 +99,6 @@
                             <p class="text-sm text-gray-500 mt-4">No reviews yet</p>
                         @endif
                     </div>
-                </div>
-
-                <!-- Change Password  -->
-                <div class="flex gap-6 mt-4">
-                    <a href="#" class="text-sm text-emerald-600 hover:text-emerald-800">Change Password</a>
                 </div>
             </div>
 
@@ -260,14 +245,15 @@
                         <div class="flex text-gray-300">
                             @for ($i = 0; $i < 5; $i++)
                                 <svg class="w-5 h-5 block" viewBox="0 0 20 20" fill="currentColor">
-                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07
-                                                                    3.292a1 1 0 00.95.69h3.462c.969 0
-                                                                    1.371 1.24.588 1.81l-2.802 2.036a1
-                                                                    1 0 00-.364 1.118l1.07 3.292c.3.921-.755
-                                                                    1.688-1.54 1.118L10 13.347l-2.985
-                                                                    2.126c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1
-                                                                    1 0 00-.364-1.118L3.38 8.72c-.783-.57-.38-1.81.588-1.81H7.43a1
-                                                                    1 0 00.95-.69l1.07-3.292z" />
+                                    <path
+                                        d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07
+                                                                                                                                                                                                                                                                                3.292a1 1 0 00.95.69h3.462c.969 0
+                                                                                                                                                                                                                                                                                1.371 1.24.588 1.81l-2.802 2.036a1
+                                                                                                                                                                                                                                                                                1 0 00-.364 1.118l1.07 3.292c.3.921-.755
+                                                                                                                                                                                                                                                                                1.688-1.54 1.118L10 13.347l-2.985
+                                                                                                                                                                                                                                                                                2.126c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1
+                                                                                                                                                                                                                                                                                1 0 00-.364-1.118L3.38 8.72c-.783-.57-.38-1.81.588-1.81H7.43a1
+                                                                                                                                                                                                                                                                                1 0 00.95-.69l1.07-3.292z" />
                                 </svg>
                             @endfor
                         </div>
@@ -276,15 +262,16 @@
                             <div class="flex text-yellow-400">
                                 @for ($i = 0; $i < 5; $i++)
                                     <svg class="w-5 h-5 block" viewBox="0 0 20 20" fill="currentColor">
-                                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902
-                                                                        0l1.07 3.292a1 1 0 00.95.69h3.462c.969
-                                                                        0 1.371 1.24.588 1.81l-2.802
-                                                                        2.036a1 1 0 00-.364 1.118l1.07
-                                                                        3.292c.3.921-.755 1.688-1.54
-                                                                        1.118L10 13.347l-2.985
-                                                                        2.126c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1
-                                                                        1 0 00-.364-1.118L3.38 8.72c-.783-.57-.38-1.81.588-1.81H7.43a1
-                                                                        1 0 00.95-.69l1.07-3.292z" />
+                                        <path
+                                            d="M9.049 2.927c.3-.921 1.603-.921 1.902
+                                                                                                                                                                                                                                                                                    0l1.07 3.292a1 1 0 00.95.69h3.462c.969
+                                                                                                                                                                                                                                                                                    0 1.371 1.24.588 1.81l-2.802
+                                                                                                                                                                                                                                                                                    2.036a1 1 0 00-.364 1.118l1.07
+                                                                                                                                                                                                                                                                                    3.292c.3.921-.755 1.688-1.54
+                                                                                                                                                                                                                                                                                    1.118L10 13.347l-2.985
+                                                                                                                                                                                                                                                                                    2.126c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1
+                                                                                                                                                                                                                                                                                    1 0 00-.364-1.118L3.38 8.72c-.783-.57-.38-1.81.588-1.81H7.43a1
+                                                                                                                                                                                                                                                                                    1 0 00.95-.69l1.07-3.292z" />
                                     </svg>
                                 @endfor
                             </div>
@@ -337,17 +324,18 @@
                                     <div class="flex text-gray-300">
                                         @for ($i = 0; $i < 5; $i++)
                                             <svg class="w-4 h-4 block" viewBox="0 0 20 20" fill="currentColor">
-                                                <path d="M9.049 2.927c.3-.921 1.603-.921
-                                                                                            1.902 0l1.07 3.292a1 1 0
-                                                                                            00.95.69h3.462c.969 0 1.371
-                                                                                            1.24.588 1.81l-2.802
-                                                                                            2.036a1 1 0 00-.364 1.118l1.07
-                                                                                            3.292c.3.921-.755
-                                                                                            1.688-1.54 1.118L10 13.347l-2.985
-                                                                                            2.126c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1
-                                                                                            1 0 00-.364-1.118L3.38
-                                                                                            8.72c-.783-.57-.38-1.81.588-1.81H7.43a1
-                                                                                            1 0 00.95-.69l1.07-3.292z" />
+                                                <path
+                                                    d="M9.049 2.927c.3-.921 1.603-.921
+                                                                                                                                                                                                                                                                                                                                                                            1.902 0l1.07 3.292a1 1 0
+                                                                                                                                                                                                                                                                                                                                                                            00.95.69h3.462c.969 0 1.371
+                                                                                                                                                                                                                                                                                                                                                                            1.24.588 1.81l-2.802
+                                                                                                                                                                                                                                                                                                                                                                            2.036a1 1 0 00-.364 1.118l1.07
+                                                                                                                                                                                                                                                                                                                                                                            3.292c.3.921-.755
+                                                                                                                                                                                                                                                                                                                                                                            1.688-1.54 1.118L10 13.347l-2.985
+                                                                                                                                                                                                                                                                                                                                                                            2.126c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1
+                                                                                                                                                                                                                                                                                                                                                                            1 0 00-.364-1.118L3.38
+                                                                                                                                                                                                                                                                                                                                                                            8.72c-.783-.57-.38-1.81.588-1.81H7.43a1
+                                                                                                                                                                                                                                                                                                                                                                            1 0 00.95-.69l1.07-3.292z" />
                                             </svg>
                                         @endfor
                                     </div>
@@ -356,19 +344,20 @@
                                         <div class="flex text-yellow-400">
                                             @for ($i = 0; $i < 5; $i++)
                                                 <svg class="w-4 h-4 block" viewBox="0 0 20 20" fill="currentColor">
-                                                    <path d="M9.049 2.927c.3-.921
-                                                                                                1.603-.921 1.902 0l1.07
-                                                                                                3.292a1 1 0 00.95.69h3.462c.969
-                                                                                                0 1.371 1.24.588
-                                                                                                1.81l-2.802 2.036a1
-                                                                                                1 0 00-.364 1.118l1.07
-                                                                                                3.292c.3.921-.755
-                                                                                                1.688-1.54 1.118L10
-                                                                                                13.347l-2.985
-                                                                                                2.126c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1
-                                                                                                1 0 00-.364-1.118L3.38
-                                                                                                8.72c-.783-.57-.38-1.81.588-1.81H7.43a1
-                                                                                                1 0 00.95-.69l1.07-3.292z" />
+                                                    <path
+                                                        d="M9.049 2.927c.3-.921
+                                                                                                                                                                                                                                                                                                                                                                                1.603-.921 1.902 0l1.07
+                                                                                                                                                                                                                                                                                                                                                                                3.292a1 1 0 00.95.69h3.462c.969
+                                                                                                                                                                                                                                                                                                                                                                                0 1.371 1.24.588
+                                                                                                                                                                                                                                                                                                                                                                                1.81l-2.802 2.036a1
+                                                                                                                                                                                                                                                                                                                                                                                1 0 00-.364 1.118l1.07
+                                                                                                                                                                                                                                                                                                                                                                                3.292c.3.921-.755
+                                                                                                                                                                                                                                                                                                                                                                                1.688-1.54 1.118L10
+                                                                                                                                                                                                                                                                                                                                                                                13.347l-2.985
+                                                                                                                                                                                                                                                                                                                                                                                2.126c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1
+                                                                                                                                                                                                                                                                                                                                                                                1 0 00-.364-1.118L3.38
+                                                                                                                                                                                                                                                                                                                                                                                8.72c-.783-.57-.38-1.81.588-1.81H7.43a1
+                                                                                                                                                                                                                                                                                                                                                                                1 0 00.95-.69l1.07-3.292z" />
                                                 </svg>
                                             @endfor
                                         </div>
