@@ -44,7 +44,7 @@
                                 @method('DELETE')
                                 <button type="submit"
                                     class="bg-red-100 hover:bg-red-200 px-4 py-2 rounded-md text-sm text-red-700 border">
-                                    Remove
+                                    Remove Photo
                                 </button>
                             </form>
                         @endif

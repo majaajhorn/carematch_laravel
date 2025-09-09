@@ -22,7 +22,12 @@ class JobseekerController extends Controller
 
         $jobseeker = Jobseeker::where('id', $user->user_id)->with(['qualifications', 'experiences'])->first();
 
-        return view('profile.jobseeker.show', compact('user', 'jobseeker'));
+        $reviews = $jobseeker->reviews()
+            ->with('employer.authParent')
+            ->latest()
+            ->paginate(3);
+
+        return view('profile.jobseeker.show', compact('user', 'jobseeker', 'reviews'));
     }
     // uredi profil
     public function edit()
