@@ -20,7 +20,9 @@ class JobseekerController extends Controller
             return redirect()->route('employer.profile.show');
         }
 
-        $jobseeker = Jobseeker::where('id', $user->user_id)->with(['qualifications', 'experiences'])->first();
+        $jobseeker = Jobseeker::where('id', $user->user_id)->with(['qualifications', 'experiences', 'reviews' => function($query) {
+            $query->with('employer.authParent')->latest();
+        }])->first();
 
         $reviews = $jobseeker->reviews()
             ->with('employer.authParent')
@@ -112,7 +114,7 @@ class JobseekerController extends Controller
 
     public function showPublic($id) 
     {
-        $jobseeker = Jobseeker::where('id', $id)->with(['qualifications', 'experiences', 'reviews.employer.authParent'])->first();
+        $jobseeker = Jobseeker::where('id', $id)->with(['qualifications', 'experiences'])->first();
 
         if (!$jobseeker) {
             abort(404, 'Jobseeker not found');
@@ -120,7 +122,12 @@ class JobseekerController extends Controller
 
         $user = $jobseeker->authParent;
 
-        return view('jobseeker.index', compact('user', 'jobseeker'));
+        $recentReviews = $jobseeker->reviews()
+            ->with('employer.authParent')
+            ->latest()
+            ->paginate(5);
+
+        return view('jobseeker.index', compact('user', 'jobseeker','recentReviews'));
     }
 
     public function showJobseekers()

@@ -61,6 +61,10 @@ class Jobseeker extends Model implements IsUserContract
     {
         return $this->reviews()->count();
     }
+    public function hasBeenReviewedBy($employerId)
+    {
+        return $this->reviews()->where('employer_id', $employerId)->exists();
+    }
     /**
  * Scope to filter by location
  */
