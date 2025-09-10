@@ -157,13 +157,22 @@
                         </div>
 
                         <!-- Action Buttons -->
+                        <!-- View Applications -->
+                        @php
+                            $appsCount = $job->applications_count ?? $job->applications()->count();
+                        @endphp
+                        <a href="{{ route('applications.employer.by-job', $job) }}"
+                            class="inline-flex items-center justify-center h-11 px-6 text-sm font-semibold text-white bg-emerald-600 rounded-lg hover:bg-emerald-700 hover:-translate-y-0.5 transition-all duration-200 min-w-[180px] mb-5">
+                            View Applications ({{ $appsCount }})
+                        </a>
+
                         <div class="flex items-center gap-3">
                             <a href="{{ route('jobs.show', $job->id) }}"
-                                class="flex h-10 min-w-[120px] items-center justify-center rounded-lg px-4 text-sm font-medium text-center box-border bg-emerald-600 text-white hover:bg-emerald-700">
+                                class="inline-flex items-center justify-center h-11 px-5 text-sm font-medium text-emerald-700  border border-emerald-600 rounded-lg hover:bg-emerald-100 hover:border-emerald-300 transition-all duration-200">
                                 View Details
                             </a>
                             <a href="{{ route('jobs.show-my-jobs', ['edit' => $job->id]) }}"
-                                class="flex h-10 min-w-[120px] items-center justify-center rounded-lg px-4 text-sm font-medium text-center box-border bg-emerald-300 text-gray-900 hover:bg-emerald-700">
+                                class="inline-flex items-center justify-center h-11 px-5 text-sm font-medium text-gray-700 border border-gray-500 rounded-lg hover:bg-gray-100 hover:border-gray-300 transition-all duration-200">
                                 Edit
                             </a>
 
@@ -173,7 +182,7 @@
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit"
-                                    class="flex h-10 min-w-[120px] items-center justify-center rounded-lg px-4 text-sm font-medium text-center box-border border bg-red-400 text-white hover:bg-red-600 mt-4">
+                                    class="inline-flex items-center justify-center h-11 px-5 text-sm font-medium text-red-700  border border-red-500 rounded-lg hover:bg-red-100 hover:border-red-300 transition-all duration-200">
                                     Delete
                                 </button>
                             </form>
@@ -184,7 +193,7 @@
                                     onsubmit="return confirm('Are you sure you want to deactivate this job post?')">
                                     @csrf
                                     <button type="submit"
-                                        class="flex h-10 min-w-[120px] items-center justify-center rounded-lg px-4 text-sm font-medium text-center box-border  text-white bg-emerald-900 hover:bg-gray-700 mt-4">
+                                        class="inline-flex items-center justify-center h-11 px-5 text-sm font-medium text-yellow-700  border border-yellow-500 rounded-lg hover:bg-yellow-100 hover:border-yellow-300 transition-all duration-200">
                                         Deactivate
                                     </button>
                                 </form>
@@ -193,20 +202,11 @@
                                     onsubmit="return confirm('Are you sure you want to activate this job post?')">
                                     @csrf
                                     <button type="submit"
-                                        class="flex h-10 min-w-[120px] items-center justify-center rounded-lg px-4 text-sm font-medium text-center box-border border border-emerald-700 text-emerald-600 hover:bg-emerald-50 mt-4">
+                                        class="flex h-10 min-w-[120px] items-center justify-center rounded-lg px-4 text-sm font-medium text-center box-border border border-emerald-700 text-emerald-600 hover:bg-emerald-50">
                                         Activate
                                     </button>
                                 </form>
                             @endif
-
-                            <!-- View Applications -->
-                            @php
-                                $appsCount = $job->applications_count ?? $job->applications()->count();
-                            @endphp
-                            <a href="{{ route('applications.employer.by-job', $job) }}"
-                                class="flex h-10 min-w-[160px] items-center justify-center rounded-lg px-4 text-sm font-medium text-center box-border bg-amber-300 text-gray-800 hover:bg-amber-700">
-                                View Applications ({{ $appsCount }})
-                            </a>
                         </div>
                     @endif
                 </div>

@@ -3,7 +3,7 @@
 @section('content')
 
     <div class="max-w-6xl mx-auto p-6">
-        <a href="{{ url()->previous() }}" class="text-emerald-600 hover:text-emerald-800 mb-6 inline-block">
+        <a href="{{ route('dashboard') }}" class="text-emerald-600 hover:text-emerald-800 mb-6 inline-block">
             ← Back
         </a>
         <h1 class="text-3xl font-bold mb-6">All Applications</h1>
@@ -21,25 +21,25 @@
 
                 <a href="{{ route('applications.employer.index', ['status' => 'all', 'order' => $ord]) }}"
                     class="px-3 py-1.5 rounded-lg text-sm font-medium border
-                                                      {{ $st === 'all' ? 'bg-emerald-500 text-white border-emerald-500' : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-100' }}">
+                                                                                      {{ $st === 'all' ? 'bg-emerald-500 text-white border-emerald-500' : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-100' }}">
                     All
                 </a>
 
                 <a href="{{ route('applications.employer.index', ['status' => 'pending', 'order' => $ord]) }}"
                     class="px-3 py-1.5 rounded-lg text-sm font-medium border
-                                                      {{ $st === 'pending' ? 'bg-emerald-500 text-white border-emerald-500' : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-100' }}">
+                                                                                      {{ $st === 'pending' ? 'bg-emerald-500 text-white border-emerald-500' : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-100' }}">
                     Pending
                 </a>
 
                 <a href="{{ route('applications.employer.index', ['status' => 'approved', 'order' => $ord]) }}"
                     class="px-3 py-1.5 rounded-lg text-sm font-medium border
-                                                      {{ $st === 'approved' ? 'bg-emerald-500 text-white border-emerald-500' : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-100' }}">
+                                                                                      {{ $st === 'approved' ? 'bg-emerald-500 text-white border-emerald-500' : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-100' }}">
                     Approved
                 </a>
 
                 <a href="{{ route('applications.employer.index', ['status' => 'rejected', 'order' => $ord]) }}"
                     class="px-3 py-1.5 rounded-lg text-sm font-medium border
-                                                      {{ $st === 'rejected' ? 'bg-emerald-500 text-white border-emerald-500' : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-100' }}">
+                                                                                      {{ $st === 'rejected' ? 'bg-emerald-500 text-white border-emerald-500' : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-100' }}">
                     Rejected
                 </a>
             </div>
@@ -114,7 +114,7 @@
 
                                     {{-- View --}}
                                     <a href="{{ route('applications.employer.show', $application) }}"
-                                        class="{{ $btn }} bg-emerald-600 text-white hover:bg-emerald-700 inline-flex items-center justify-center">
+                                        class="{{ $btn }} border border-emerald-600 text-emerald-600 hover:bg-emerald-200 inline-flex items-center justify-center">
                                         View
                                     </a>
 
@@ -123,7 +123,7 @@
                                         <form method="POST" action="{{ route('applications.approve', $application) }}"
                                             class="inline m-0">
                                             @csrf @method('PATCH')
-                                            <button type="submit" class="{{ $btn }} bg-amber-500 text-white hover:bg-amber-600"
+                                            <button type="submit" class="{{ $btn }}  bg-amber-500 text-white hover:bg-amber-300"
                                                 onclick="return confirm('Approve this application?')">
                                                 Approve
                                             </button>
@@ -133,7 +133,7 @@
                                         <form method="POST" action="{{ route('applications.reject', $application) }}"
                                             class="inline m-0">
                                             @csrf @method('PATCH')
-                                            <button type="submit" class="{{ $btn }} bg-red-600 text-white hover:bg-red-700"
+                                            <button type="submit" class="{{ $btn }}  bg-red-600 text-white hover:bg-red-200"
                                                 onclick="return confirm('Reject this application?')">
                                                 Reject
                                             </button>
@@ -144,7 +144,7 @@
                                         <form method="POST" action="{{ route('applications.reject', $application) }}"
                                             class="inline m-0">
                                             @csrf @method('PATCH')
-                                            <button type="submit" class="{{ $btn }} bg-red-600 text-white hover:bg-red-700"
+                                            <button type="submit" class="{{ $btn }}  bg-red-600 text-white hover:bg-red-200"
                                                 onclick="return confirm('Reject this application?')">
                                                 Reject
                                             </button>
@@ -155,7 +155,7 @@
                                         <form method="POST" action="{{ route('applications.approve', $application) }}"
                                             class="inline m-0">
                                             @csrf @method('PATCH')
-                                            <button type="submit" class="{{ $btn }} bg-amber-500 text-white hover:bg-amber-600"
+                                            <button type="submit" class="{{ $btn }}  bg-amber-500 text-white hover:bg-amber-200"
                                                 onclick="return confirm('Approve this application?')">
                                                 Approve
                                             </button>
