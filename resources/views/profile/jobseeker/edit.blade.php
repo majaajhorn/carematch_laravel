@@ -320,7 +320,7 @@
                 @csrf
                 @method('DELETE')
                 </form>
-                @endif
+            @endif
         </div>
     </main>
 @endsection

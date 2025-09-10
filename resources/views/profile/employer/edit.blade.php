@@ -53,14 +53,42 @@
                     </div>
                 </div>
 
-                <div class="bg-gray-50 px-6 py-4 flex justify-between">
-                    <a href="{{ route('employer.profile.show') }}"
-                        class="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50">Cancel</a>
-                    <button
-                        class="px-6 py-2 bg-emerald-600 text-white rounded-md text-sm font-medium hover:bg-emerald-700">Save
-                        Changes</button>
+                <!-- Form Actions -->
+                <div class="bg-gray-50 px-6 py-4 flex flex-wrap justify-between items-center gap-3">
+                    <div class="flex gap-3">
+                        @if($user->hasPhoto())
+                            <button type="button" onclick="document.getElementById('remove-photo-form').submit()"
+                                class="inline-block px-4 py-2 text-sm font-medium text-red-700 border border-red-600 rounded-md cursor-pointer hover:border-red-700 hover:text-red-800 focus:outline-none focus:ring-2 focus:ring-red-500/30">
+                                Remove Photo
+                            </button>
+                        @endif
+
+                        <a href="{{ route('password.edit') }}"
+                            class="px-4 py-2 text-sm font-medium text-gray-700 border-gray-300 border rounded-md hover:bg-gray-200">
+                            Change Password
+                        </a>
+                    </div>
+
+                    <div class="flex gap-3">
+                        <a href="{{ route('employer.profile.show') }}"
+                            class="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50">
+                            Cancel
+                        </a>
+
+                        <button type="submit"
+                            class="px-6 py-2 bg-emerald-600 text-white rounded-md text-sm font-medium hover:bg-emerald-700">
+                            Save Changes
+                        </button>
+                    </div>
                 </div>
             </form>
+
+            @if($user->hasPhoto())
+                <form id="remove-photo-form" method="POST" action="{{ route('profile.remove-photo') }}">
+                    @csrf
+                    @method('DELETE')
+                </form>
+            @endif
         </div>
     </main>
 
