@@ -11,7 +11,7 @@
 <header class="border-b border-gray-200 bg-white/70 backdrop-blur">
     <div class="mx-auto max-w-6xl px-4 py-4 flex items-center justify-between">
         <!-- Logo -->
-        <a href="/dashboard" class="inline-flex items-center gap-2 font-semibold text-gray-900">
+        <a href="{{ route('dashboard') }}" class="inline-flex items-center gap-2 font-semibold text-gray-900">
             <span class="inline-flex h-8 w-8 items-center justify-center rounded-xl bg-emerald-600 text-white">CM</span>
             <span>CareMatch</span>
         </a>
@@ -68,8 +68,9 @@
                 </button>
 
                 @php
-                    $routeName = auth()->user()->user instanceof App\Models\Employer ? 'employer.profile.show' : 'jobseeker.profile.show';
-                @endphp
+                    $routeName = auth()->user()->isJobseeker() ? 'jobseeker.profile.show' : 'employer.profile.show';
+                    $editRouteName = auth()->user()->isJobseeker() ? 'jobseeker.profile.edit' : 'employer.profile.edit';
+                 @endphp
 
                 <!-- Dropdown menu -->
                 <div id="profileDropdownMenu"
@@ -83,10 +84,6 @@
                             </svg>
                             View Profile
                         </a>
-
-                        @php
-                            $editRouteName = auth()->user()->user instanceof App\Models\Employer ? 'employer.profile.edit' : 'jobseeker.profile.edit';
-                        @endphp
 
                         <a href="{{ route($editRouteName) }}"
                             class="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 {{ request()->routeIs($editRouteName) ? 'text-emerald-600 bg-emerald-50' : '' }}">

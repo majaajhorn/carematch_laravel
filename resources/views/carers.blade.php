@@ -18,9 +18,9 @@
                 <input type="hidden" name="experience" value="{{ $experience ?? '' }}">
 
                 <button type="submit"
-                        class="px-6 py-2.5 text-white font-medium text-base bg-emerald-600 border border-emerald-600 rounded-r-lg hover:bg-emerald-700">
-                        Search
-                    </button>
+                    class="px-6 py-2.5 text-white font-medium text-base bg-emerald-600 border border-emerald-600 rounded-r-lg hover:bg-emerald-700">
+                    Search
+                </button>
             </form>
 
             <!-- Filter Button - Same Style -->

@@ -30,24 +30,19 @@ Route::get('/login', [SessionController::class, 'create'])->name('login');
 Route::post('/login', [SessionController::class, 'store'])->name('login.store');
 Route::post('/logout', [SessionController::class, 'destroy'])->name('logout');
 
-// Dodaj ove rute u svoj web.php file
-
-// Google Socialite rute
+// Google Socialite routes
 Route::get('/auth/google', [SocialiteController::class, 'redirectToGoogle'])->name('auth.google');
 Route::get('/auth/google/callback', [SocialiteController::class, 'handleGoogleCallback'])->name('auth.google.callback');
 
-// Rute za odabir tipa korisnika (dostupne samo ulogiranim korisnicima u procesu registracije)
+// Jobseeker/Employer type of user 
 Route::get('/auth/choose-user-type', [SocialiteController::class, 'showChooseUserType'])->name('auth.choose-user-type');
 Route::post('/auth/complete-registration', [SocialiteController::class, 'completeRegistration'])->name('auth.complete-registration');
 
-// FORGOT PASSWORD NADODALA SAM OVO
+// FORGOT PASSWORD
 Route::middleware('guest')->group(function () {
     Route::get('/forgot-password', [PasswordResetController::class, 'showForgotPasswordForm'])->name('password.request');
-
     Route::post('/forgot-password', [PasswordResetController::class, 'sendResetLinkEmail'])->name('password.email');
-
     Route::get('/reset-password/{token}', [PasswordResetController::class, 'showResetPasswordForm'])->name('password.reset');
-
     Route::post('/reset-password', [PasswordResetController::class, 'resetPassword'])->name('password.update');
 });
 
@@ -147,9 +142,4 @@ Route::middleware('auth')->group(function () {
     Route::get('/jobseeker/{id}', [JobseekerController::class, 'showPublic'])->name('jobseeker.show');
 
     Route::get('/carers', [CarersController::class, 'index'])->name('carers')->middleware(CheckUserByUserType::class. ':' . Employer::class);
-
-    /*Route::get('/carers', function() {
-        $jobseekers = Jobseeker::with('authParent')->get();
-        return view('jobseekers', compact('jobseekers'));
-    })->name('carers')->middleware(CheckUserByUserType::class. ':' . Employer::class);*/
 });

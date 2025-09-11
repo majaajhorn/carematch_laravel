@@ -41,7 +41,7 @@
                 </div>
 
                 <div class="flex justify-between">
-                    <a href="{{ route('jobseeker.profile.show') }}"
+                    <a href="{{ Auth::user()->isJobseeker() ? route('jobseeker.profile.show') : route('employer.profile.show') }}"
                         class="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50">
                         Cancel
                     </a>
