@@ -19,36 +19,37 @@ class CarersController extends Controller
 
         
         $jobseekers = Jobseeker::with(['authParent', 'qualifications', 'experiences'])
-                              ->location($location)       
-                              ->gender($gender)             
-                              ->qualification($qualification) 
-                              ->experience($experience)      
-                              ->search($search)              
-                              ->latest()           
-                              ->paginate(6)                 
-                              ->withQueryString();           
+        ->whereHas('authParent')
+        ->location($location)       
+        ->gender($gender)             
+        ->qualification($qualification) 
+        ->experience($experience)      
+        ->search($search)              
+        ->latest()           
+        ->paginate(6)                 
+        ->withQueryString();           
 
         $locations = Jobseeker::with('authParent')
-                             ->get()
-                             ->pluck('authParent.location')
-                             ->filter()
-                             ->unique()
-                             ->sort()
-                             ->values();
+            ->get()
+            ->pluck('authParent.location')
+            ->filter()
+            ->unique()
+            ->sort()
+            ->values();
 
         $qualifications = JobseekerQualification::distinct()
-                                               ->pluck('qualification_name')
-                                               ->filter()
-                                               ->unique()
-                                               ->sort()
-                                               ->values();
+            ->pluck('qualification_name')
+            ->filter()
+            ->unique()
+            ->sort()
+            ->values();
 
         $experiences = JobseekerExperience::distinct()
-                                         ->pluck('job_title')
-                                         ->filter()
-                                         ->unique()
-                                         ->sort()
-                                         ->values();
+            ->pluck('job_title')
+            ->filter()
+            ->unique()
+            ->sort()
+            ->values();
 
         return view('carers', compact(
             'jobseekers',

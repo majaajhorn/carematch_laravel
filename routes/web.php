@@ -13,17 +13,12 @@ use App\Http\Controllers\UserAvatarController;
 use App\Http\Controllers\SavedJobController;
 use App\Http\Controllers\CarersController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\Auth\SocialiteController;
 use App\Http\Middleware\CheckUserByUserType;
-use App\Mail\ApplicationSent;
 use App\Models\Employer;
 use App\Models\Jobseeker;
-use App\Models\User;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Http\Request;
-
-
 
 Route::view('/', 'home')->name('home');
 Route::view('/about', 'about')->name('about'); 
@@ -34,6 +29,16 @@ Route::post('/register', [RegisteredUserController::class, 'store'])->name('regi
 Route::get('/login', [SessionController::class, 'create'])->name('login');
 Route::post('/login', [SessionController::class, 'store'])->name('login.store');
 Route::post('/logout', [SessionController::class, 'destroy'])->name('logout');
+
+// Dodaj ove rute u svoj web.php file
+
+// Google Socialite rute
+Route::get('/auth/google', [SocialiteController::class, 'redirectToGoogle'])->name('auth.google');
+Route::get('/auth/google/callback', [SocialiteController::class, 'handleGoogleCallback'])->name('auth.google.callback');
+
+// Rute za odabir tipa korisnika (dostupne samo ulogiranim korisnicima u procesu registracije)
+Route::get('/auth/choose-user-type', [SocialiteController::class, 'showChooseUserType'])->name('auth.choose-user-type');
+Route::post('/auth/complete-registration', [SocialiteController::class, 'completeRegistration'])->name('auth.complete-registration');
 
 // FORGOT PASSWORD NADODALA SAM OVO
 Route::middleware('guest')->group(function () {
