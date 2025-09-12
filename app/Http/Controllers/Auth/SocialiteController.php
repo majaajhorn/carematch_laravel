@@ -12,33 +12,27 @@ use Laravel\Socialite\Facades\Socialite;
 
 class SocialiteController extends Controller
 {
-    /**
-     * Preusmjeri korisnika na Google za autentifikaciju
-     */
+    
     public function redirectToGoogle()
     {
         return Socialite::driver('google')->redirect();
     }
 
-    /**
-     * Rukovanje callback-om od Google-a
-     */
     public function handleGoogleCallback()
     {
         try {
-            // Dohvati korisničke podatke od Google-a
+            // Getting user's info from Google
             $googleUser = Socialite::driver('google')->user();
             
-            // Provjeri postoji li već korisnik s ovim emailom
+            // Check if the user exists
             $existingUser = User::where('email', $googleUser->getEmail())->first();
             
             if ($existingUser) {
-                // Ako korisnik već postoji, samo ga ulogiraj
                 Auth::login($existingUser);
                 return redirect()->route('dashboard');
             }
-            
-            // Ako korisnik ne postoji, spremimo ga u session i idemo na stranicu za odabir tipa
+
+            // If the user doesn't exists, save it in session and redirect to choose type
             session([
                 'google_user' => [
                     'name' => $googleUser->getName(),
@@ -47,7 +41,6 @@ class SocialiteController extends Controller
                 ]
             ]);
             
-            // Preusmjeri na stranicu za odabir user_type
             return redirect()->route('auth.choose-user-type');
             
         } catch (\Exception $e) {
@@ -56,11 +49,11 @@ class SocialiteController extends Controller
     }
 
     /**
-     * Prikaži stranicu za odabir tipa korisnika
+     * Choose user type
      */
     public function showChooseUserType()
     {
-        // Provjeri ima li podataka u session
+        // Check if the data is stored in session
         if (!session('google_user')) {
             return redirect()->route('login')->with('error', 'Session has expired, please try again.');
         }
@@ -70,27 +63,26 @@ class SocialiteController extends Controller
     }
 
     /**
-     * Završi registraciju s odabranim tipom korisnika
+     * Finishing the registration with chosen type
      */
     public function completeRegistration(Request $request)
     {
-        // Validiraj odabrani tip korisnika
         $request->validate([
             'user_type' => ['required', 'in:employer,jobseeker']
         ]);
         
-        // Dohvati podatke iz session
+        // Get the data from session
         $googleUser = session('google_user');
         if (!$googleUser) {
             return redirect()->route('login')->with('error', 'Session has expired, please try again.');
         }
         
-        // Razdijeli ime i prezime (Google često vraća puno ime)
+        // Divide name and surname
         $nameParts = explode(' ', $googleUser['name'], 2);
         $firstName = $nameParts[0];
         $lastName = isset($nameParts[1]) ? $nameParts[1] : '';
         
-        // Stvori odgovarajući tip korisnika (Employer ili Jobseeker)
+        // Make the type (Employer or Jobseeker)
         if ($request->user_type === 'employer') {
             $userModel = Employer::create([]);
             $userType = Employer::class;
@@ -99,21 +91,20 @@ class SocialiteController extends Controller
             $userType = Jobseeker::class;
         }
         
-        // Stvori glavnog User-a s polimorfnom vezom
+        // Create User with polymorph relationship
         $user = User::create([
             'first_name' => $firstName,
             'last_name' => $lastName,
             'email' => $googleUser['email'],
             'user_type' => $userType,
             'user_id' => $userModel->id,
-            'password' => bcrypt('google-user-' . time()), // Nasumična lozinka jer se neće koristiti
-            'email_verified_at' => now(), // Google je već verificirao email
+            'password' => bcrypt('google-user-' . time()), // Random password, won't be used
+            'email_verified_at' => now(), 
         ]);
         
-        // Ulogiraj korisnika
         Auth::login($user);
         
-        // Očisti session
+        // Clear session
         session()->forget('google_user');
         
         return redirect()->route('dashboard')->with('success', 'Welcome! Your profile has been authorized.');

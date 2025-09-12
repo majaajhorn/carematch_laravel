@@ -37,16 +37,18 @@
                     Welcome to <span class="text-emerald-600">CareMatch</span>
                 </h1>
                 <p class="mt-4 text-lg leading-relaxed text-gray-600">
-                    This is the home page of CareMatch, where you can find features to help manage your care needs.
-                    Feel free to explore the application and make use of the available resources.
+                    CareMatch helps jobseekers and employers come together in a safe and supportive space. Whether
+                    you’re looking for trusted live-in carers or searching for the right role, finding the perfect match
+                    has never been easier with features like smart job matching, verified profiles, and secure
+                    communication.
                 </p>
 
                 <div class="mt-8 flex items-center justify-center gap-3">
-                    <a href="/register"
+                    <a href="{{ route('register') }}"
                         class="inline-flex items-center rounded-xl bg-emerald-600 px-5 py-3 text-base font-semibold text-white shadow hover:bg-emerald-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2">
                         Get Started
                     </a>
-                    <a href="/login"
+                    <a href="{{ route('login') }}"
                         class="inline-flex items-center rounded-xl border border-gray-300 px-5 py-3 text-base font-semibold text-gray-700 hover:bg-gray-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2">
                         Log In
                     </a>
