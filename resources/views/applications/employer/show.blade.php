@@ -60,8 +60,11 @@
 
             {{-- Applicant name --}}
             <div class="mt-6">
-                <div class="text-sm text-gray-500">Applicant</div>
-                <div class="text-lg font-semibold text-gray-900">
+                @if ($application->jobseeker?->authParent?->hasPhoto())
+                    <img src="{{ $application->jobseeker->authParent->photo_url }}" alt="Profile Photo"
+                        class="w-20 h-20 rounded-full object-cover">
+                @endif
+                <div class="text-lg font-semibold text-gray-900 mt-4">
                     {{ $application->jobseeker?->authParent?->first_name }}
                     {{ $application->jobseeker?->authParent?->last_name }}
                 </div>
