@@ -31,12 +31,12 @@
 
     <!-- Hero -->
     <main class="mx-auto max-w-6xl px-4">
-        <section class="py-20 sm:py-24">
+        <section class="py-20 sm:py-60">
             <div class="mx-auto max-w-3xl text-center">
-                <h1 class="text-4xl font-bold tracking-tight sm:text-5xl">
+                <h1 class="text-4xl font-bold tracking-tight sm:text-6xl pb-8">
                     Welcome to <span class="text-emerald-600">CareMatch</span>
                 </h1>
-                <p class="mt-4 text-lg leading-relaxed text-gray-600">
+                <p class="mt-4 text-lg leading-relaxed text-gray-600 pb-8">
                     CareMatch helps jobseekers and employers come together in a safe and supportive space. Whether
                     you’re looking for trusted live-in carers or searching for the right role, finding the perfect match
                     has never been easier with features like smart job matching, verified profiles, and secure
@@ -56,6 +56,7 @@
             </div>
         </section>
     </main>
+
 
     <!-- Footer -->
     <footer class="border-t border-gray-200 bg-white/70 backdrop-blur">
